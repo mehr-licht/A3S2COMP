@@ -7,13 +7,13 @@ options {
 public class Jmm
 {
  public static void main(String args[]) throws ParseException {
- Calculator myCalc = new Calculator(System.in);
- SimpleNode root = myCalc.Expression();
+ Jmm myJmm = new Jmm(System.in);
+ SimpleNode root = myJmm.Start();
  root.dump("");
 
- System.out.println("Valor da expressão: "+myCalc.eval(root));
+ System.out.println("Valor da expressão: " );//+ myJmm.eval(root));
  }
-
+/*
 int eval(SimpleNode node) {
 if(node.jjtGetNumChildren() == 0) // leaf node with integer value
 return node.val;
@@ -31,25 +31,56 @@ System.out.println("Operador ilegal!");
 System.exit(1);
 }
 return 0;
- }
+ }*/
 
 }
 
   PARSER_END(Jmm)
 
-// RESERVED
-
-
 
 //TOKENS
-SKIP :
+SKIP ://no comments considered
 {
 " " | "\r" | "\t"
 }
+
+
+// RESERVED
+TOKEN:
+{
+<CLASS: "class">
+| <EXTENDS: "extends">
+| <LCHAVETA: "{">
+| <RCHAVETA: "}">
+| <SCOLON: ";">
+| <PUBLIC: "public">
+| <LPAR: "(">
+| <VIRG: ",">
+| <RPAR: ")">
+| <RETURN: "return">
+| <LSQUARE: "[">
+| <RSQUARE: "]">
+| <INT: "int">
+| <BOOLEAN: "boolean">
+| <IF: "if">
+| <ELSE: "else">
+| <WHILE: "while">
+| <EQUAL: "=">
+| <POINT: ".">
+| <LENGTH: "length">
+| <OPERATOR: "&&" | "<" | "+" | "-" | "*" | "/">
+| <TRUE: "true">
+| <FALSE: "false">
+| <THIS: "this">
+| <NEW: "new">
+| <NOT: "!">
+}
+
 TOKEN:
 {
  < INTEGER: (["0"-"9"])+ >
 | < LF: "\n" >
+| <IDENTIFIER: ["_","a"-"z","A"-"Z"](["_","a"-"z","A"-"Z","0"-"9"])*>
 }
 
 
@@ -61,16 +92,15 @@ Program()
 }
 
 
-
 void Program(): {Token t;}
 {
 ClassDeclaration()
-"EOF"
+<LF>
 }
 
 void ClassDeclaration(): {Token t;}
 {
-"class"
+  <CLASS> ([" "])+ <INTEGER>
 }
 
 
