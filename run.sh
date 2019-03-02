@@ -1,9 +1,9 @@
 #!bin/bash
-echo jjtree Calculator.jjt############
-jjtree Calculator.jjt
-echo javacc Calculator.jj############ 
-javacc Calculator.jj
+echo jjtree jmm.jjt############
+jjtree jmm.jjt
+echo javacc jmm.jj############
+javacc jmm.jj
 echo javac *.java#################### 
 javac *.java
-echo java Calculator
-java Calculator
+echo java jmm
+java jmm
