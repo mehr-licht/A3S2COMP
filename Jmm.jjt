@@ -1,15 +1,15 @@
 options {
-    LOOKAHEAD=1;
-    }
+        LOOKAHEAD=3;
+        }
 
-    PARSER_BEGIN(Jmm)
+PARSER_BEGIN(Jmm)
 
 public class Jmm
 {
  public static void main(String args[]) throws ParseException {
- Jmm myJmm = new Jmm(System.in);
- SimpleNode root = myJmm.Start();
- root.dump("");
+     Jmm myJmm = new Jmm(System.in);
+     SimpleNode root = myJmm.Start();
+     root.dump("");
 
  System.out.println("Valor da expressão: " );//+ myJmm.eval(root));
  }
@@ -35,13 +35,13 @@ return 0;
 
 }
 
-  PARSER_END(Jmm)
+PARSER_END(Jmm)
 
 
 //TOKENS
 SKIP ://no comments considered
 {
-" " | "\r" | "\t"
+ " " | "\r" | "\t"
 }
 
 
@@ -62,6 +62,8 @@ TOKEN:
 | <RSQUARE: "]">
 | <INT: "int">
 | <BOOLEAN: "boolean">
+| <INT_ARRAY: "int[]">
+| <BOOL_ARRAY: "boolean[]">
 | <IF: "if">
 | <ELSE: "else">
 | <WHILE: "while">
@@ -87,24 +89,96 @@ TOKEN:
 //PRODUCTIONS
 SimpleNode Start(): {}
 {
-Program()
-{return jjtThis;}
+Program() {return jjtThis;}
 }
 
 
 void Program(): {Token t;}
 {
-ClassDeclaration()
-<LF>
+    VarDeclaration()  //changed this for debugging reasons should be ClassDeclaration()
+    <LF>                // also we need to uncomment ClassDeclaration()
 }
 
+/*
 void ClassDeclaration(): {Token t;}
 {
-  <CLASS> ([" "])+ <INTEGER>
+  <CLASS> <SPACE> <INTEGER>
+
+}
+*/
+
+/*testes.md for more info*/
+void Type():{}
+{
+    (<INT> | <BOOLEAN> | <INT_ARRAY> | <BOOL_ARRAY> )
+}
+
+/*testes.md for more info*/
+void VarDeclaration(): {Token t;}
+{
+  Type() <IDENTIFIER> ";"
+}
+
+
+
+void Statement():{}
+{
+    <INT> //just for Debugging reasons
+}
+
+// primeia parte da declaracao do metodo
+void MethodDeclaration():{}
+{
+    //excludes class constructor
+    // public int getFoo(){return foo;)}
+    <PUBLIC> Type() <IDENTIFIER> <LPAR> MethodDeclarationArgs() <RPAR> MethodDeclarationdInside()
+}
+
+//Trata dos argumentos da funcao
+void MethodDeclarationArgs():{}
+{
+    (
+         Type() <IDENTIFIER>
+     |
+         (Type() <IDENTIFIER>  (<VIRG> Type() <IDENTIFIER>)+)
+    )
+}
+
+//Trata apenas dos returnos que os metodos podem ter
+void ReturnExpression():{}
+{
+    (<IDENTIFIER> | <INTEGER> | <TRUE> | <FALSE> )
+}
+
+// Corpo do metodo da classe, a parte entre {}
+void MethodDeclarationdInside():{}
+{
+    <LCHAVETA> (VarDeclaration() )* (Statement())* <RETURN> [ReturnExpression()] <SCOLON> <RCHAVETA>
 }
 
 
 /*
+void Debugg(): {}
+{
+    //        [...] in a JavaCC input file indicate that the ... is optional.
+    //        [...] may also be written as (...)?
+    //         e1 | e2 | e3 | ... : A choice of e1, e2, e3, etc.
+    //        ( e )+             : One or more occurrences of e
+    //        ( e )*             : Zero or more occurrences of e
+   // (<INT> | <BOOLEAN>) ->pelo menos um: um ou outro ouExclusivo
+   //[<INT> | <BOOLEAN>] -> zero ou uma vez um ou outro
+   // ( <INT> <" ">)* //zero  ->aceita VAZIO,     <int><" ">,   <int><" "><int><" ">
+   // ( <INT> )*    //zero ou mais int
+    (<INT> | <BOOLEAN>)* //zero ou mais int OU Boolean
+
+}
+*/
+
+
+
+
+
+/* Samples from Calculator exercise
 void Expr1() #void: {}
 {
  Expr2(1)
