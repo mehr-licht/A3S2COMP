@@ -123,7 +123,12 @@ void VarDeclaration(): {Token t;}
 
 void Statement():{}
 {
-    <INT> //just for Debugging reasons
+    <LCHAVETA> Statement() <RCHAVETA>
+    | <IF> <LPAR> Expression() <RPAR> Statement() <ELSE> Statement()
+    | <WHILE> <LPAR> Expression() <RPAR> Statement()
+    | Expression() <SCOLON>
+    | <IDENTIFIER> <EQUAL> Expression() <SCOLON>
+    | <IDENTIFIER> <LSQUARE> Expression() <RSQUARE> <EQUAL> Expression() <SCOLON>
 }
 
 // primeia parte da declaracao do metodo
