@@ -166,15 +166,23 @@ void MethodDeclarationdInside():{}
     <LCHAVETA> (VarDeclaration() )* (Statement())* <RETURN> [ReturnExpression()] <SCOLON> <RCHAVETA>
 }
 
-/* //NEED TO RESOLVE LEFT RECURSION AND (...)? EXPANSION
-
 void Expression(): {Token t;}
+{
+Exp1() | Exp2()
+}
+
+void Exp1(): {Token t;}
 {
 Expression() <OPERATOR> Expression()
 | Expression() <LSQUARE> Expression() <RSQUARE>
 | Expression() <POINT> <LENGTH>
-| Expression() <POINT> <IDENTIFIER> <LPAR> (Expression() | (<VIRG> Expression())*)? <RPAR>
-| <INTEGERLITERAL>
+| Expression() <POINT> <IDENTIFIER> <LPAR> (Expression() (<VIRG> Expression())*)? <RPAR>
+}
+
+
+void Exp2(): {Token t;}
+{
+<INTEGERLITERAL>
 | <TRUE>
 | <FALSE>
 | <IDENTIFIER>
