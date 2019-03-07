@@ -63,7 +63,6 @@ TOKEN:
 | <INT: "int">
 | <BOOLEAN: "boolean">
 | <INT_ARRAY: "int[]">
-| <BOOL_ARRAY: "boolean[]">
 | <IF: "if">
 | <ELSE: "else">
 | <WHILE: "while">
@@ -119,7 +118,7 @@ void MainDeclaration(): {Token t;}
 /*testes.md for more info*/
 void Type():{}
 {
-    (<INT> | <BOOLEAN> | <INT_ARRAY> | <BOOL_ARRAY> )
+    (<INT> | <BOOLEAN> | <INT_ARRAY> | <IDENTIFIER> )
 }
 
 
