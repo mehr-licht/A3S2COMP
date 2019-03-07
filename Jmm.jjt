@@ -76,13 +76,19 @@ TOKEN:
 | <THIS: "this">
 | <NEW: "new">
 | <NOT: "!">
+| <STATIC: "static">
+| <VOID: "void">
+| <MAIN: "main">
+| <QUOTE:"\"">
 }
 
 TOKEN:
 {
- < INTEGER: (["0"-"9"])+ >
+ < INTEGERLITERAL: (["0"-"9"])+ >
 | < LF: "\n" >
 | <IDENTIFIER: ["_","a"-"z","A"-"Z"](["_","a"-"z","A"-"Z","0"-"9"])*>
+| <STRING: "\"" (["a"-"z","A"-"Z","0"-"9",":"," ","="])+ "\"">
+ /* | <STRING: <QUOTE> (["_","a"-"z","A"-"Z","0"-"9"," ", "\n", "\t"])* <QUOTE> >*/
 }
 
 
@@ -99,19 +105,23 @@ void Program(): {Token t;}
     <LF>                // also we need to uncomment ClassDeclaration()
 }
 
-/*
+
 void ClassDeclaration(): {Token t;}
 {
-  <CLASS> <SPACE> <INTEGER>
-
+  <CLASS> <IDENTIFIER> (<EXTENDS> <IDENTIFIER>)? <LCHAVETA> (VarDeclaration())* (MainDeclaration() | MethodDeclaration())* <RCHAVETA>
 }
-*/
+
+void MainDeclaration(): {Token t;}
+{
+<PUBLIC> <STATIC> <VOID> <MAIN> <LPAR> <STRING> <LSQUARE> <RSQUARE> <IDENTIFIER> <RPAR> <LCHAVETA> (VarDeclaration())* (Statement())* <RCHAVETA>
+}
 
 /*testes.md for more info*/
 void Type():{}
 {
     (<INT> | <BOOLEAN> | <INT_ARRAY> | <BOOL_ARRAY> )
 }
+
 
 /*testes.md for more info*/
 void VarDeclaration(): {Token t;}
@@ -136,7 +146,7 @@ void MethodDeclaration():{}
 {
     //excludes class constructor
     // public int getFoo(){return foo;)}
-    <PUBLIC> Type() <IDENTIFIER> <LPAR> MethodDeclarationArgs() <RPAR> MethodDeclarationdInside()
+    <PUBLIC> Type() <IDENTIFIER> <LPAR> MethodDeclarationArgs() <RPAR> MethodDeclarationdInside() //WHY "(" instead of <LPAR>, etc ?
 }
 
 //Trata dos argumentos da funcao
@@ -152,7 +162,7 @@ void MethodDeclarationArgs():{}
 //Trata apenas dos returnos que os metodos podem ter
 void ReturnExpression():{}
 {
-    (<IDENTIFIER> | <INTEGER> | <TRUE> | <FALSE> )
+    (<IDENTIFIER> | <INTEGERLITERAL> | <TRUE> | <FALSE> )   // WHY "true" instead of <TRUE>?
 }
 
 // Corpo do metodo da classe, a parte entre {}
@@ -161,6 +171,35 @@ void MethodDeclarationdInside():{}
     <LCHAVETA> (VarDeclaration() )* (Statement())* <RETURN> [ReturnExpression()] <SCOLON> <RCHAVETA>
 }
 
+void Expression(): {Token t;}
+{
+Exp1() | Exp2()
+}
+
+void Exp1(): {Token t;}
+{
+Expression() <OPERATOR> Expression()
+| Expression() <LSQUARE> Expression() <RSQUARE>
+| Expression() <POINT> <LENGTH>
+| Expression() <POINT> <IDENTIFIER> <LPAR> (Expression() (<VIRG> Expression())*)? <RPAR>
+}
+
+
+void Exp2(): {Token t;}
+{
+<INTEGERLITERAL>
+| <TRUE>
+| <FALSE>
+| <IDENTIFIER>
+| <THIS>
+| <NEW> <INT> <LSQUARE> Expression() <RSQUARE>
+| <NEW> <IDENTIFIER> <LPAR> <RPAR>
+| <NOT> Expression()
+| <LPAR> Expression() <RPAR>
+}
+
+
+/*
 
 /*
 void Debugg(): {}
@@ -203,7 +242,7 @@ void Expr2(int sign) #void: {} // 1: positive; -1: negative
 
 void Expr3(int sign) #void: {Token t;}
 {
- t=<INTEGER>
+ t=<INTEGERLITERAL>
 {
 jjtThis.val = sign * Integer.parseInt(t.image);
 } #Term
