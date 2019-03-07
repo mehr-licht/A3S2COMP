@@ -95,7 +95,7 @@ Program() {return jjtThis;}
 
 void Program(): {Token t;}
 {
-    VarDeclaration()  //changed this for debugging reasons should be ClassDeclaration()
+    Statement()  //changed this for debugging reasons should be ClassDeclaration()
     <LF>                // also we need to uncomment ClassDeclaration()
 }
 
@@ -121,9 +121,14 @@ void VarDeclaration(): {Token t;}
 
 
 
-void Statement():{}
+void Statement():{Token:t;}
 {
-    <INT> //just for Debugging reasons
+    <LCHAVETA> ( Statement() )* <RCHAVETA>
+    | <IF> <LPAR> Expression() <RPAR> Statement() <ELSE> Statement()
+    | <WHILE> <LPAR> Expression() <RPAR> Statement()
+    | Expression() <SCOLON>
+    | <IDENTIFIER> <EQUAL> Expression() <SCOLON>
+    | <IDENTIFIER> <LSQUARE> Expression() <RSQUARE> <EQUAL> Expression() <SCOLON>
 }
 
 // primeia parte da declaracao do metodo
