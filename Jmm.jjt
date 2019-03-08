@@ -62,7 +62,6 @@ TOKEN:
 | <RSQUARE: "]">
 | <INT: "int">
 | <BOOLEAN: "boolean">
-| <INT_ARRAY: "int[]">
 | <IF: "if">
 | <ELSE: "else">
 | <WHILE: "while">
@@ -79,6 +78,7 @@ TOKEN:
 | <VOID: "void">
 | <MAIN: "main">
 | <QUOTE:"\"">
+| <STRING: "String">
 }
 
 TOKEN:
@@ -86,7 +86,7 @@ TOKEN:
  < INTEGERLITERAL: (["0"-"9"])+ >
 | < LF: "\n" >
 | <IDENTIFIER: ["_","a"-"z","A"-"Z"](["_","a"-"z","A"-"Z","0"-"9"])*>
-| <STRING: "\"" (["a"-"z","A"-"Z","0"-"9",":"," ","="])+ "\"">
+ /* | <STRING: "\"" (["a"-"z","A"-"Z","0"-"9",":"," ","="])+ "\""> //comeca e acabe em aspas */
  /* | <STRING: <QUOTE> (["_","a"-"z","A"-"Z","0"-"9"," ", "\n", "\t"])* <QUOTE> >*/
 }
 
@@ -100,26 +100,17 @@ Program() {return jjtThis;}
 
 void Program(): {Token t;}
 {
-    Statement()  //changed this for debugging reasons should be ClassDeclaration()
+    ClassDeclaration()  //changed this for debugging reasons should be ClassDeclaration()
     <LF>                // also we need to uncomment ClassDeclaration()
 }
 
+//LEXICO
 
 void ClassDeclaration(): {Token t;}
 {
   <CLASS> <IDENTIFIER> (<EXTENDS> <IDENTIFIER>)? <LCHAVETA> (VarDeclaration())* (MainDeclaration() | MethodDeclaration())* <RCHAVETA>
 }
 
-void MainDeclaration(): {Token t;}
-{
-<PUBLIC> <STATIC> <VOID> <MAIN> <LPAR> <STRING> <LSQUARE> <RSQUARE> <IDENTIFIER> <RPAR> <LCHAVETA> (VarDeclaration())* (Statement())* <RCHAVETA>
-}
-
-/*testes.md for more info*/
-void Type():{}
-{
-    (<INT> | <BOOLEAN> | <INT_ARRAY> | <IDENTIFIER> )
-}
 
 
 /*testes.md for more info*/
@@ -130,15 +121,12 @@ void VarDeclaration(): {Token t;}
 
 
 
-void Statement():{Token:t;}
+void MainDeclaration(): {Token t;}
 {
-    <LCHAVETA> ( Statement() )* <RCHAVETA>
-    | <IF> <LPAR> Expression() <RPAR> Statement() <ELSE> Statement()
-    | <WHILE> <LPAR> Expression() <RPAR> Statement()
-    | Expression() <SCOLON>
-    | <IDENTIFIER> <EQUAL> Expression() <SCOLON>
-    | <IDENTIFIER> <LSQUARE> Expression() <RSQUARE> <EQUAL> Expression() <SCOLON>
+<PUBLIC> <STATIC> <VOID> <MAIN> <LPAR> <STRING> <LSQUARE> <RSQUARE> <IDENTIFIER> <RPAR> <LCHAVETA> (VarDeclaration())* (Statement())* <RCHAVETA>
 }
+
+
 
 // primeia parte da declaracao do metodo
 void MethodDeclaration():{}
@@ -151,50 +139,61 @@ void MethodDeclaration():{}
 //Trata dos argumentos da funcao
 void MethodDeclarationArgs():{}
 {
-    (
-         Type() <IDENTIFIER>
-     |
-         (Type() <IDENTIFIER>  (<VIRG> Type() <IDENTIFIER>)+)
-    )
+    (Type() <IDENTIFIER>  (<VIRG> Type() <IDENTIFIER>)* )?
+
 }
 
-//Trata apenas dos returnos que os metodos podem ter
-void ReturnExpression():{}
-{
-    (<IDENTIFIER> | <INTEGERLITERAL> | <TRUE> | <FALSE> )   // WHY "true" instead of <TRUE>?
-}
 
 // Corpo do metodo da classe, a parte entre {}
 void MethodDeclarationdInside():{}
 {
-    <LCHAVETA> (VarDeclaration() )* (Statement())* <RETURN> [ReturnExpression()] <SCOLON> <RCHAVETA>
+    <LCHAVETA> (VarDeclaration() )* (Statement())* <RETURN> Expression() <SCOLON> <RCHAVETA>
 }
+
+
+/*testes.md for more info*/
+void Type():{}
+{
+    (<INT> | <BOOLEAN> | <INT>  <LSQUARE> <RSQUARE> | <IDENTIFIER> )
+}
+
+
+
+void Statement():{Token t;}
+{
+    <LCHAVETA> ( Statement() )* <RCHAVETA>
+    | <IF> <LPAR> Expression() <RPAR> Statement() <ELSE> Statement()
+    | <WHILE> <LPAR> Expression() <RPAR> Statement()
+    | Expression() <SCOLON>
+    | <IDENTIFIER> <EQUAL> Expression() <SCOLON>
+    | <IDENTIFIER> <LSQUARE> Expression() <RSQUARE> <EQUAL> Expression() <SCOLON>
+}
+
 
 void Expression(): {Token t;}
 {
-Exp1() | Exp2()
+<INTEGERLITERAL> ( Exp1() )?
+| <TRUE> ( Exp1() )?
+| <FALSE> ( Exp1() )?
+| <IDENTIFIER> ( Exp1() )?
+| <THIS> ( Exp1() )?
+| <NEW> Novos() ( Exp1() )?
+| <NOT> Expression() ( Exp1() )?
+| <LPAR> Expression() <RPAR> ( Exp1() )?
 }
 
-void Exp1(): {Token t;}
+void Exp1() : {Token t;}
 {
-Expression() <OPERATOR> Expression()
-| Expression() <LSQUARE> Expression() <RSQUARE>
-| Expression() <POINT> <LENGTH>
-| Expression() <POINT> <IDENTIFIER> <LPAR> (Expression() (<VIRG> Expression())*)? <RPAR>
+ <OPERATOR> Expression()  Exp1()
+| <LSQUARE> Expression() <RSQUARE>  Exp1()
+| <POINT> <LENGTH>  Exp1()
+| <	POINT> <IDENTIFIER> <LPAR> ( Expression() (<VIRG> Expression() )* )? <RPAR>  Exp1()
 }
 
-
-void Exp2(): {Token t;}
+void Novos(): {Token t;}
 {
-<INTEGERLITERAL>
-| <TRUE>
-| <FALSE>
-| <IDENTIFIER>
-| <THIS>
-| <NEW> <INT> <LSQUARE> Expression() <RSQUARE>
-| <NEW> <IDENTIFIER> <LPAR> <RPAR>
-| <NOT> Expression()
-| <LPAR> Expression() <RPAR>
+<INT><LSQUARE>Expression() <RSQUARE>
+| <IDENTIFIER><LPAR><RPAR>
 }
 
 
@@ -248,5 +247,4 @@ jjtThis.val = sign * Integer.parseInt(t.image);
  | "-" Expr3(-1)
  | "(" Expr1() ")"
 }*/
-
 
