@@ -114,9 +114,9 @@ void ClassDeclaration(): {Token t;}
 
 
 /*testes.md for more info*/
-void VarDeclaration(): {Token t;}
+void Type():{}
 {
-  Type() <IDENTIFIER> ";"
+    (<INT> | <BOOLEAN> | <INT>  <LSQUARE> <RSQUARE> | <IDENTIFIER> )
 }
 
 
@@ -136,8 +136,7 @@ void MethodDeclaration():{}
     <PUBLIC> Type() <IDENTIFIER> <LPAR> MethodDeclarationArgs() <RPAR> MethodDeclarationdInside() //WHY "(" instead of <LPAR>, etc ?
 }
 
-//Trata dos argumentos da funcao
-void MethodDeclarationArgs():{}
+void Expression(): {Token t;}
 {
     (Type() <IDENTIFIER>  (<VIRG> Type() <IDENTIFIER>)* )?
 
