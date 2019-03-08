@@ -159,7 +159,7 @@ void Type():{}
 
 
 
-void Statement():{Token:t;}
+void Statement():{Token t;}
 {
     <LCHAVETA> ( Statement() )* <RCHAVETA>
     | <IF> <LPAR> Expression() <RPAR> Statement() <ELSE> Statement()
