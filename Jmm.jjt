@@ -114,9 +114,9 @@ void ClassDeclaration(): {Token t;}
 
 
 /*testes.md for more info*/
-void Type():{}
+void VarDeclaration(): {Token t;}
 {
-    (<INT> | <BOOLEAN> | <INT>  <LSQUARE> <RSQUARE> | <IDENTIFIER> )
+  Type() <IDENTIFIER> ";"
 }
 
 
@@ -136,7 +136,8 @@ void MethodDeclaration():{}
     <PUBLIC> Type() <IDENTIFIER> <LPAR> MethodDeclarationArgs() <RPAR> MethodDeclarationdInside() //WHY "(" instead of <LPAR>, etc ?
 }
 
-void Expression(): {Token t;}
+//Trata dos argumentos da funcao
+void MethodDeclarationArgs():{}
 {
     (Type() <IDENTIFIER>  (<VIRG> Type() <IDENTIFIER>)* )?
 
@@ -147,6 +148,15 @@ void Expression(): {Token t;}
 void MethodDeclarationdInside():{}
 {
     <LCHAVETA> (VarDeclaration() )* (Statement())* <RETURN> Expression() <SCOLON> <RCHAVETA>
+<<<<<<< HEAD
+}
+
+
+/*testes.md for more info*/
+void Type():{}
+{
+    (<INT> | <BOOLEAN> | <INT>  <LSQUARE> <RSQUARE> | <IDENTIFIER> )
+=======
 }
 
 
@@ -171,6 +181,26 @@ void Statement():{Token t;}
 
 void Expression(): {Token t;}
 {
+    Exp1() | Exp2()
+>>>>>>> c618a8cba83227f32fdafc0870a41b166c2cbe08
+}
+
+
+
+void Statement():{Token t;}
+{
+<<<<<<< HEAD
+    <LCHAVETA> ( Statement() )* <RCHAVETA>
+    | <IF> <LPAR> Expression() <RPAR> Statement() <ELSE> Statement()
+    | <WHILE> <LPAR> Expression() <RPAR> Statement()
+    | Expression() <SCOLON>
+    | <IDENTIFIER> <EQUAL> Expression() <SCOLON>
+    | <IDENTIFIER> <LSQUARE> Expression() <RSQUARE> <EQUAL> Expression() <SCOLON>
+}
+
+
+void Expression(): {Token t;}
+{
 <INTEGERLITERAL> ( Exp1() )?
 | <TRUE> ( Exp1() )?
 | <FALSE> ( Exp1() )?
@@ -179,6 +209,12 @@ void Expression(): {Token t;}
 | <NEW> Novos() ( Exp1() )?
 | <NOT> Expression() ( Exp1() )?
 | <LPAR> Expression() <RPAR> ( Exp1() )?
+=======
+      Expression() <OPERATOR> Expression()
+    | Expression() <LSQUARE> Expression() <RSQUARE>
+    | Expression() <POINT> <LENGTH>
+    | Expression() <POINT> <IDENTIFIER> <LPAR> (Expression() (<VIRG> Expression())* )? <RPAR>
+>>>>>>> c618a8cba83227f32fdafc0870a41b166c2cbe08
 }
 
 void Exp1() : {Token t;}
@@ -191,8 +227,20 @@ void Exp1() : {Token t;}
 
 void Novos(): {Token t;}
 {
+<<<<<<< HEAD
 <INT><LSQUARE>Expression() <RSQUARE>
 | <IDENTIFIER><LPAR><RPAR>
+=======
+    <INTEGERLITERAL>
+    | <TRUE>
+    | <FALSE>
+    | <IDENTIFIER>
+    | <THIS>
+    | <NEW> <INT> <LSQUARE> Expression() <RSQUARE>
+    | <NEW> <IDENTIFIER> <LPAR> <RPAR>
+    | <NOT> Expression()
+    | <LPAR> Expression() <RPAR>
+>>>>>>> c618a8cba83227f32fdafc0870a41b166c2cbe08
 }
 
 
