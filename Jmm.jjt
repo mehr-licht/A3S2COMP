@@ -100,7 +100,7 @@ Program() {return jjtThis;}
 
 void Program(): {Token t;}
 {
-    Statement()  //changed this for debugging reasons should be ClassDeclaration()
+    ClassDeclaration()  //changed this for debugging reasons should be ClassDeclaration()
     <LF>                // also we need to uncomment ClassDeclaration()
 }
 
@@ -148,6 +148,15 @@ void MethodDeclarationArgs():{}
 void MethodDeclarationdInside():{}
 {
     <LCHAVETA> (VarDeclaration() )* (Statement())* <RETURN> Expression() <SCOLON> <RCHAVETA>
+<<<<<<< HEAD
+}
+
+
+/*testes.md for more info*/
+void Type():{}
+{
+    (<INT> | <BOOLEAN> | <INT>  <LSQUARE> <RSQUARE> | <IDENTIFIER> )
+=======
 }
 
 
@@ -173,19 +182,55 @@ void Statement():{Token t;}
 void Expression(): {Token t;}
 {
     Exp1() | Exp2()
+>>>>>>> c618a8cba83227f32fdafc0870a41b166c2cbe08
 }
 
-void Exp1(): {Token t;}
+
+
+void Statement():{Token t;}
 {
+<<<<<<< HEAD
+    <LCHAVETA> ( Statement() )* <RCHAVETA>
+    | <IF> <LPAR> Expression() <RPAR> Statement() <ELSE> Statement()
+    | <WHILE> <LPAR> Expression() <RPAR> Statement()
+    | Expression() <SCOLON>
+    | <IDENTIFIER> <EQUAL> Expression() <SCOLON>
+    | <IDENTIFIER> <LSQUARE> Expression() <RSQUARE> <EQUAL> Expression() <SCOLON>
+}
+
+
+void Expression(): {Token t;}
+{
+<INTEGERLITERAL> ( Exp1() )?
+| <TRUE> ( Exp1() )?
+| <FALSE> ( Exp1() )?
+| <IDENTIFIER> ( Exp1() )?
+| <THIS> ( Exp1() )?
+| <NEW> Novos() ( Exp1() )?
+| <NOT> Expression() ( Exp1() )?
+| <LPAR> Expression() <RPAR> ( Exp1() )?
+=======
       Expression() <OPERATOR> Expression()
     | Expression() <LSQUARE> Expression() <RSQUARE>
     | Expression() <POINT> <LENGTH>
     | Expression() <POINT> <IDENTIFIER> <LPAR> (Expression() (<VIRG> Expression())* )? <RPAR>
+>>>>>>> c618a8cba83227f32fdafc0870a41b166c2cbe08
 }
 
-
-void Exp2(): {Token t;}
+void Exp1() : {Token t;}
 {
+ <OPERATOR> Expression()  Exp1()
+| <LSQUARE> Expression() <RSQUARE>  Exp1()
+| <POINT> <LENGTH>  Exp1()
+| <	POINT> <IDENTIFIER> <LPAR> ( Expression() (<VIRG> Expression() )* )? <RPAR>  Exp1()
+}
+
+void Novos(): {Token t;}
+{
+<<<<<<< HEAD
+<INT><LSQUARE>Expression() <RSQUARE>
+| <IDENTIFIER><LPAR><RPAR>
+=======
     <INTEGERLITERAL>
     | <TRUE>
     | <FALSE>
@@ -195,6 +240,7 @@ void Exp2(): {Token t;}
     | <NEW> <IDENTIFIER> <LPAR> <RPAR>
     | <NOT> Expression()
     | <LPAR> Expression() <RPAR>
+>>>>>>> c618a8cba83227f32fdafc0870a41b166c2cbe08
 }
 
 
@@ -248,5 +294,4 @@ jjtThis.val = sign * Integer.parseInt(t.image);
  | "-" Expr3(-1)
  | "(" Expr1() ")"
 }*/
-
 
