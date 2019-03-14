@@ -188,48 +188,30 @@ void Statement():{Token t1,t2;}
     | t2=<IDENTIFIER> <LSQUARE> Expression() <RSQUARE> <EQUAL> Expression() <SCOLON>
 }
 
-
 void Expression(): {Token t;}
 {
-    Exp1() | Exp2()
+<INTEGERLITERAL> (Exp1())?
+| <TRUE> (Exp1())?
+| <FALSE> (Exp1())?
+| <IDENTIFIER> (Exp1())?
+| <THIS> (Exp1())?
+| <NEW> Novos() (Exp1())?
+| <NOT> Expression() (Exp1())
+| <LPAR> Expression() <RPAR> (Exp1())?
 }
 
-
-void Expression(): {Token t1;}
+void Exp1(): {Token t;}
 {
-<INTEGERLITERAL> ( Exp1() )?
-| <TRUE> ( Exp1() )?
-| <FALSE> ( Exp1() )?
-| t1=<IDENTIFIER> ( Exp1() )?
-| <THIS> ( Exp1() )?
-| <NEW> Novos() ( Exp1() )?
-| <NOT> Expression() ( Exp1() )?
-| <LPAR> Expression() <RPAR> ( Exp1() )?
-
+( <ADDOP> | <MULTOP> | <BINAND> | <LESSTHAN> ) Expression() Exp1()
+| <LSQUARE> Expression() <RSQUARE> Exp1()
+| <POINT> <LENGTH> Exp1()
+| <	POINT> <IDENTIFIER> <LPAR> ( Expression() (<VIRG> Expression() )* )? <RPAR> Exp1()
 }
 
-void Exp1() : {Token t1;}
+void Novos(): {token t;}
 {
- <OPERATOR> Expression()  Exp1()
-| <LSQUARE> Expression() <RSQUARE>  Exp1()
-| <POINT> <LENGTH>  Exp1()
-| <POINT> t1=<IDENTIFIER> <LPAR> ( Expression() (<VIRG> Expression() )* )? <RPAR>  Exp1()
-}
-
-void Novos(): {Token t1,t2,t3;}
-{
-
-     <INT><LSQUARE>Expression() <RSQUARE>
-    | t1=<IDENTIFIER><LPAR><RPAR><INTEGERLITERAL>
-    | <TRUE>
-    | <FALSE>
-    | t2=<IDENTIFIER>
-    | <THIS>
-    | <NEW> <INT> <LSQUARE> Expression() <RSQUARE>
-    | <NEW> t3=<IDENTIFIER> <LPAR> <RPAR>
-    | <NOT> Expression()
-    | <LPAR> Expression() <RPAR>
-
+<INT><LSQUARE>Expression() <RSQUARE>
+| <IDENTIFIER><LPAR><RPAR>
 }
 
 
