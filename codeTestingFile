@@ -1,6 +1,6 @@
 class Fac {
         public int ComputeFac(int num){
-                int num_aux; //
+                int num_aux; 5 //
                 /***/
             return num_aux;
          }

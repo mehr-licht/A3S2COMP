@@ -1,11 +1,14 @@
 options {
         LOOKAHEAD=3;
+        //DEBUG_PARSER=true;
         }
 
 PARSER_BEGIN(Jmm)
 
 public class Jmm
 {
+
+
  public static void main(String args[]) throws ParseException {
 
      //Parser initialization
@@ -48,9 +51,21 @@ public class Jmm
 
      }
 
- System.out.println("---------- Execution Finished ------------" );//+ myJmm.eval(root));
- }
-
+     System.out.println("---------- Execution Finished ------------" );//+ myJmm.eval(root));
+}
+   void error_skipto(int kind) {
+     ParseException e = generateParseException();  // generate the exception object.
+     System.out.println(e.toString());  // print the error message
+     Token t;
+     do {
+       t = getNextToken();
+     } while (t.kind != kind);
+       // The above loop consumes tokens all the way up to a token of
+       // "kind".  We use a do-while loop rather than a while because the
+       // current token is the one immediately before the erroneous token
+       // (in our case the token immediately before what should have been
+       // "if"/"while".
+   }
 }
 
 PARSER_END(Jmm)
@@ -160,6 +175,7 @@ SimpleNode Start(): {}
 void Program(): {Token t;}
 {
     ClassDeclaration()  //changed this for debugging reasons should be ClassDeclaration()
+
     <EOF>                // also we need to uncomment ClassDeclaration()
 }
 
