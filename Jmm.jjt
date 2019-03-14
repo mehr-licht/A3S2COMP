@@ -7,31 +7,49 @@ PARSER_BEGIN(Jmm)
 public class Jmm
 {
  public static void main(String args[]) throws ParseException {
-     Jmm myJmm = new Jmm(System.in);
-     SimpleNode root = myJmm.Start();
-     root.dump("");
 
- System.out.println("Valor da expressão: " );//+ myJmm.eval(root));
+     //Parser initialization
+     Jmm myJmm;
+
+     if(args.length == 0){
+        System.out.println("Jmm Parser: Reading Input...");
+        myJmm = new Jmm(System.in);
+
+     } else if(args.length == 1){
+        System.out.println("Jmm Parser: Reading File " + args[0] + " ... ");
+        try{
+            myJmm = new Jmm(    new java.io.FileInputStream(args[0])    );
+        } catch(java.io.FileNotFoundException e){
+            System.out.println("Jmm Parser: File " + args[0] + " not found");
+            return;
+        }
+
+     }
+     else{
+        System.out.println("Jmm Parser: Run one of the following commands");
+        System.out.println("   java Jmm < fileName  ");
+        System.out.println("   ou  ");
+        System.out.println("    java Jmm  fileName  ");
+        return;
+     }
+
+     try{
+        SimpleNode root = myJmm.Start();
+        System.out.println("Jmm Parser: Input wad readed sucessfully  ");
+        root.dump("");
+
+     }catch (ParseException e){
+        System.out.println(" Jmm Parser: Error during the parser: ");
+        System.out.println(e.getMessage());
+
+     }catch(TokenMgrError e){
+        System.out.println(" Jmm Parser: Error during the parser: ");
+                System.out.println(e.getMessage());
+
+     }
+
+ System.out.println("---------- Execution Finished ------------" );//+ myJmm.eval(root));
  }
-/*
-int eval(SimpleNode node) {
-if(node.jjtGetNumChildren() == 0) // leaf node with integer value
-return node.val;
-else if(node.jjtGetNumChildren() == 1) // only one child
-return this.eval((SimpleNode) node.jjtGetChild(0));
-SimpleNode lhs = (SimpleNode) node.jjtGetChild(0); //left child
-SimpleNode rhs = (SimpleNode) node.jjtGetChild(1); // right child
-switch(node.id) {
-case CalculatorTreeConstants.JJTADD : return eval( lhs ) + eval( rhs );
-case CalculatorTreeConstants.JJTSUB : return eval( lhs ) - eval( rhs );
-case CalculatorTreeConstants.JJTMUL : return eval( lhs ) * eval( rhs );
-case CalculatorTreeConstants.JJTDIV : return eval( lhs ) / eval( rhs );
-default : // abort
-System.out.println("Operador ilegal!");
-System.exit(1);
-}
-return 0;
- }*/
 
 }
 
@@ -116,7 +134,7 @@ void ClassDeclaration(): {Token t;}
 /*testes.md for more info*/
 void VarDeclaration(): {Token t;}
 {
-  Type() <IDENTIFIER> ";"
+  Type() <IDENTIFIER> <SCOLON>
 }
 
 
@@ -148,15 +166,6 @@ void MethodDeclarationArgs():{}
 void MethodDeclarationdInside():{}
 {
     <LCHAVETA> (VarDeclaration() )* (Statement())* <RETURN> Expression() <SCOLON> <RCHAVETA>
-<<<<<<< HEAD
-}
-
-
-/*testes.md for more info*/
-void Type():{}
-{
-    (<INT> | <BOOLEAN> | <INT>  <LSQUARE> <RSQUARE> | <IDENTIFIER> )
-=======
 }
 
 
@@ -165,8 +174,6 @@ void Type():{}
 {
     (<INT> | <BOOLEAN> | <INT>  <LSQUARE> <RSQUARE> | <IDENTIFIER> )
 }
-
-
 
 void Statement():{Token t;}
 {
@@ -182,14 +189,14 @@ void Statement():{Token t;}
 void Expression(): {Token t;}
 {
     Exp1() | Exp2()
->>>>>>> c618a8cba83227f32fdafc0870a41b166c2cbe08
+
 }
 
 
 
 void Statement():{Token t;}
 {
-<<<<<<< HEAD
+
     <LCHAVETA> ( Statement() )* <RCHAVETA>
     | <IF> <LPAR> Expression() <RPAR> Statement() <ELSE> Statement()
     | <WHILE> <LPAR> Expression() <RPAR> Statement()
@@ -209,12 +216,7 @@ void Expression(): {Token t;}
 | <NEW> Novos() ( Exp1() )?
 | <NOT> Expression() ( Exp1() )?
 | <LPAR> Expression() <RPAR> ( Exp1() )?
-=======
-      Expression() <OPERATOR> Expression()
-    | Expression() <LSQUARE> Expression() <RSQUARE>
-    | Expression() <POINT> <LENGTH>
-    | Expression() <POINT> <IDENTIFIER> <LPAR> (Expression() (<VIRG> Expression())* )? <RPAR>
->>>>>>> c618a8cba83227f32fdafc0870a41b166c2cbe08
+
 }
 
 void Exp1() : {Token t;}
@@ -222,16 +224,14 @@ void Exp1() : {Token t;}
  <OPERATOR> Expression()  Exp1()
 | <LSQUARE> Expression() <RSQUARE>  Exp1()
 | <POINT> <LENGTH>  Exp1()
-| <	POINT> <IDENTIFIER> <LPAR> ( Expression() (<VIRG> Expression() )* )? <RPAR>  Exp1()
+| <POINT> <IDENTIFIER> <LPAR> ( Expression() (<VIRG> Expression() )* )? <RPAR>  Exp1()
 }
 
 void Novos(): {Token t;}
 {
-<<<<<<< HEAD
-<INT><LSQUARE>Expression() <RSQUARE>
-| <IDENTIFIER><LPAR><RPAR>
-=======
-    <INTEGERLITERAL>
+
+     <INT><LSQUARE>Expression() <RSQUARE>
+    | <IDENTIFIER><LPAR><RPAR><INTEGERLITERAL>
     | <TRUE>
     | <FALSE>
     | <IDENTIFIER>
@@ -240,7 +240,7 @@ void Novos(): {Token t;}
     | <NEW> <IDENTIFIER> <LPAR> <RPAR>
     | <NOT> Expression()
     | <LPAR> Expression() <RPAR>
->>>>>>> c618a8cba83227f32fdafc0870a41b166c2cbe08
+
 }
 
 
@@ -262,36 +262,3 @@ void Debugg(): {}
 
 }
 */
-
-
-
-
-
-/* Samples from Calculator exercise
-void Expr1() #void: {}
-{
- Expr2(1)
- [
- ("+" Expr2(1) #Add(2)
- | "-" Expr2(1) #Sub(2))
- ]
-}
-
-void Expr2(int sign) #void: {} // 1: positive; -1: negative
-{
- Expr3(sign)
- ("*" Expr3(1) #Mul(2)
- | "/" Expr3(1) #Div(2)
-)? // (…)? é equivalente a […]
-}
-
-void Expr3(int sign) #void: {Token t;}
-{
- t=<INTEGERLITERAL>
-{
-jjtThis.val = sign * Integer.parseInt(t.image);
-} #Term
- | "-" Expr3(-1)
- | "(" Expr1() ")"
-}*/
-

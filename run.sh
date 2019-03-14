@@ -6,4 +6,4 @@ javacc Jmm.jj;
 echo javac *.java####################;
 javac *.java;
 echo java Jmm;
-java Jmm
+java Jmm codeTestingFile
