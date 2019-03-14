@@ -86,7 +86,10 @@ TOKEN:
 | <EQUAL: "=">
 | <POINT: ".">
 | <LENGTH: "length">
-| <OPERATOR: "&&" | "<" | "+" | "-" | "*" | "/">
+| <BINAND: "&&" >
+| <LESSTHAN:  "<" >
+| <ADDOP: "+" | "-" >
+| <MULTOP: "*" | "/" >
 | <TRUE: "true">
 | <FALSE: "false">
 | <THIS: "this">
