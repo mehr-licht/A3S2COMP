@@ -59,7 +59,7 @@ PARSER_END(Jmm)
 //TOKENS
 SKIP ://no comments considered
 {
- " " | "\r" | "\t"
+ " " | "\r" | "\t" | "\n"
 }
 
 
@@ -105,7 +105,6 @@ TOKEN:
 TOKEN:
 {
  < INTEGERLITERAL: (["0"-"9"])+ >
-| < LF: "\n" >
 | <IDENTIFIER: ["_","a"-"z","A"-"Z"](["_","a"-"z","A"-"Z","0"-"9"])*>
  /* | <STRING: "\"" (["a"-"z","A"-"Z","0"-"9",":"," ","="])+ "\""> //comeca e acabe em aspas */
  /* | <STRING: <QUOTE> (["_","a"-"z","A"-"Z","0"-"9"," ", "\n", "\t"])* <QUOTE> >*/
@@ -115,7 +114,7 @@ TOKEN:
 //PRODUCTIONS
 SimpleNode Start(): {}
 {
-Program() {return jjtThis;}
+    Program() {return jjtThis;}
 }
 
 
@@ -127,9 +126,34 @@ void Program(): {Token t;}
 
 //LEXICO
 
-void ClassDeclaration(): {Token t1; t2;}
+void ClassDeclaration(): {Token t1, t2;}
 {
-  <CLASS> t1=<IDENTIFIER> (<EXTENDS> t2=<IDENTIFIER>)? <LCHAVETA> (VarDeclaration())* (MainDeclaration() | MethodDeclaration())* <RCHAVETA>
+
+    <CLASS> t1=<IDENTIFIER> (<EXTENDS> t2=<IDENTIFIER>)? <LCHAVETA>
+    (
+        try {
+            VarDeclaration()
+                    }
+                    catch (ParseException e) {
+                      System.out.println(e.getMessage());
+                    }
+
+    )*
+    (
+        try{
+            MainDeclaration()
+                    }catch(ParseException e){
+                        System.out.println(e.getMessage());
+                    }
+     |
+
+        try{
+            MethodDeclaration()
+                    }catch(ParseException e){
+                        System.out.println(e.getMessage());
+                    }
+     )* <RCHAVETA>
+
 }
 
 
@@ -202,16 +226,16 @@ void Expression(): {Token t;}
 
 void Exp1(): {Token t;}
 {
-( <ADDOP> | <MULTOP> | <BINAND> | <LESSTHAN> ) Expression() Exp1()
-| <LSQUARE> Expression() <RSQUARE> Exp1()
-| <POINT> <LENGTH> Exp1()
-| <	POINT> <IDENTIFIER> <LPAR> ( Expression() (<VIRG> Expression() )* )? <RPAR> Exp1()
+    ( <ADDOP> | <MULTOP> | <BINAND> | <LESSTHAN> ) Expression() Exp1()
+    | <LSQUARE> Expression() <RSQUARE> Exp1()
+    | <POINT> <LENGTH> Exp1()
+    | <	POINT> <IDENTIFIER> <LPAR> ( Expression() (<VIRG> Expression() )* )? <RPAR> Exp1()
 }
 
-void Novos(): {token t;}
+void Novos(): {Token t;}
 {
-<INT><LSQUARE>Expression() <RSQUARE>
-| <IDENTIFIER><LPAR><RPAR>
+    <INT><LSQUARE>Expression() <RSQUARE>
+    | <IDENTIFIER><LPAR><RPAR>
 }
 
 
