@@ -62,8 +62,45 @@ SKIP ://no comments considered
  " " | "\r" | "\t" | "\n"
 }
 
+/***************************************************************** COMMENTS begin*********************************/
 
-// RESERVED
+MORE :
+{
+  "//" : IN_SINGLE_LINE_COMMENT
+|
+  <"/**" ~["/"]> { input_stream.backup(1); } : IN_FORMAL_COMMENT
+|
+  "/*" : IN_MULTI_LINE_COMMENT
+}
+
+<IN_SINGLE_LINE_COMMENT>
+SPECIAL_TOKEN :
+{
+  <SINGLE_LINE_COMMENT: "\n" | "\r" | "\r\n" > : DEFAULT
+}
+
+<IN_FORMAL_COMMENT>
+SPECIAL_TOKEN :
+{
+  <FORMAL_COMMENT: "*/" > : DEFAULT
+}
+
+<IN_MULTI_LINE_COMMENT>
+SPECIAL_TOKEN :
+{
+  <MULTI_LINE_COMMENT: "*/" > : DEFAULT
+}
+
+<IN_SINGLE_LINE_COMMENT,IN_FORMAL_COMMENT,IN_MULTI_LINE_COMMENT>
+
+MORE :
+{
+  < ~[] >
+}
+/***************************************************************** COMMENTS end*********************************/
+
+
+// *************************************************************** RESERVED begin*******************************/
 TOKEN:
 {
 <CLASS: "class">
@@ -110,8 +147,10 @@ TOKEN:
  /* | <STRING: <QUOTE> (["_","a"-"z","A"-"Z","0"-"9"," ", "\n", "\t"])* <QUOTE> >*/
 }
 
+// *************************************************************** RESERVED end*******************************/
 
-//PRODUCTIONS
+
+//**************************************************************** PRODUCTIONS begin *************************/
 SimpleNode Start(): {}
 {
     Program() {return jjtThis;}
@@ -121,7 +160,7 @@ SimpleNode Start(): {}
 void Program(): {Token t;}
 {
     ClassDeclaration()  //changed this for debugging reasons should be ClassDeclaration()
-    <LF>                // also we need to uncomment ClassDeclaration()
+    <EOF>                // also we need to uncomment ClassDeclaration()
 }
 
 //LEXICO
