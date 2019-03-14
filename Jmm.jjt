@@ -124,40 +124,40 @@ void Program(): {Token t;}
 
 //LEXICO
 
-void ClassDeclaration(): {Token t;}
+void ClassDeclaration(): {Token t1; t2;}
 {
-  <CLASS> <IDENTIFIER> (<EXTENDS> <IDENTIFIER>)? <LCHAVETA> (VarDeclaration())* (MainDeclaration() | MethodDeclaration())* <RCHAVETA>
+  <CLASS> t1=<IDENTIFIER> (<EXTENDS> t2=<IDENTIFIER>)? <LCHAVETA> (VarDeclaration())* (MainDeclaration() | MethodDeclaration())* <RCHAVETA>
 }
 
 
 
 /*testes.md for more info*/
-void VarDeclaration(): {Token t;}
+void VarDeclaration(): {Token t1;}
 {
-  Type() <IDENTIFIER> <SCOLON>
+  Type() t1=<IDENTIFIER> <SCOLON>
 }
 
 
 
-void MainDeclaration(): {Token t;}
+void MainDeclaration(): {Token t1;}
 {
-<PUBLIC> <STATIC> <VOID> <MAIN> <LPAR> <STRING> <LSQUARE> <RSQUARE> <IDENTIFIER> <RPAR> <LCHAVETA> (VarDeclaration())* (Statement())* <RCHAVETA>
+<PUBLIC> <STATIC> <VOID> <MAIN> <LPAR> <STRING> <LSQUARE> <RSQUARE> t1=<IDENTIFIER> <RPAR> <LCHAVETA> (VarDeclaration())* (Statement())* <RCHAVETA>
 }
 
 
 
 // primeia parte da declaracao do metodo
-void MethodDeclaration():{}
+void MethodDeclaration():{Token t1;}
 {
     //excludes class constructor
     // public int getFoo(){return foo;)}
-    <PUBLIC> Type() <IDENTIFIER> <LPAR> MethodDeclarationArgs() <RPAR> MethodDeclarationdInside() //WHY "(" instead of <LPAR>, etc ?
+    <PUBLIC> Type() t1=<IDENTIFIER> <LPAR> MethodDeclarationArgs() <RPAR> MethodDeclarationdInside() //WHY "(" instead of <LPAR>, etc ?
 }
 
 //Trata dos argumentos da funcao
-void MethodDeclarationArgs():{}
+void MethodDeclarationArgs():{Token t1,t2;}
 {
-    (Type() <IDENTIFIER>  (<VIRG> Type() <IDENTIFIER>)* )?
+    (Type() t1=<IDENTIFIER>  (<VIRG> Type() t2=<IDENTIFIER>)* )?
 
 }
 
@@ -170,48 +170,34 @@ void MethodDeclarationdInside():{}
 
 
 /*testes.md for more info*/
-void Type():{}
+void Type():{Token t1;}
 {
-    (<INT> | <BOOLEAN> | <INT>  <LSQUARE> <RSQUARE> | <IDENTIFIER> )
+    (<INT> | <BOOLEAN> | <INT>  <LSQUARE> <RSQUARE> | t1=<IDENTIFIER> )
 }
 
-void Statement():{Token t;}
+void Statement():{Token t1,t2;}
 {
     <LCHAVETA> ( Statement() )* <RCHAVETA>
     | <IF> <LPAR> Expression() <RPAR> Statement() <ELSE> Statement()
     | <WHILE> <LPAR> Expression() <RPAR> Statement()
     | Expression() <SCOLON>
-    | <IDENTIFIER> <EQUAL> Expression() <SCOLON>
-    | <IDENTIFIER> <LSQUARE> Expression() <RSQUARE> <EQUAL> Expression() <SCOLON>
+    | t1=<IDENTIFIER> <EQUAL> Expression() <SCOLON>
+    | t2=<IDENTIFIER> <LSQUARE> Expression() <RSQUARE> <EQUAL> Expression() <SCOLON>
 }
 
 
 void Expression(): {Token t;}
 {
     Exp1() | Exp2()
-
 }
 
 
-
-void Statement():{Token t;}
-{
-
-    <LCHAVETA> ( Statement() )* <RCHAVETA>
-    | <IF> <LPAR> Expression() <RPAR> Statement() <ELSE> Statement()
-    | <WHILE> <LPAR> Expression() <RPAR> Statement()
-    | Expression() <SCOLON>
-    | <IDENTIFIER> <EQUAL> Expression() <SCOLON>
-    | <IDENTIFIER> <LSQUARE> Expression() <RSQUARE> <EQUAL> Expression() <SCOLON>
-}
-
-
-void Expression(): {Token t;}
+void Expression(): {Token t1;}
 {
 <INTEGERLITERAL> ( Exp1() )?
 | <TRUE> ( Exp1() )?
 | <FALSE> ( Exp1() )?
-| <IDENTIFIER> ( Exp1() )?
+| t1=<IDENTIFIER> ( Exp1() )?
 | <THIS> ( Exp1() )?
 | <NEW> Novos() ( Exp1() )?
 | <NOT> Expression() ( Exp1() )?
@@ -219,25 +205,25 @@ void Expression(): {Token t;}
 
 }
 
-void Exp1() : {Token t;}
+void Exp1() : {Token t1;}
 {
  <OPERATOR> Expression()  Exp1()
 | <LSQUARE> Expression() <RSQUARE>  Exp1()
 | <POINT> <LENGTH>  Exp1()
-| <POINT> <IDENTIFIER> <LPAR> ( Expression() (<VIRG> Expression() )* )? <RPAR>  Exp1()
+| <POINT> t1=<IDENTIFIER> <LPAR> ( Expression() (<VIRG> Expression() )* )? <RPAR>  Exp1()
 }
 
-void Novos(): {Token t;}
+void Novos(): {Token t1,t2,t3;}
 {
 
      <INT><LSQUARE>Expression() <RSQUARE>
-    | <IDENTIFIER><LPAR><RPAR><INTEGERLITERAL>
+    | t1=<IDENTIFIER><LPAR><RPAR><INTEGERLITERAL>
     | <TRUE>
     | <FALSE>
-    | <IDENTIFIER>
+    | t2=<IDENTIFIER>
     | <THIS>
     | <NEW> <INT> <LSQUARE> Expression() <RSQUARE>
-    | <NEW> <IDENTIFIER> <LPAR> <RPAR>
+    | <NEW> t3=<IDENTIFIER> <LPAR> <RPAR>
     | <NOT> Expression()
     | <LPAR> Expression() <RPAR>
 
