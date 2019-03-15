@@ -267,12 +267,12 @@ void Statement():{Token t1,t2;}
     | t2=<IDENTIFIER> <LSQUARE> Expression() <RSQUARE> <EQUAL> Expression() <SCOLON>
 }
 
-void Expression(): {Token t;}
+void Expression(): {Token t,t1;}
 {
-<INTEGERLITERAL> (Exp1())?
+t=<INTEGERLITERAL> (Exp1())?
 | <TRUE> (Exp1())?
 | <FALSE> (Exp1())?
-| <IDENTIFIER> (Exp1())?
+| t1=<IDENTIFIER> (Exp1())?
 | <THIS> (Exp1())?
 | <NEW> Novos() (Exp1())?
 | <NOT> Expression() (Exp1())
@@ -281,18 +281,47 @@ void Expression(): {Token t;}
 
 void Exp1(): {Token t;}
 {
-    ( <ADDOP> | <MULTOP> | <BINAND> | <LESSTHAN> ) Expression() Exp1()
+    ExpOp() Expression() Exp1()
     | <LSQUARE> Expression() <RSQUARE> Exp1()
     | <POINT> <LENGTH> Exp1()
-    | <	POINT> <IDENTIFIER> <LPAR> ( Expression() (<VIRG> Expression() )* )? <RPAR> Exp1()
+    | <	POINT> t=<IDENTIFIER> <LPAR> ( Expression() (<VIRG> Expression() )* )? <RPAR> Exp1()
 }
 
-void Novos(): {Token t;}
+void Novos(): {Token t,t2;}
 {
-    <INT><LSQUARE>Expression() <RSQUARE>
-    | <IDENTIFIER><LPAR><RPAR>
+    t=<INT><LSQUARE>Expression() <RSQUARE>
+    | t2=<IDENTIFIER><LPAR><RPAR>
 }
 
+void ExpOp() #void: {Token op;}
+{
+And() (op=<BINAND> And() #And(2) )*
+}
+
+void And() #void: {Token op;}
+{
+LessThan() (op=<LESSTHAN> LessThan() #LessThan(2))*
+}
+
+void AddSub() #void: {Token op;}
+{
+MultDiv() (op=<LESSTHAN> MultDiv() #AddSub(2))*
+}
+
+void LessThan() #void: {Token op;}
+{
+MultDiv() (op=<ADDOP> MultDiv() #MultDiv(2))*
+}
+
+void MultDiv() #void: {Token op;}
+{
+Literal() (op=<MULTOP> Literal() )*
+}
+
+void Literal(): {Token t;}
+{
+t=<INTEGERLITERAL> | t=<IDENTIFIER>
+}
 
 
 /*
