@@ -254,7 +254,7 @@ void MethodDeclarationdInside():{}
 /*testes.md for more info*/
 void Type():{Token t1;}
 {
-    (<INT> | <BOOLEAN> | <INT>  <LSQUARE> <RSQUARE> | t1=<IDENTIFIER> )
+    (<INT> [<LSQUARE> <RSQUARE>] | <BOOLEAN> | t1=<IDENTIFIER> )
 }
 
 void Statement():{Token t1,t2;}
