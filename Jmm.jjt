@@ -7,8 +7,6 @@ PARSER_BEGIN(Jmm)
 
 public class Jmm
 {
-
-
  public static void main(String args[]) throws ParseException {
 
      //Parser initialization
@@ -48,11 +46,11 @@ public class Jmm
      }catch(TokenMgrError e){
         System.out.println(" Jmm Parser: Error during the parser: ");
                 System.out.println(e.getMessage());
-
      }
 
      System.out.println("---------- Execution Finished ------------" );//+ myJmm.eval(root));
 }
+    // Temos de testar a condicao do while
    void error_skipto(int kind) {
      ParseException e = generateParseException();  // generate the exception object.
      System.out.println(e.toString());  // print the error message
