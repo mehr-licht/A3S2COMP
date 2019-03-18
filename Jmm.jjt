@@ -246,11 +246,12 @@ void Type():{Token t1;}
 
 void Statement():{Token t1;}
 {
+    //LOOKAHEAD(3)
       <LCHAVETA> ( Statement() )* <RCHAVETA>
     | <IF> <LPAR> Expression() <RPAR> Statement() <ELSE> Statement()
     | <WHILE> <LPAR> Expression() <RPAR> Statement()
-    | Expression() <SCOLON>
-    | t1=<IDENTIFIER> SolveAmbiguityInStatement()
+    | Expression() <SCOLON>  //LL(2) porque Expression() -> IDENTIFIER
+    | t1=<IDENTIFIER> SolveAmbiguityInStatement() //LL(2) porque -> IDENTIFIER
 }
 
 void SolveAmbiguityInStatement():{}{
@@ -261,15 +262,17 @@ void SolveAmbiguityInStatement():{}{
 
 void Expression(): {Token t,t1;}
 {
-  t=<INTEGERLITERAL> (Exp1())?
-| <TRUE> (Exp1())?
-| <FALSE> (Exp1())?
-| t1=<IDENTIFIER> (Exp1())?
-| <THIS> (Exp1())?
-| <NEW> Novos() (Exp1())?
-| <NOT> Expression() (Exp1())
-| <LPAR> Expression() <RPAR> (Exp1())?
-
+    (
+      t=<INTEGERLITERAL>
+    | <TRUE>
+    | <FALSE>
+    | t1=<IDENTIFIER>
+    | <THIS>
+    | <NEW> Novos()
+    | <NOT> Expression()
+    | <LPAR> Expression() <RPAR>
+    )
+    ( Exp1() )?
 }
 
 void Exp1(): {Token t;}
@@ -286,13 +289,13 @@ void SolveAmbiguityInPointExp1():{}{
 
 void Novos(): {Token t,t2;}
 {
-    t=<INT><LSQUARE>Expression() <RSQUARE>
+      t=<INT><LSQUARE>Expression() <RSQUARE>
     | t2=<IDENTIFIER><LPAR><RPAR>
 }
 
 void ExpOp() #void: {Token op;}
 {
-And() (op=<BINAND> And() #And(2) )*
+    And() (op=<BINAND> And() #And(2) )*
 }
 
 void And() #void: {Token op;}
@@ -317,7 +320,7 @@ Literal() (op=<MULTOP> Literal() )*
 
 void Literal(): {Token t;}
 {
-t=<INTEGERLITERAL> | t=<IDENTIFIER>
+ <INTEGERLITERAL> | t=<IDENTIFIER>
 }
 
 
