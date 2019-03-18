@@ -1,5 +1,5 @@
 options {
-        LOOKAHEAD=2;
+        LOOKAHEAD=1;
         //DEBUG_PARSER=true;
         }
 
@@ -208,10 +208,9 @@ void VarDeclaration(): {Token t1;}
 }
 
 
-
 void MainDeclaration(): {Token t1;}
 {
- <STATIC> <VOID> <MAIN> <LPAR> <STRING> <LSQUARE> <RSQUARE> t1=<IDENTIFIER> <RPAR> <LCHAVETA> (VarDeclaration())* (Statement())* <RCHAVETA>
+ <STATIC> <VOID> <MAIN> <LPAR> <STRING> <LSQUARE> <RSQUARE> t1=<IDENTIFIER> <RPAR> <LCHAVETA> ( VarDeclaration() )* ( Statement() )* <RCHAVETA>
 }
 
 
@@ -245,14 +244,19 @@ void Type():{Token t1;}
     (<INT> [<LSQUARE> <RSQUARE>] | <BOOLEAN> | t1=<IDENTIFIER> )
 }
 
-void Statement():{Token t1,t2;}
+void Statement():{Token t1;}
 {
-    <LCHAVETA> ( Statement() )* <RCHAVETA>
+      <LCHAVETA> ( Statement() )* <RCHAVETA>
     | <IF> <LPAR> Expression() <RPAR> Statement() <ELSE> Statement()
     | <WHILE> <LPAR> Expression() <RPAR> Statement()
     | Expression() <SCOLON>
-    | t1=<IDENTIFIER> <EQUAL> Expression() <SCOLON>
-    | t2=<IDENTIFIER> <LSQUARE> Expression() <RSQUARE> <EQUAL> Expression() <SCOLON>
+    | t1=<IDENTIFIER> SolveAmbiguityInStatement()
+}
+
+void SolveAmbiguityInStatement():{}{
+      <EQUAL> Expression() <SCOLON>
+    | <LSQUARE> Expression() <RSQUARE> <EQUAL> Expression() <SCOLON>
+
 }
 
 void Expression(): {Token t,t1;}
@@ -272,10 +276,13 @@ void Exp1(): {Token t;}
 {
     ExpOp() Expression() Exp1()
     | <LSQUARE> Expression() <RSQUARE> Exp1()
-    | <POINT> <LENGTH> Exp1()
-    | <POINT> t=<IDENTIFIER> <LPAR> ( Expression() (<VIRG> Expression() )* )? <RPAR> Exp1()
+    | <POINT> SolveAmbiguityInPointExp1()
 }
 
+void SolveAmbiguityInPointExp1():{}{
+    <LENGTH> Exp1()
+   | t=<IDENTIFIER> <LPAR> ( Expression() (<VIRG> Expression() )* )? <RPAR> Exp1()
+}
 
 void Novos(): {Token t,t2;}
 {
