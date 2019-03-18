@@ -1,5 +1,5 @@
 options {
-        LOOKAHEAD=3;
+        LOOKAHEAD=2;
         //DEBUG_PARSER=true;
         }
 
@@ -182,29 +182,19 @@ void Program(): {Token t;}
 void ClassDeclaration(): {Token t1, t2;}
 {
 
-    <CLASS> t1=<IDENTIFIER> (<EXTENDS> t2=<IDENTIFIER>)? <LCHAVETA>
+    <CLASS>
+    t1=<IDENTIFIER>
+    (<EXTENDS> t2=<IDENTIFIER>)?
+    <LCHAVETA>
     (
-        try {
             VarDeclaration()
-                    }
-                    catch (ParseException e) {
-                      System.out.println(e.getMessage());
-                    }
-
     )*
-    (
-        try{
-            MainDeclaration()
-                    }catch(ParseException e){
-                        System.out.println(e.getMessage());
-                    }
+    ( <PUBLIC>
+       (
+           MainDeclaration()
      |
-
-        try{
-            MethodDeclaration()
-                    }catch(ParseException e){
-                        System.out.println(e.getMessage());
-                    }
+          MethodDeclaration()
+        )
      )* <RCHAVETA>
 
 }
@@ -221,7 +211,7 @@ void VarDeclaration(): {Token t1;}
 
 void MainDeclaration(): {Token t1;}
 {
-<PUBLIC> <STATIC> <VOID> <MAIN> <LPAR> <STRING> <LSQUARE> <RSQUARE> t1=<IDENTIFIER> <RPAR> <LCHAVETA> (VarDeclaration())* (Statement())* <RCHAVETA>
+ <STATIC> <VOID> <MAIN> <LPAR> <STRING> <LSQUARE> <RSQUARE> t1=<IDENTIFIER> <RPAR> <LCHAVETA> (VarDeclaration())* (Statement())* <RCHAVETA>
 }
 
 
@@ -231,7 +221,7 @@ void MethodDeclaration():{Token t1;}
 {
     //excludes class constructor
     // public int getFoo(){return foo;)}
-    <PUBLIC> Type() t1=<IDENTIFIER> <LPAR> MethodDeclarationArgs() <RPAR> MethodDeclarationdInside() //WHY "(" instead of <LPAR>, etc ?
+    Type() t1=<IDENTIFIER> <LPAR> MethodDeclarationArgs() <RPAR> MethodDeclarationdInside() //WHY "(" instead of <LPAR>, etc ?
 }
 
 //Trata dos argumentos da funcao
@@ -267,7 +257,7 @@ void Statement():{Token t1,t2;}
 
 void Expression(): {Token t,t1;}
 {
-t=<INTEGERLITERAL> (Exp1())?
+  t=<INTEGERLITERAL> (Exp1())?
 | <TRUE> (Exp1())?
 | <FALSE> (Exp1())?
 | t1=<IDENTIFIER> (Exp1())?
@@ -275,6 +265,7 @@ t=<INTEGERLITERAL> (Exp1())?
 | <NEW> Novos() (Exp1())?
 | <NOT> Expression() (Exp1())
 | <LPAR> Expression() <RPAR> (Exp1())?
+
 }
 
 void Exp1(): {Token t;}
@@ -282,8 +273,9 @@ void Exp1(): {Token t;}
     ExpOp() Expression() Exp1()
     | <LSQUARE> Expression() <RSQUARE> Exp1()
     | <POINT> <LENGTH> Exp1()
-    | <	POINT> t=<IDENTIFIER> <LPAR> ( Expression() (<VIRG> Expression() )* )? <RPAR> Exp1()
+    | <POINT> t=<IDENTIFIER> <LPAR> ( Expression() (<VIRG> Expression() )* )? <RPAR> Exp1()
 }
+
 
 void Novos(): {Token t,t2;}
 {
@@ -298,17 +290,17 @@ And() (op=<BINAND> And() #And(2) )*
 
 void And() #void: {Token op;}
 {
-LessThan() (op=<LESSTHAN> LessThan() #LessThan(2))*
+    LessThan() (op=<LESSTHAN> LessThan() #LessThan(2))*
 }
 
 void AddSub() #void: {Token op;}
 {
-MultDiv() (op=<LESSTHAN> MultDiv() #AddSub(2))*
+    MultDiv() (op=<LESSTHAN> MultDiv() #AddSub(2))*
 }
 
 void LessThan() #void: {Token op;}
 {
-MultDiv() (op=<ADDOP> MultDiv() #MultDiv(2))*
+    MultDiv() (op=<ADDOP> MultDiv() #MultDiv(2))*
 }
 
 void MultDiv() #void: {Token op;}
