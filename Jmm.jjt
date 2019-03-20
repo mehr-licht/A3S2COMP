@@ -208,7 +208,7 @@ void ClassDeclaration(): {Token t1, t2;}
 
 void MainDeclaration(): {Token t1;}
 {
- <STATIC> <VOID> <MAIN> <LPAR> <STRING> <LSQUARE> <RSQUARE> t1=<IDENTIFIER> <RPAR> <LCHAVETA> (LOOKAHEAD (2)  VarDeclaration() )* ( Statement() )* <RCHAVETA>
+ <STATIC> <VOID> <MAIN> <LPAR> <STRING> <LSQUARE> <RSQUARE> t1=<IDENTIFIER> <RPAR> <LCHAVETA> (LOOKAHEAD (2)  VarDeclaration() )* ( Statement() )* <RCHAVETA> //<IDENTIFIER>
 }
 
 
@@ -218,7 +218,7 @@ void MethodDeclaration():{Token t1;}
 {
     //excludes class constructor
     // public int getFoo(){return foo;)}
-    Type() t1=<IDENTIFIER> <LPAR> MethodDeclarationArgs() <RPAR> MethodDeclarationdInside() //WHY "(" instead of <LPAR>, etc ?
+    Type() t1=<IDENTIFIER> <LPAR> MethodDeclarationArgs() <RPAR> MethodDeclarationdInside()
 
 }
 
@@ -233,7 +233,7 @@ void MethodDeclarationArgs():{Token t1,t2;}
 // Corpo do metodo da classe, a parte entre {}
 void MethodDeclarationdInside():{}
 {
-    <LCHAVETA> ( LOOKAHEAD (2) VarDeclaration() )* (Statement())* <RETURN> Expression() <SCOLON> <RCHAVETA>
+    <LCHAVETA> ( LOOKAHEAD (2) VarDeclaration() )* (Statement())* <RETURN> Expression() <SCOLON> <RCHAVETA> //<IDENTIFIER>
 }
 
 
@@ -253,12 +253,12 @@ void VarDeclaration(): {Token t1;}
 
 void Statement():{Token t1;}
 {
-    //LOOKAHEAD(3)
+
       <LCHAVETA> ( Statement() )* <RCHAVETA>
     | <IF> <LPAR> Expression() <RPAR> Statement() <ELSE> Statement()
     | <WHILE> <LPAR> Expression() <RPAR> Statement()
-    | LOOKAHEAD (2) Expression() <SCOLON>  //LL(2) porque Expression() -> IDENTIFIER
-    | LOOKAHEAD (2) t1=<IDENTIFIER> SolveAmbiguityInStatement() //LL(2) porque -> IDENTIFIER
+    | LOOKAHEAD (2) Expression() <SCOLON>  //LL(2) porque Expression() -> <IDENTIFIER> na Expression e na linha a seguir t1
+    | LOOKAHEAD (2) t1=<IDENTIFIER> SolveAmbiguityInStatement() //LL(2) porque -> <IDENTIFIER> daqui e da Expression
 }
 
 void SolveAmbiguityInStatement():{}{
@@ -280,7 +280,7 @@ void Expression(): {Token t1,t2;}
     | <LPAR> Expression() <RPAR>
 
     )
-    (LOOKAHEAD (2)  Exp1() )?
+    (LOOKAHEAD (2)  Exp1() )?  //<INTEGERLITERAL> NO FIM DAS OPs PRECEDENCIAS e t1 daqui
 }
 
 void Exp1(): {}
