@@ -1,7 +1,7 @@
 options {
-        LOOKAHEAD=2;
+        LOOKAHEAD=1;
         MULTI=true;
-        DEBUG_PARSER=false;
+        DEBUG_PARSER=true;
         }
 
 PARSER_BEGIN(Jmm)
@@ -208,7 +208,7 @@ void ClassDeclaration(): {Token t1, t2;}
 
 void MainDeclaration(): {Token t1;}
 {
- <STATIC> <VOID> <MAIN> <LPAR> <STRING> <LSQUARE> <RSQUARE> t1=<IDENTIFIER> <RPAR> <LCHAVETA> ( VarDeclaration() )* ( Statement() )* <RCHAVETA>
+ <STATIC> <VOID> <MAIN> <LPAR> <STRING> <LSQUARE> <RSQUARE> t1=<IDENTIFIER> <RPAR> <LCHAVETA> (LOOKAHEAD (2)  VarDeclaration() )* ( Statement() )* <RCHAVETA>
 }
 
 
@@ -233,7 +233,7 @@ void MethodDeclarationArgs():{Token t1,t2;}
 // Corpo do metodo da classe, a parte entre {}
 void MethodDeclarationdInside():{}
 {
-    <LCHAVETA> (VarDeclaration() )* (Statement())* <RETURN> Expression() <SCOLON> <RCHAVETA>
+    <LCHAVETA> ( LOOKAHEAD (2) VarDeclaration() )* (Statement())* <RETURN> Expression() <SCOLON> <RCHAVETA>
 }
 
 
@@ -257,8 +257,8 @@ void Statement():{Token t1;}
       <LCHAVETA> ( Statement() )* <RCHAVETA>
     | <IF> <LPAR> Expression() <RPAR> Statement() <ELSE> Statement()
     | <WHILE> <LPAR> Expression() <RPAR> Statement()
-    | Expression() <SCOLON>  //LL(2) porque Expression() -> IDENTIFIER
-    | t1=<IDENTIFIER> SolveAmbiguityInStatement() //LL(2) porque -> IDENTIFIER
+    | LOOKAHEAD (2) Expression() <SCOLON>  //LL(2) porque Expression() -> IDENTIFIER
+    | LOOKAHEAD (2) t1=<IDENTIFIER> SolveAmbiguityInStatement() //LL(2) porque -> IDENTIFIER
 }
 
 void SolveAmbiguityInStatement():{}{
@@ -280,7 +280,7 @@ void Expression(): {Token t1,t2;}
     | <LPAR> Expression() <RPAR>
 
     )
-    ( Exp1() )?
+    (LOOKAHEAD (2)  Exp1() )?
 }
 
 void Exp1(): {}
