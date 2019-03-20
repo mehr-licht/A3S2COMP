@@ -1,15 +1,14 @@
 class Fac {
       public int ComputeFac(int num){
-        int num_aux;
-         //num_aux = num + 1;
+         num_aux = num;
         return num_aux;
       }
 
       public boolean Hello(){
 
-           // int foo = 4;
+            //int foo = 4;
 
-            if( 2 < 5 ){
+            if( true ){ //foo < 4
                     false;
                }else{
                     true;

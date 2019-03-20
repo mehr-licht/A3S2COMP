@@ -1,6 +1,7 @@
 options {
-        LOOKAHEAD=1;
-        //DEBUG_PARSER=true;
+        LOOKAHEAD=2;
+        MULTI=true;
+        DEBUG_PARSER=false;
         }
 
 PARSER_BEGIN(Jmm)
@@ -186,26 +187,23 @@ void ClassDeclaration(): {Token t1, t2;}
     t1=<IDENTIFIER>
     (<EXTENDS> t2=<IDENTIFIER>)?
     <LCHAVETA>
+
     (
             VarDeclaration()
     )*
+
     ( <PUBLIC>
        (
            MainDeclaration()
      |
           MethodDeclaration()
         )
-     )* <RCHAVETA>
+     )*
+
+     <RCHAVETA>
 
 }
 
-
-
-/*testes.md for more info*/
-void VarDeclaration(): {Token t1;}
-{
-  Type() t1=<IDENTIFIER> <SCOLON>
-}
 
 
 void MainDeclaration(): {Token t1;}
@@ -221,6 +219,7 @@ void MethodDeclaration():{Token t1;}
     //excludes class constructor
     // public int getFoo(){return foo;)}
     Type() t1=<IDENTIFIER> <LPAR> MethodDeclarationArgs() <RPAR> MethodDeclarationdInside() //WHY "(" instead of <LPAR>, etc ?
+
 }
 
 //Trata dos argumentos da funcao
@@ -239,10 +238,18 @@ void MethodDeclarationdInside():{}
 
 
 /*testes.md for more info*/
-void Type():{Token t1;}
+void Type():{Token t1,t2,t3;}
 {
-    (<INT> [<LSQUARE> <RSQUARE>] | <BOOLEAN> | t1=<IDENTIFIER> )
+    (t1=<INT> [<LSQUARE> <RSQUARE>] | t2=<BOOLEAN> | t3=<IDENTIFIER> )
 }
+
+
+/*testes.md for more info*/
+void VarDeclaration(): {Token t1;}
+{
+  Type() t1=<IDENTIFIER> <SCOLON>
+}
+
 
 void Statement():{Token t1;}
 {
@@ -260,37 +267,41 @@ void SolveAmbiguityInStatement():{}{
 
 }
 
-void Expression(): {Token t,t1;}
+void Expression(): {Token t1,t2;}
 {
     (
-      t=<INTEGERLITERAL>
+      t1=<INTEGERLITERAL>
     | <TRUE>
     | <FALSE>
-    | t1=<IDENTIFIER>
+    | t2=<IDENTIFIER>
     | <THIS>
     | <NEW> Novos()
     | <NOT> Expression()
     | <LPAR> Expression() <RPAR>
+
     )
     ( Exp1() )?
 }
 
-void Exp1(): {Token t;}
+void Exp1(): {}
 {
     ExpOp() Expression() Exp1()
     | <LSQUARE> Expression() <RSQUARE> Exp1()
     | <POINT> SolveAmbiguityInPointExp1()
 }
 
-void SolveAmbiguityInPointExp1():{}{
-    <LENGTH> Exp1()
-   | t=<IDENTIFIER> <LPAR> ( Expression() (<VIRG> Expression() )* )? <RPAR> Exp1()
+void SolveAmbiguityInPointExp1():{Token t1;}{
+    (
+    <LENGTH>
+   | t1=<IDENTIFIER> <LPAR> ( Expression() (<VIRG> Expression() )* )? <RPAR>
+    )
+    Exp1()
 }
 
-void Novos(): {Token t,t2;}
+void Novos(): {Token t1,t2;}
 {
-      t=<INT><LSQUARE>Expression() <RSQUARE>
-    | t2=<IDENTIFIER><LPAR><RPAR>
+      t1=<INT> <LSQUARE> Expression() <RSQUARE>
+    | t2=<IDENTIFIER> <LPAR> <RPAR>
 }
 
 void ExpOp() #void: {Token op;}
@@ -300,17 +311,17 @@ void ExpOp() #void: {Token op;}
 
 void And() #void: {Token op;}
 {
-    LessThan() (op=<LESSTHAN> LessThan() #LessThan(2))*
+    LessThan() (op=<LESSTHAN> LessThan() #LessThan(2) )*
 }
 
 void AddSub() #void: {Token op;}
 {
-    MultDiv() (op=<LESSTHAN> MultDiv() #AddSub(2))*
+    MultDiv() (op=<LESSTHAN> MultDiv() #AddSub(2) )*
 }
 
 void LessThan() #void: {Token op;}
 {
-    MultDiv() (op=<ADDOP> MultDiv() #MultDiv(2))*
+    MultDiv() (op=<ADDOP> MultDiv() #MultDiv(2) )*
 }
 
 void MultDiv() #void: {Token op;}
@@ -318,9 +329,9 @@ void MultDiv() #void: {Token op;}
 Literal() (op=<MULTOP> Literal() )*
 }
 
-void Literal(): {Token t;}
+void Literal(): {Token t1,t2;}
 {
- <INTEGERLITERAL> | t=<IDENTIFIER>
+ t1=<INTEGERLITERAL> | t2=<IDENTIFIER>
 }
 
 
