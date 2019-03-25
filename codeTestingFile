@@ -5,20 +5,19 @@ class Fac {
       }
 
       public boolean Hello(){
-
             int foo;
-            //int a =3;
-            if( true ){ //foo < 4
+            if( true ){
                     false;
                }else{
                     true;
                }
-            return true;
+            return 1;
       }
 
 
       public static void main(String[] a){
         int i;
+        i = 4;
 
       }
 }

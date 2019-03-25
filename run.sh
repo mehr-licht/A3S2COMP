@@ -1,5 +1,11 @@
 #!bin/bash
-cp Jmm.jjt ./jjtree
-cp codeTestingFile ./jjtree
-sh ./jjtree/automaticRun.sh
+jjtree Jmm.jjt;
+echo               -------------- jjtree Jmm.jjt     -------------------;
+javacc Jmm.jj;
+echo               -------------- javacc Jmm.jj     -------------------;
+javac *.java;
+echo                       -------------- javac *.java     -------------------;
+echo            -------------- java Jmm codeTestingFile     -------------------;
+java Jmm codeTestingFile;
+
 

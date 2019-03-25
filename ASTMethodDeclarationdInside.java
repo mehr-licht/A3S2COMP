@@ -2,7 +2,9 @@
 /* JavaCCOptions:MULTI=true,NODE_USES_PARSER=false,VISITOR=false,TRACK_TOKENS=false,NODE_PREFIX=AST,NODE_EXTENDS=,NODE_FACTORY=,SUPPORT_CLASS_VISIBILITY_PUBLIC=true */
 public
 class ASTMethodDeclarationdInside extends SimpleNode {
-  public ASTMethodDeclarationdInside(int id) {
+  private String name;
+
+    public ASTMethodDeclarationdInside(int id) {
     super(id);
   }
 
@@ -10,5 +12,17 @@ class ASTMethodDeclarationdInside extends SimpleNode {
     super(p, id);
   }
 
+  /**From documentation*/
+  public void setName(String n) {
+    name = n;
+  }
+
+  /**
+   * {@inheritDoc}
+   * @see org.javacc.examples.jjtree.eg2.SimpleNode#toString()
+   */
+  public String toString() {
+    return "Identifier: " + name;
+  }
 }
 /* JavaCC - OriginalChecksum=76b5940aabc3abfb13b401420b605504 (do not edit this line) */

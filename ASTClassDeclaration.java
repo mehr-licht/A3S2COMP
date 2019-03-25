@@ -2,6 +2,8 @@
 /* JavaCCOptions:MULTI=true,NODE_USES_PARSER=false,VISITOR=false,TRACK_TOKENS=false,NODE_PREFIX=AST,NODE_EXTENDS=,NODE_FACTORY=,SUPPORT_CLASS_VISIBILITY_PUBLIC=true */
 public
 class ASTClassDeclaration extends SimpleNode {
+  private String name;
+
   public ASTClassDeclaration(int id) {
     super(id);
   }
@@ -9,6 +11,7 @@ class ASTClassDeclaration extends SimpleNode {
   public ASTClassDeclaration(Jmm p, int id) {
     super(p, id);
   }
+
 
 }
 /* JavaCC - OriginalChecksum=de93fed517ebd8fb13c9fe84a844e1ce (do not edit this line) */

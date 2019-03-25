@@ -197,8 +197,7 @@ void ClassDeclaration(): { Token t1, t2;}
 
     <CLASS>
     t1=<IDENTIFIER>
-//    {        jjtThis.name=t1.image;
-//      }
+   // {        jjtThis.setName=t1.image;      }
     (<EXTENDS> t2=<IDENTIFIER>)?
     <LCHAVETA>
 
@@ -252,9 +251,12 @@ void MethodDeclarationdInside():{}
 
 
 /*testes.md for more info*/
-void Type():{Token t1,t2,t3;}
+void Type() #void:{Token t1,t2,t3;}
 {
-    (t1=<INT> [<LSQUARE> <RSQUARE>] | t2=<BOOLEAN> | t3=<IDENTIFIER> )
+     (t1=<INT> [<LSQUARE> <RSQUARE>]
+    | t1=<BOOLEAN>
+    | t1=<IDENTIFIER>  )
+    //{jjtThis.setName(t1.image);}
 }
 
 
@@ -262,6 +264,7 @@ void Type():{Token t1,t2,t3;}
 void VarDeclaration(): {Token t1;}
 {
   Type() t1=<IDENTIFIER> <SCOLON>
+  {jjtThis.setName(t1.image);}
 }
 
 
@@ -273,9 +276,10 @@ void Statement():{Token t1;}
     | <WHILE> #While <LPAR> Expression() <RPAR> Statement()
     | LOOKAHEAD (2) Expression() <SCOLON>  //LL(2) porque Expression() -> <IDENTIFIER> na Expression e na linha a seguir t1
     | LOOKAHEAD (2) t1=<IDENTIFIER> SolveAmbiguityInStatement() //LL(2) porque -> <IDENTIFIER> daqui e da Expression
+    //{jjtThis.setName(t1.image);}
 }
 
-void SolveAmbiguityInStatement():{}{
+void SolveAmbiguityInStatement() #void:{}{
       <EQUAL> Expression() <SCOLON>
     | <LSQUARE> Expression() <RSQUARE> <EQUAL> Expression() <SCOLON>
 
