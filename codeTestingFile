@@ -1,7 +1,11 @@
 class Fac {
       public int ComputeFac(int num){
-         num_aux = num;
-        return num_aux;
+      int num_aux;
+          if ( num < 1 )
+                num_aux = 1;
+          else
+            num_aux = num * (this.ComputeFac(num-1));
+          return num_aux;
       }
 
       public boolean Hello(){
@@ -14,10 +18,8 @@ class Fac {
             return 1;
       }
 
-
       public static void main(String[] a){
-        int i;
-        i = 4;
+        io.println(new Fac().ComputeFac(10));
 
       }
 }

@@ -3,6 +3,7 @@
 public
 class ASTVarDeclaration extends SimpleNode {
   private String name;
+  private String type;
 
   public ASTVarDeclaration(int id) {
     super(id);
@@ -13,16 +14,17 @@ class ASTVarDeclaration extends SimpleNode {
   }
 
   /**From documentation*/
+  public void setType(String n){
+    type = n;
+  }
+  /**From documentation*/
   public void setName(String n) {
     name = n;
   }
 
-  /**
-   * {@inheritDoc}
-   * @see org.javacc.examples.jjtree.eg2.SimpleNode#toString()
-   */
+  /**From documentation*/
   public String toString() {
-    return "Identifier: " + name;
+    return type + " " + name;
   }
 
 }

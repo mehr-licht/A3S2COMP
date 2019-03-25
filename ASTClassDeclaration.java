@@ -12,6 +12,18 @@ class ASTClassDeclaration extends SimpleNode {
     super(p, id);
   }
 
+    /**From documentation*/
+    public void setName(String n) {
+        name = n;
+    }
+
+    /**
+     * {@inheritDoc}
+     * @see org.javacc.examples.jjtree.eg2.SimpleNode#toString()
+     */
+    public String toString() {
+        return "Class [ " + name + " ]";
+    }
 
 }
 /* JavaCC - OriginalChecksum=de93fed517ebd8fb13c9fe84a844e1ce (do not edit this line) */

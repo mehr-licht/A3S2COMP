@@ -1,7 +1,7 @@
 options {
         LOOKAHEAD=1;
         MULTI=true; //multi mode the type of the parse tree node is derived from the name of the node.
-        DEBUG_PARSER=false;
+        DEBUG_PARSER=true;
         KEEP_LINE_COLUMN = false;
         }
 
@@ -63,7 +63,7 @@ public class Jmm {
      System.out.println("---------- Execution Finished ------------" );//+ myJmm.eval(root));
 }
     // Temos de testar a condicao do while
-   void error_skipto(int kind) {
+   static void error_skipto(int kind) {
      ParseException e = generateParseException();  // generate the exception object.
      System.out.println(e.toString());  // print the error message
      Token t;
@@ -182,7 +182,7 @@ SimpleNode Start(): {}
 }
 
 
-void Program() #void: {Token t;}
+void Program() #void: {}
 {
 
     ClassDeclaration()  //changed this for debugging reasons should be ClassDeclaration()
@@ -197,7 +197,7 @@ void ClassDeclaration(): { Token t1, t2;}
 
     <CLASS>
     t1=<IDENTIFIER>
-   // {        jjtThis.setName=t1.image;      }
+    {        jjtThis.setName(t1.image);      }
     (<EXTENDS> t2=<IDENTIFIER>)?
     <LCHAVETA>
 
@@ -227,18 +227,18 @@ void MainDeclaration(): {Token t1;}
 
 
 // primeia parte da declaracao do metodo
-void MethodDeclaration():{Token t1;}
+void MethodDeclaration():{Token t1,t2;}
 {
     //excludes class constructor
     // public int getFoo(){return foo;)}
-    Type() t1=<IDENTIFIER> <LPAR> MethodDeclarationArgs() <RPAR> MethodDeclarationdInside()
-
+    t2=Type() t1=<IDENTIFIER> <LPAR> MethodDeclarationArgs() <RPAR> MethodDeclarationdInside()
+    {        jjtThis.setName(t1.image); jjtThis.setType(t2.image);}
 }
 
 //Trata dos argumentos da funcao
-void MethodDeclarationArgs():{Token t1,t2;}
+void MethodDeclarationArgs() #void :{Token t1,t2,t3;}
 {
-    (Type() t1=<IDENTIFIER>  (<VIRG> Type() t2=<IDENTIFIER>)* )?
+    (t1=Type() t1=<IDENTIFIER>  (<VIRG> t3=Type() t2=<IDENTIFIER>)* )?
 
 }
 
@@ -251,27 +251,26 @@ void MethodDeclarationdInside():{}
 
 
 /*testes.md for more info*/
-void Type() #void:{Token t1,t2,t3;}
+Token Type() #void:{Token t1;}
 {
      (t1=<INT> [<LSQUARE> <RSQUARE>]
     | t1=<BOOLEAN>
     | t1=<IDENTIFIER>  )
-    //{jjtThis.setName(t1.image);}
+    {return t1;}
 }
 
 
 /*testes.md for more info*/
-void VarDeclaration(): {Token t1;}
+void VarDeclaration(): {Token t1, t2;}
 {
-  Type() t1=<IDENTIFIER> <SCOLON>
-  {jjtThis.setName(t1.image);}
+  t2=Type() t1=<IDENTIFIER> <SCOLON>
+  {jjtThis.setName(t1.image);jjtThis.setType(t2.image);}
 }
 
 
 void Statement():{Token t1;}
 {
-
-      <LCHAVETA> ( Statement() )* <RCHAVETA>
+     <LCHAVETA> ( Statement() )* <RCHAVETA>
     | <IF> #If <LPAR> Expression() <RPAR> Statement() <ELSE> Statement()
     | <WHILE> #While <LPAR> Expression() <RPAR> Statement()
     | LOOKAHEAD (2) Expression() <SCOLON>  //LL(2) porque Expression() -> <IDENTIFIER> na Expression e na linha a seguir t1
@@ -285,15 +284,15 @@ void SolveAmbiguityInStatement() #void:{}{
 
 }
 
-void Expression() #void : {Token t1,t2;}
+void Expression() : {Token t1,t2;}
 {
     (
-      t1=<INTEGERLITERAL>
+      t1=<INTEGERLITERAL> //numero
     | <TRUE>
     | <FALSE>
     | t2=<IDENTIFIER>
     | <THIS>
-    | <NEW> Novos()
+    | <NEW> SolveAmbiguityInNew()
     | <NOT> Expression()
     | <LPAR> Expression() <RPAR>
 
@@ -316,33 +315,33 @@ void SolveAmbiguityInPointExp1():{Token t1;}{
     Exp1()
 }
 
-void Novos(): {Token t1,t2;}
+void SolveAmbiguityInNew() #Novos: {Token t1,t2;}
 {
       t1=<INT> <LSQUARE> Expression() <RSQUARE>
     | t2=<IDENTIFIER> <LPAR> <RPAR>
 }
 
-void And() #void: {Token op;}
+void And() #And: {Token op;}
 {
     LessThan() (op=<BINAND> LessThan() #And(2) )*
 }
 
-void LessThan() #void: {Token op;}
+void LessThan() #LessThan: {Token op;}
 {
     AddSub() (op=<LESSTHAN> AddSub() #LessThan(2) )*
 }
 
-void AddSub() #void: {Token op;}
+void AddSub() #AddSub: {Token op;}
 {
     MultDiv() (op=<ADDOP> MultDiv() #AddSub(2) )*
 }
 
-void MultDiv() #void: {Token op;}
+void MultDiv() #MultiDiv: {Token op;}
 {
 Literal() (op=<MULTOP> Literal() #MultDiv(2) )*
 }
 
-void Literal(): {Token t1,t2;}
+void Literal() #Literal: {Token t1,t2;}
 {
  t1=<INTEGERLITERAL> | t2=<IDENTIFIER>
 }
