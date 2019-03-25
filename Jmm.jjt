@@ -299,7 +299,7 @@ void Expression() #void : {Token t1,t2;}
 
 void Exp1(): {}
 {
-    ExpOp() Expression() Exp1()
+    And() Expression() Exp1()
     | <LSQUARE> Expression() <RSQUARE> Exp1()
     | <POINT> SolveAmbiguityInPointExp1()
 }
@@ -318,29 +318,24 @@ void Novos(): {Token t1,t2;}
     | t2=<IDENTIFIER> <LPAR> <RPAR>
 }
 
-void ExpOp() #void: {Token op;}
-{
-    And() (op=<BINAND> And() #And(2) )*
-}
-
 void And() #void: {Token op;}
 {
-    LessThan() (op=<LESSTHAN> LessThan() #LessThan(2) )*
-}
-
-void AddSub() #void: {Token op;}
-{
-    MultDiv() (op=<LESSTHAN> MultDiv() #AddSub(2) )*
+    LessThan() (op=<BINAND> LessThan() #And(2) )*
 }
 
 void LessThan() #void: {Token op;}
 {
-    MultDiv() (op=<ADDOP> MultDiv() #MultDiv(2) )*
+    AddSub() (op=<LESSTHAN> AddSub() #LessThan(2) )*
+}
+
+void AddSub() #void: {Token op;}
+{
+    MultDiv() (op=<ADDOP> MultDiv() #AddSub(2) )*
 }
 
 void MultDiv() #void: {Token op;}
 {
-Literal() (op=<MULTOP> Literal() )*
+Literal() (op=<MULTOP> Literal() #MultDiv(2) )*
 }
 
 void Literal(): {Token t1,t2;}
