@@ -1,93 +1,73 @@
+
 options {
-        LOOKAHEAD=1;
-        MULTI=true; //multi mode the type of the parse tree node is derived from the name of the node.
-        DEBUG_PARSER=true;
-        KEEP_LINE_COLUMN = false;
-        }
+  MULTI =true;
+   LOOKAHEAD=1;
+}
 
 PARSER_BEGIN(Jmm)
 
-//import java.text.ParseException;
-import java.io.*;
-
 public class Jmm {
- public static void main(String args[]) throws ParseException {
 
-     //Parser initialization
-     Jmm myJmm;
-
-     if(args.length == 0){
-        System.out.println("Jmm Parser: Reading Input...");
-        myJmm = new Jmm(System.in);
-
-     } else if(args.length == 1){
-        System.out.println("Jmm Parser: Reading File " + args[0] + " ... ");
-        try{
-            myJmm = new Jmm(    new java.io.FileInputStream(args[0])    );
-        } catch(java.io.FileNotFoundException e){
-            System.out.println("Jmm Parser: File " + args[0] + " not found");
-            return;
-        }
-
-     }
-     else{
-        System.out.println("Jmm Parser: Run one of the following commands");
-        System.out.println("   java Jmm < fileName  ");
-        System.out.println("   ou  ");
-        System.out.println("    java Jmm  fileName  ");
+  public static void main(String args[]) {
+    Jmm myJmm;
+    if (args.length == 0) {
+      System.out.println("Jmm Parser:  Reading from standard input . . .");
+      myJmm = new Jmm(System.in);
+    
+    } else if (args.length == 1) {
+      System.out.println("Jmm Parser:  Reading from file " + args[0] + " . . .");
+      try {
+        myJmm = new Jmm(new java.io.FileInputStream(args[0]));
+      } catch (java.io.FileNotFoundException e) {
+        System.out.println("Jmm Parser:  File " + args[0] + " not found.");
         return;
-     }
-
-     try{
-        SimpleNode root = myJmm.Start();
+      }
+    
+    } else {
+      System.out.println("Jmm Parser:  Usage is one of:");
+      System.out.println("         java Jmm < inputfile");
+      System.out.println("OR");
+      System.out.println("         java Jmm inputfile");
+      return;
+    }
+    try {
+      SimpleNode root = myJmm.Start();
         root.dump("");
 
-     }catch (ParseException e){
-        System.out.println("### 1 ### Jmm Parser: Error during the parser: ###");
-            e.printStackTrace();
-        System.out.println("--------------------------------------------");
-        // System.out.print("Offset:  ");//System.out.println(e.getErrorOffset());
+      System.out.println("Jmm Parser:  Java program parsed successfully.");
+    } catch (ParseException e) {
+      System.out.println(e.getMessage());
+      System.out.println("Jmm Parser:  Encountered errors during parse.");
+    }
+  }
 
-        System.out.println("1 - Message delivered : " + e.getMessage());
+//  /*
+//   * Returns true if the next token is not in the FOLLOW list of "expansion".
+//   * It is used to decide when the end of an "expansion" has been reached.
+//   */
+//  static private boolean notTailOfExpansionUnit() {
+//    Token t;
+//    t = getToken(1);
+//    if (t.kind == BIT_OR || t.kind == COMMA || t.kind == RPAREN || t.kind == RBRACE || t.kind == RBRACKET) return false;
+//    return true;
+//  }
 
-
-
-     }catch(TokenMgrError e){
-        System.out.println("### 2 ### Jmm Parser: Error during the parser: ##");
-        //        System.out.println("Message delivered: " + e.getMessage());
-        //        e.printStackTrace();
-
-     }
-     System.out.println("Jmm Parser: Input wad readed sucessfully  ");
-
-     System.out.println("---------- Execution Finished ------------" );//+ myJmm.eval(root));
-}
-    // Temos de testar a condicao do while
-   static void error_skipto(int kind) {
-     ParseException e = generateParseException();  // generate the exception object.
-     System.out.println(e.toString());  // print the error message
-     Token t;
-     do {
-       t = getNextToken();
-     } while (t.kind != kind);
-       // The above loop consumes tokens all the way up to a token of
-       // "kind".  We use a do-while loop rather than a while because the
-       // current token is the one immediately before the erroneous token
-       // (in our case the token immediately before what should have been
-       // "if"/"while".
-   }
 }
 
 PARSER_END(Jmm)
 
+/* WHITE SPACE */
 
-//TOKENS
-SKIP ://no comments considered
+SKIP :
 {
- " " | "\r" | "\t" | "\n"
+  " "
+| "\t"
+| "\n"
+| "\r"
+| "\f"
 }
 
-/***************************************************************** COMMENTS begin*********************************/
+/* COMMENTS */
 
 MORE :
 {
@@ -117,251 +97,562 @@ SPECIAL_TOKEN :
 }
 
 <IN_SINGLE_LINE_COMMENT,IN_FORMAL_COMMENT,IN_MULTI_LINE_COMMENT>
-
 MORE :
 {
   < ~[] >
 }
-/***************************************************************** COMMENTS end*********************************/
 
+/* JAVA RESERVED WORDS AND LITERALS */
 
-// *************************************************************** RESERVED begin*******************************/
-TOKEN:
+TOKEN :
 {
-<CLASS: "class">
-| <EXTENDS: "extends">
-| <LCHAVETA: "{">
-| <RCHAVETA: "}">
-| <SCOLON: ";">
-| <PUBLIC: "public">
-| <LPAR: "(">
-| <VIRG: ",">
-| <RPAR: ")">
-| <RETURN: "return">
-| <LSQUARE: "[">
-| <RSQUARE: "]">
-| <INT: "int">
-| <BOOLEAN: "boolean">
-| <IF: "if">
-| <ELSE: "else">
-| <WHILE: "while">
-| <EQUAL: "=">
-| <POINT: ".">
-| <LENGTH: "length">
-| <BINAND: "&&" >
-| <LESSTHAN:  "<" >
-| <ADDOP: "+" | "-" >
-| <MULTOP: "*" | "/" >
-| <TRUE: "true">
-| <FALSE: "false">
-| <THIS: "this">
-| <NEW: "new">
-| <NOT: "!">
-| <STATIC: "static">
-| <VOID: "void">
-| <MAIN: "main">
-| <QUOTE:"\"">
-| <STRING: "String">
+ < BOOLEAN: "boolean" >
+| < CLASS: "class" >
+| < ELSE: "else" >
+| < EXTENDS: "extends" >
+| < FALSE: "false" >
+| < IF: "if" >
+| < INT: "int" >
+| < NEW: "new" >
+| < PUBLIC: "public" >
+| < RETURN: "return" >
+| < STATIC: "static" >
+| < THIS: "this" >
+| < TRUE: "true" >
+| < VOID: "void" >
+| < WHILE: "while" >
+| < LENGTH: "length">
 }
 
-TOKEN:
+/* JAVA LITERALS */
+
+TOKEN :
 {
- < INTEGERLITERAL: (["0"-"9"])+ >
-| <IDENTIFIER: ["_","a"-"z","A"-"Z"](["_","a"-"z","A"-"Z","0"-"9"])*>
- /* | <STRING: "\"" (["a"-"z","A"-"Z","0"-"9",":"," ","="])+ "\""> //comeca e acabe em aspas */
- /* | <STRING: <QUOTE> (["_","a"-"z","A"-"Z","0"-"9"," ", "\n", "\t"])* <QUOTE> >*/
+  < INTEGER_LITERAL: (["0"-"9"])+ >
 }
 
-// *************************************************************** RESERVED end*******************************/
+/****************************************************** IDENTIFIERS */
 
-
-//**************************************************************** PRODUCTIONS begin *************************/
-SimpleNode Start(): {}
+TOKEN :
 {
-    Program() {return jjtThis;}
+  < IDENTIFIER: <LETTER> (<LETTER>|<DIGIT>)* >
+|
+  < #LETTER: ["a"-"z", "_","A"-"Z"]>
+|
+  < #DIGIT: (["0"-"9"])*>
 }
 
+/***************************************************** SEPARATORS */
 
-void Program() #void: {}
+TOKEN :
 {
-
-    ClassDeclaration()  //changed this for debugging reasons should be ClassDeclaration()
-
-    <EOF>                // also we need to uncomment ClassDeclaration()
+  < LPAREN: "(" >
+| < RPAREN: ")" >
+| < LBRACE: "{" >
+| < RBRACE: "}" >
+| < LBRACKET: "[" >
+| < RBRACKET: "]" >
+| < SEMICOLON: ";" >
+| < COMMA: "," >
+| < DOT: "." >
 }
 
-//LEXICO
+/***************************************************** OPERATORS */
 
-void ClassDeclaration(): { Token t1, t2;}
+TOKEN :
 {
-
-    <CLASS>
-    t1=<IDENTIFIER>
-    {        jjtThis.setName(t1.image);      }
-    (<EXTENDS> t2=<IDENTIFIER>)?
-    <LCHAVETA>
-
-    (
-            VarDeclaration()
-    )*
-
-    ( <PUBLIC>
-       (
-           MainDeclaration()
-     |
-          MethodDeclaration()
-        )
-     )*
-
-     <RCHAVETA>
-
+  < ASSIGN: "=" >
+| < LT: "<" >
+| < BANG: "!" >
+| < SC_AND: "&&" >
+| < PLUS: "+" >
+| < MINUS: "-" >
+| < STAR: "*" >
+| < SLASH: "/" >
 }
 
+/************************************************************************************************************************
+ * Function Start.
+ ************************************************************************************************************************/
 
+SimpleNode Start() :{}{
+    JavaCompilationUnit() {return jjtThis;}
+}
 
-void MainDeclaration(): {Token t1;}
+void JavaCompilationUnit() #void :{}
 {
- <STATIC> <VOID> <MAIN> <LPAR> <STRING> <LSQUARE> <RSQUARE> t1=<IDENTIFIER> <RPAR> <LCHAVETA> (LOOKAHEAD (2)  VarDeclaration() )* ( Statement() )* <RCHAVETA> //<IDENTIFIER>
+  CompilationUnit() <EOF>
 }
 
 
-
-// primeia parte da declaracao do metodo
-void MethodDeclaration():{Token t1,t2;}
+void CompilationUnit() #void :{}
 {
-    //excludes class constructor
-    // public int getFoo(){return foo;)}
-    t2=Type() t1=<IDENTIFIER> <LPAR> MethodDeclarationArgs() <RPAR> MethodDeclarationdInside()
-    {        jjtThis.setName(t1.image); jjtThis.setType(t2.image);}
+  ( TypeDeclaration() )*
 }
 
-//Trata dos argumentos da funcao
-void MethodDeclarationArgs() #void :{Token t1,t2,t3;}
+
+void TypeDeclaration() #void :
+{}
 {
-    (t1=Type() t1=<IDENTIFIER>  (<VIRG> t3=Type() t2=<IDENTIFIER>)* )?
-
-}
-
-
-// Corpo do metodo da classe, a parte entre {}
-void MethodDeclarationdInside():{}
-{
-    <LCHAVETA> ( LOOKAHEAD (2) VarDeclaration() )* (Statement())* <RETURN> Expression() <SCOLON> <RCHAVETA> //<IDENTIFIER>
-}
-
-
-/*testes.md for more info*/
-Token Type() #void:{Token t1;}
-{
-     (t1=<INT> [<LSQUARE> <RSQUARE>]
-    | t1=<BOOLEAN>
-    | t1=<IDENTIFIER>  )
-    {return t1;}
-}
-
-
-/*testes.md for more info*/
-void VarDeclaration(): {Token t1, t2;}
-{
-  t2=Type() t1=<IDENTIFIER> <SCOLON>
-  {jjtThis.setName(t1.image);jjtThis.setType(t2.image);}
-}
-
-
-void Statement():{Token t1;}
-{
-     <LCHAVETA> ( Statement() )* <RCHAVETA>
-    | <IF> #If <LPAR> Expression() <RPAR> Statement() <ELSE> Statement()
-    | <WHILE> #While <LPAR> Expression() <RPAR> Statement()
-    | LOOKAHEAD (2) Expression() <SCOLON>  //LL(2) porque Expression() -> <IDENTIFIER> na Expression e na linha a seguir t1
-    | LOOKAHEAD (2) t1=<IDENTIFIER> SolveAmbiguityInStatement() //LL(2) porque -> <IDENTIFIER> daqui e da Expression
-    //{jjtThis.setName(t1.image);}
-}
-
-void SolveAmbiguityInStatement() #void:{}{
-      <EQUAL> Expression() <SCOLON>
-    | <LSQUARE> Expression() <RSQUARE> <EQUAL> Expression() <SCOLON>
-
-}
-
-void Expression() : {Token t1,t2;}
-{
-    (
-      t1=<INTEGERLITERAL> //numero
-    | <TRUE>
-    | <FALSE>
-    | t2=<IDENTIFIER>
-    | <THIS>
-    | <NEW> SolveAmbiguityInNew()
-    | <NOT> Expression()
-    | <LPAR> Expression() <RPAR>
-
-    )
-    (LOOKAHEAD (2)  Exp1() )?  //<INTEGERLITERAL> NO FIM DAS OPs PRECEDENCIAS e t1 daqui
-}
-
-void Exp1(): {}
-{
-    And() Expression() Exp1()
-    | <LSQUARE> Expression() <RSQUARE> Exp1()
-    | <POINT> SolveAmbiguityInPointExp1()
-}
-
-void SolveAmbiguityInPointExp1():{Token t1;}{
-    (
-    <LENGTH>
-   | t1=<IDENTIFIER> <LPAR> ( Expression() (<VIRG> Expression() )* )? <RPAR>
-    )
-    Exp1()
-}
-
-void SolveAmbiguityInNew() #Novos: {Token t1,t2;}
-{
-      t1=<INT> <LSQUARE> Expression() <RSQUARE>
-    | t2=<IDENTIFIER> <LPAR> <RPAR>
-}
-
-void And() #And: {Token op;}
-{
-    LessThan() (op=<BINAND> LessThan() #And(2) )*
-}
-
-void LessThan() #LessThan: {Token op;}
-{
-    AddSub() (op=<LESSTHAN> AddSub() #LessThan(2) )*
-}
-
-void AddSub() #AddSub: {Token op;}
-{
-    MultDiv() (op=<ADDOP> MultDiv() #AddSub(2) )*
-}
-
-void MultDiv() #MultiDiv: {Token op;}
-{
-Literal() (op=<MULTOP> Literal() #MultDiv(2) )*
-}
-
-void Literal() #Literal: {Token t1,t2;}
-{
- t1=<INTEGERLITERAL> | t2=<IDENTIFIER>
+  LOOKAHEAD( ( "public" )* "class" )
+  ClassDeclaration()
+|
+  ";"
 }
 
 
 /*
+ * Declaration syntax follows.
+ */
+
+void ClassDeclaration() #void :
+{}
+{
+  ( "public" )*
+  UnmodifiedClassDeclaration()
+}
+
+void UnmodifiedClassDeclaration() :
+{Token t1;}
+{
+  "class" t1=<IDENTIFIER> [ "extends" Name() ]
+  {jjtThis.setName(t1.image);}
+  ClassBody()
+}
+
+void ClassBody() #void:
+{}
+{
+  "{" ( ClassBodyDeclaration() )* "}"
+}
+
+void NestedClassDeclaration() #void:
+{}
+{
+  ( "static"  | "public"  )*
+  UnmodifiedClassDeclaration()
+}
+
+void ClassBodyDeclaration() #void:
+{}
+{
+  LOOKAHEAD(2)
+  Initializer()
+|
+  LOOKAHEAD( ( "static"  | "public"  )* "class" )
+  NestedClassDeclaration()
+|
+  LOOKAHEAD( [ "public"  ] Name() "(" )
+  ConstructorDeclaration()
+|
+  LOOKAHEAD( MethodDeclarationLookahead() )
+  MethodDeclaration()
+|
+  FieldDeclaration()
+}
+
+// This production is to determine lookahead only.
+void MethodDeclarationLookahead() :
+{Token t1;}
+{
+  ( "public"  | "static"  )*
+  ResultType() t1=<IDENTIFIER> "("
+   {jjtThis.setName(t1.image);}
+}
+
+
+void FieldDeclaration() :
+{}
+{
+  ( "public" |  "static"  )*
+  Type() VariableDeclarator() ( "," VariableDeclarator() )* ";"
+}
+
+void VariableDeclarator() :
+{}
+{
+  VariableDeclaratorId() [ "=" VariableInitializer() ]
+}
+
+void VariableDeclaratorId() :
+{}
+{
+  <IDENTIFIER> ( "[" "]" )*
+}
+
+void VariableInitializer() :
+{}
+{
+  Expression()
+}
+
+void MethodDeclaration() :
+{}
+{
+  ( "public"  | "static"   )*
+  ResultType() MethodDeclarator()
+  ( Block() | ";" )
+}
+
+void MethodDeclarator() :
+{}
+{
+  <IDENTIFIER> FormalParameters() ( "[" "]" )*
+}
+
+void FormalParameters() :
+{}
+{
+  "(" [ FormalParameter() ( "," FormalParameter() )* ] ")"
+}
+
+void FormalParameter() :
+{}
+{
+  Type() VariableDeclaratorId()
+}
+
+void ConstructorDeclaration() :
+{}
+{
+  [ "public"  ]
+  <IDENTIFIER> FormalParameters()
+  "{"
+    [ LOOKAHEAD(ExplicitConstructorInvocation()) ExplicitConstructorInvocation() ]
+    ( BlockStatement() )*
+  "}"
+}
+
+void ExplicitConstructorInvocation() :
+{}
+{
+   "this" Arguments() ";"
+}
+
+void Initializer() :
+{}
+{
+  [ "static" ] Block()
+}
+
 
 /*
-void Debugg(): {}
-{
-    //        [...] in a JavaCC input file indicate that the ... is optional.
-    //        [...] may also be written as (...)?
-    //         e1 | e2 | e3 | ... : A choice of e1, e2, e3, etc.
-    //        ( e )+             : One or more occurrences of e
-    //        ( e )*             : Zero or more occurrences of e
-   // (<INT> | <BOOLEAN>) ->pelo menos um: um ou outro ouExclusivo
-   //[<INT> | <BOOLEAN>] -> zero ou uma vez um ou outro
-   // ( <INT> <" ">)* //zero  ->aceita VAZIO,     <int><" ">,   <int><" "><int><" ">
-   // ( <INT> )*    //zero ou mais int
-    (<INT> | <BOOLEAN>)* //zero ou mais int OU Boolean
+ * Type, name and expression syntax follows.
+ */
 
+void Type() :
+{}
+{
+  ( PrimitiveType() | Name() ) ( "[" "]" )*
 }
-*/
+
+void PrimitiveType() :
+{}
+{
+  "boolean"
+|
+  "int"
+}
+
+void ResultType() :
+{}
+{
+  "void"
+|
+  Type()
+}
+
+void Name() :
+{}
+{
+  <IDENTIFIER>
+  ( LOOKAHEAD(2) "." <IDENTIFIER> )*
+}
+
+void NameList() :
+{}
+{
+  Name() ( "," Name() )*
+}
+
+
+/*
+ * Expression syntax follows.
+ */
+
+void Expression() :
+{}
+{
+  ConditionalAndExpression() [ AssignmentOperator() Expression() ]
+}
+
+void AssignmentOperator() :
+{}
+{
+  "="
+}
+
+void ConditionalAndExpression() :
+{}
+{
+  RelationalExpression() ( "&&" RelationalExpression() )*
+}
+
+
+void RelationalExpression() :
+{}
+{
+  AdditiveExpression() ( LOOKAHEAD(2) ( "<"  ) AdditiveExpression() )*
+}
+
+
+void AdditiveExpression() :
+{}
+{
+  MultiplicativeExpression() ( ( "+" | "-" ) MultiplicativeExpression() )*
+}
+
+void MultiplicativeExpression() :
+{}
+{
+  UnaryExpression() ( ( "*" | "/" ) UnaryExpression() )*
+}
+
+void UnaryExpression() :
+{}
+{
+  ( "+" | "-" ) UnaryExpression()
+|
+  UnaryExpressionNotPlusMinus()
+}
+
+
+void UnaryExpressionNotPlusMinus() :
+{}
+{
+  ( "!" ) UnaryExpression()
+|
+  LOOKAHEAD( CastLookahead() )
+  CastExpression()
+|
+  PostfixExpression()
+}
+
+void CastLookahead() :
+{}
+{
+  LOOKAHEAD(2)
+  "(" PrimitiveType()
+|
+  LOOKAHEAD("(" Name() "[")
+  "(" Name() "[" "]"
+|
+  "(" Name() ")" ( "!" | "(" | <IDENTIFIER> | "this" | "new" | Literal() )
+}
+
+void PostfixExpression() :
+{}
+{
+  PrimaryExpression()
+}
+
+void CastExpression() :
+{}
+{
+  LOOKAHEAD("(" PrimitiveType())
+  "(" Type() ")" UnaryExpression()
+|
+  LOOKAHEAD("(" Name())
+  "(" Type() ")" UnaryExpressionNotPlusMinus()
+}
+
+void PrimaryExpression() :
+{}
+{
+  PrimaryPrefix() ( LOOKAHEAD(2) PrimarySuffix() )*
+}
+
+void PrimaryPrefix() :
+{}
+{
+  Literal()
+|
+  "this"
+|
+  "(" Expression() ")"
+|
+  AllocationExpression()
+|
+  LOOKAHEAD( ResultType() "." "class" )
+  ResultType() "." "class"
+|
+  Name()
+}
+
+void PrimarySuffix() :
+{}
+{
+  LOOKAHEAD(2)
+  "." "this"
+|
+  LOOKAHEAD(2)
+  "." AllocationExpression()
+|
+   LOOKAHEAD(2)
+   "." "length"
+|
+  "[" Expression() "]"
+|
+  "." <IDENTIFIER>
+|
+  Arguments()
+}
+
+void Literal() :
+{}
+{
+  <INTEGER_LITERAL>
+|
+  BooleanLiteral()
+}
+
+void IntegerLiteral() :
+{}
+{
+  <INTEGER_LITERAL>
+}
+
+void BooleanLiteral() :
+{}
+{
+  "true"
+|
+  "false"
+}
+
+void Arguments() :
+{}
+{
+  "(" [ ArgumentList() ] ")"
+}
+
+void ArgumentList() :
+{}
+{
+  Expression() ( "," Expression() )*
+}
+
+void AllocationExpression() :
+{}
+{
+  LOOKAHEAD(2)
+  "new" PrimitiveType() ArrayDimsAndInits()
+|
+  "new" Name()
+    (
+      ArrayDimsAndInits()
+    |
+      Arguments() [ ClassBody() ]
+    )
+}
+
+/*
+ * The second LOOKAHEAD specification below is to parse to PrimarySuffix
+ * if there is an expression between the "[...]".
+ */
+void ArrayDimsAndInits() :
+{}
+{
+  ( LOOKAHEAD(2) "[" Expression() "]" )+ ( LOOKAHEAD(2) "[" "]" )*
+//|
+//  ( "[" "]" )+ ArrayInitializer()
+}
+
+
+/*
+ * Statement syntax follows.
+ */
+
+void Statement() :
+{}
+{
+  LOOKAHEAD(2)
+  Block()
+|
+  EmptyStatement()
+|
+  StatementExpression() ";"
+|
+  IfStatement()
+|
+  WhileStatement()
+|
+  ReturnStatement()
+}
+
+
+void Block() :
+{}
+{
+  "{" ( BlockStatement() )* "}"
+}
+
+void BlockStatement() :
+{}
+{
+  LOOKAHEAD( Type() <IDENTIFIER>)
+  LocalVariableDeclaration() ";"
+|
+  Statement()
+|
+  UnmodifiedClassDeclaration()
+}
+
+void LocalVariableDeclaration() :
+{}
+{
+   Type() VariableDeclarator() ( "," VariableDeclarator() )*
+}
+
+void EmptyStatement() :
+{}
+{
+  ";"
+}
+
+void StatementExpression() :
+{}
+{
+  PrimaryExpression()
+  [
+    AssignmentOperator() Expression()
+  ]
+}
+
+
+void IfStatement() #If :
+{}
+{
+  "if" "(" Expression() ")" Statement() [ LOOKAHEAD(1) "else" Statement() ]
+}
+
+void WhileStatement() #While :
+{}
+{
+  "while" "(" Expression() ")" Statement()
+}
+
+
+void StatementExpressionList() :
+{}
+{
+  StatementExpression() ( "," StatementExpression() )*
+}
+
+
+void ReturnStatement() #Return :
+{}
+{
+  "return" [ Expression() ] ";"
+}
+
