@@ -1,7 +1,8 @@
 
 options {
   MULTI =true;
-   LOOKAHEAD=1;
+  LOOKAHEAD=1;
+  STATIC =true;
 }
 
 PARSER_BEGIN(Jmm)
@@ -213,10 +214,10 @@ void ClassDeclaration() #void :
 }
 
 void UnmodifiedClassDeclaration() :
-{Token t1;}
+{Token t2;}
 {
-  "class" t1=<IDENTIFIER> [ "extends" Name() ]
-  {jjtThis.setName(t1.image);}
+  "class" t2=<IDENTIFIER> [ "extends" Name() ]
+  {jjtThis.setName(t2.image);}
   ClassBody()
 }
 
@@ -253,40 +254,41 @@ void ClassBodyDeclaration() #void:
 
 // This production is to determine lookahead only.
 void MethodDeclarationLookahead() :
-{Token t1;}
+{Token t10;}
 {
   ( "public"  | "static"  )*
-  ResultType() t1=<IDENTIFIER> "("
-   {jjtThis.setName(t1.image);}
+  ResultType() t10=<IDENTIFIER> "("
+  {jjtThis.setName(t10.image);}
 }
 
 
-void FieldDeclaration() :
+void FieldDeclaration() #void:
 {}
 {
   ( "public" |  "static"  )*
   Type() VariableDeclarator() ( "," VariableDeclarator() )* ";"
 }
 
-void VariableDeclarator() :
+void VariableDeclarator() #void :
 {}
 {
-  VariableDeclaratorId() [ "=" VariableInitializer() ]
+  VariableDeclaratorId() [ "=" #EQUAL VariableInitializer() ]
 }
 
 void VariableDeclaratorId() :
-{}
+{Token t6;}
 {
-  <IDENTIFIER> ( "[" "]" )*
+  t6=<IDENTIFIER> ( "[" "]" )*
+    {jjtThis.setName(t6.image);}
 }
 
-void VariableInitializer() :
+void VariableInitializer() #void:
 {}
 {
   Expression()
 }
 
-void MethodDeclaration() :
+void MethodDeclaration() #void:
 {}
 {
   ( "public"  | "static"   )*
@@ -295,41 +297,42 @@ void MethodDeclaration() :
 }
 
 void MethodDeclarator() :
-{}
+{Token t3;}
 {
-  <IDENTIFIER> FormalParameters() ( "[" "]" )*
+  t3=<IDENTIFIER> FormalParameters() ( "[" "]" )*
+    {jjtThis.setName(t3.image);}
 }
 
-void FormalParameters() :
+void FormalParameters() #void:
 {}
 {
   "(" [ FormalParameter() ( "," FormalParameter() )* ] ")"
 }
 
-void FormalParameter() :
+void FormalParameter() #void:
 {}
 {
   Type() VariableDeclaratorId()
 }
 
-void ConstructorDeclaration() :
-{}
+void ConstructorDeclaration():
+{Token t9;}
 {
   [ "public"  ]
-  <IDENTIFIER> FormalParameters()
+  t9=<IDENTIFIER> FormalParameters() {jjtThis.setName(t9.image);}
   "{"
     [ LOOKAHEAD(ExplicitConstructorInvocation()) ExplicitConstructorInvocation() ]
     ( BlockStatement() )*
   "}"
 }
 
-void ExplicitConstructorInvocation() :
+void ExplicitConstructorInvocation() #void:
 {}
 {
    "this" Arguments() ";"
 }
 
-void Initializer() :
+void Initializer() #void:
 {}
 {
   [ "static" ] Block()
@@ -340,21 +343,22 @@ void Initializer() :
  * Type, name and expression syntax follows.
  */
 
-void Type() :
+void Type() #void:
 {}
 {
   ( PrimitiveType() | Name() ) ( "[" "]" )*
 }
 
 void PrimitiveType() :
-{}
+{Token t;}
 {
-  "boolean"
+  t="boolean"
 |
-  "int"
+  t="int"
+  {jjtThis.setName(t.image);}
 }
 
-void ResultType() :
+void ResultType() #void:
 {}
 {
   "void"
@@ -363,13 +367,14 @@ void ResultType() :
 }
 
 void Name() :
-{}
+{Token t;}
 {
-  <IDENTIFIER>
+  t=<IDENTIFIER>
   ( LOOKAHEAD(2) "." <IDENTIFIER> )*
+   {jjtThis.setName(t.image);}
 }
 
-void NameList() :
+void NameList() #void:
 {}
 {
   Name() ( "," Name() )*
@@ -380,45 +385,45 @@ void NameList() :
  * Expression syntax follows.
  */
 
-void Expression() :
+void Expression() #void:
 {}
 {
   ConditionalAndExpression() [ AssignmentOperator() Expression() ]
 }
 
-void AssignmentOperator() :
+void AssignmentOperator() #void:
 {}
 {
-  "="
+  "=" #ASSIGNMENT
 }
 
-void ConditionalAndExpression() :
+void ConditionalAndExpression() #void:
 {}
 {
-  RelationalExpression() ( "&&" RelationalExpression() )*
-}
-
-
-void RelationalExpression() :
-{}
-{
-  AdditiveExpression() ( LOOKAHEAD(2) ( "<"  ) AdditiveExpression() )*
+  RelationalExpression() ( "&&" #AND RelationalExpression() )*
 }
 
 
-void AdditiveExpression() :
+void RelationalExpression() #void:
 {}
 {
-  MultiplicativeExpression() ( ( "+" | "-" ) MultiplicativeExpression() )*
+  AdditiveExpression() ( LOOKAHEAD(2) ( "<"  #LessThen ) AdditiveExpression() )*
 }
 
-void MultiplicativeExpression() :
+
+void AdditiveExpression() #void:
 {}
 {
-  UnaryExpression() ( ( "*" | "/" ) UnaryExpression() )*
+  MultiplicativeExpression() ( ( "+" | "-" ) #ADDSUB MultiplicativeExpression() )*
 }
 
-void UnaryExpression() :
+void MultiplicativeExpression() #void:
+{}
+{
+  UnaryExpression() ( ( "*" | "/" ) #DIVMULT UnaryExpression() )*
+}
+
+void UnaryExpression() #void:
 {}
 {
   ( "+" | "-" ) UnaryExpression()
@@ -427,15 +432,15 @@ void UnaryExpression() :
 }
 
 
-void UnaryExpressionNotPlusMinus() :
+void UnaryExpressionNotPlusMinus() #void:
 {}
 {
-  ( "!" ) UnaryExpression()
+  ( "!"  ) UnaryExpression()
 |
   LOOKAHEAD( CastLookahead() )
   CastExpression()
 |
-  PostfixExpression()
+  PrimaryExpression()
 }
 
 void CastLookahead() :
@@ -450,13 +455,8 @@ void CastLookahead() :
   "(" Name() ")" ( "!" | "(" | <IDENTIFIER> | "this" | "new" | Literal() )
 }
 
-void PostfixExpression() :
-{}
-{
-  PrimaryExpression()
-}
 
-void CastExpression() :
+void CastExpression() #void:
 {}
 {
   LOOKAHEAD("(" PrimitiveType())
@@ -466,13 +466,13 @@ void CastExpression() :
   "(" Type() ")" UnaryExpressionNotPlusMinus()
 }
 
-void PrimaryExpression() :
+void PrimaryExpression() #void:
 {}
 {
   PrimaryPrefix() ( LOOKAHEAD(2) PrimarySuffix() )*
 }
 
-void PrimaryPrefix() :
+void PrimaryPrefix() #void:
 {}
 {
   Literal()
@@ -490,7 +490,7 @@ void PrimaryPrefix() :
 }
 
 void PrimarySuffix() :
-{}
+{Token t7;}
 {
   LOOKAHEAD(2)
   "." "this"
@@ -503,46 +503,50 @@ void PrimarySuffix() :
 |
   "[" Expression() "]"
 |
-  "." <IDENTIFIER>
+  "." t7=<IDENTIFIER> {jjtThis.setName(t7.image);}
 |
   Arguments()
+
 }
 
 void Literal() :
-{}
+{Token t5;}
 {
-  <INTEGER_LITERAL>
+  t5=<INTEGER_LITERAL>
 |
-  BooleanLiteral()
+  t5=BooleanLiteral()
+    {jjtThis.setName(t5.image);}
 }
 
 void IntegerLiteral() :
-{}
+{Token t;}
 {
-  <INTEGER_LITERAL>
+  t=<INTEGER_LITERAL>
+   {jjtThis.setName(t.image);}
 }
 
-void BooleanLiteral() :
-{}
+Token BooleanLiteral() #void:
+{Token t;}
 {
-  "true"
+  t="true"
 |
-  "false"
+  t="false"
+    {return t;}
 }
 
-void Arguments() :
+void Arguments() #void:
 {}
 {
   "(" [ ArgumentList() ] ")"
 }
 
-void ArgumentList() :
+void ArgumentList() #void:
 {}
 {
   Expression() ( "," Expression() )*
 }
 
-void AllocationExpression() :
+void AllocationExpression() #void:
 {}
 {
   LOOKAHEAD(2)
@@ -556,11 +560,7 @@ void AllocationExpression() :
     )
 }
 
-/*
- * The second LOOKAHEAD specification below is to parse to PrimarySuffix
- * if there is an expression between the "[...]".
- */
-void ArrayDimsAndInits() :
+void ArrayDimsAndInits() #void:
 {}
 {
   ( LOOKAHEAD(2) "[" Expression() "]" )+ ( LOOKAHEAD(2) "[" "]" )*
@@ -573,7 +573,7 @@ void ArrayDimsAndInits() :
  * Statement syntax follows.
  */
 
-void Statement() :
+void Statement() #void :
 {}
 {
   LOOKAHEAD(2)
@@ -591,13 +591,13 @@ void Statement() :
 }
 
 
-void Block() :
+void Block() #void:
 {}
 {
   "{" ( BlockStatement() )* "}"
 }
 
-void BlockStatement() :
+void BlockStatement() #void:
 {}
 {
   LOOKAHEAD( Type() <IDENTIFIER>)
@@ -606,21 +606,22 @@ void BlockStatement() :
   Statement()
 |
   UnmodifiedClassDeclaration()
+
 }
 
-void LocalVariableDeclaration() :
+void LocalVariableDeclaration() #void:
 {}
 {
    Type() VariableDeclarator() ( "," VariableDeclarator() )*
 }
 
-void EmptyStatement() :
+void EmptyStatement() #void:
 {}
 {
   ";"
 }
 
-void StatementExpression() :
+void StatementExpression() #void:
 {}
 {
   PrimaryExpression()
@@ -643,7 +644,7 @@ void WhileStatement() #While :
 }
 
 
-void StatementExpressionList() :
+void StatementExpressionList() #void:
 {}
 {
   StatementExpression() ( "," StatementExpression() )*

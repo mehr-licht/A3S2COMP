@@ -2,12 +2,21 @@
 /* JavaCCOptions:MULTI=true,NODE_USES_PARSER=false,VISITOR=false,TRACK_TOKENS=false,NODE_PREFIX=AST,NODE_EXTENDS=,NODE_FACTORY=,SUPPORT_CLASS_VISIBILITY_PUBLIC=true */
 public
 class ASTConstructorDeclaration extends SimpleNode {
+  private String name;
   public ASTConstructorDeclaration(int id) {
     super(id);
   }
 
   public ASTConstructorDeclaration(Jmm p, int id) {
     super(p, id);
+  }
+
+  public void setName(String n) {
+    name = n;
+  }
+
+  public String toString() {
+    return  name ;
   }
 
 }

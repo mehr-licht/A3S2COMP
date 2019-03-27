@@ -2,6 +2,7 @@
 /* JavaCCOptions:MULTI=true,NODE_USES_PARSER=false,VISITOR=false,TRACK_TOKENS=false,NODE_PREFIX=AST,NODE_EXTENDS=,NODE_FACTORY=,SUPPORT_CLASS_VISIBILITY_PUBLIC=true */
 public
 class ASTName extends SimpleNode {
+  private String name;
   public ASTName(int id) {
     super(id);
   }
@@ -9,6 +10,15 @@ class ASTName extends SimpleNode {
   public ASTName(Jmm p, int id) {
     super(p, id);
   }
+
+  public void setName(String n) {
+    name = n;
+  }
+
+  public String toString() {
+    return "[" + name + "]";
+  }
+
 
 }
 /* JavaCC - OriginalChecksum=1b083ce71fda15db1336fc7c65d97f5a (do not edit this line) */
