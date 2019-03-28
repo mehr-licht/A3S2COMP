@@ -269,10 +269,10 @@ void FieldDeclaration() #void:
   Type() VariableDeclarator() ( "," VariableDeclarator() )* ";"
 }
 
-void VariableDeclarator() #void :
+void VariableDeclarator() #void:
 {}
 {
-  VariableDeclaratorId() [ "=" #EQUAL VariableInitializer() ]
+  VariableDeclaratorId() [ "="  VariableInitializer() #INIT(>1) ]
 }
 
 void VariableDeclaratorId() :
@@ -288,7 +288,7 @@ void VariableInitializer() #void:
   Expression()
 }
 
-void MethodDeclaration() #void:
+void MethodDeclaration() #METODO(>1):
 {}
 {
   ( "public"  | "static"   )*
@@ -349,13 +349,13 @@ void Type() #void:
   ( PrimitiveType() | Name() ) ( "[" "]" )*
 }
 
-void PrimitiveType() :
+void PrimitiveType() #void:
 {Token t;}
 {
-  t="boolean"
+  "boolean"
 |
-  t="int"
-  {jjtThis.setName(t.image);}
+  "int"
+
 }
 
 void ResultType() #void:
@@ -388,39 +388,39 @@ void NameList() #void:
 void Expression() #void:
 {}
 {
-  ConditionalAndExpression() [ AssignmentOperator() Expression() ]
+  ConditionalAndExpression() [ AssignmentOperator() Expression()  #ASSIGNMENT(2)]
 }
 
 void AssignmentOperator() #void:
 {}
 {
-  "=" #ASSIGNMENT
+  "="
 }
 
 void ConditionalAndExpression() #void:
 {}
 {
-  RelationalExpression() ( "&&" #AND RelationalExpression() )*
+  RelationalExpression() ( "&&"  RelationalExpression() )*
 }
 
 
 void RelationalExpression() #void:
 {}
 {
-  AdditiveExpression() ( LOOKAHEAD(2) ( "<"  #LessThen ) AdditiveExpression() )*
+  AdditiveExpression() ( LOOKAHEAD(2) ( "<"  ) AdditiveExpression() #LESSTHEN(2) )*
 }
 
 
 void AdditiveExpression() #void:
 {}
 {
-  MultiplicativeExpression() ( ( "+" | "-" ) #ADDSUB MultiplicativeExpression() )*
+  MultiplicativeExpression() ( ( "+" | "-" )  MultiplicativeExpression() #ADDSUB(2) )*
 }
 
 void MultiplicativeExpression() #void:
 {}
 {
-  UnaryExpression() ( ( "*" | "/" ) #DIVMULT UnaryExpression() )*
+  UnaryExpression() ( ( "*" | "/" )  UnaryExpression() #DIVMULT(2) )*
 }
 
 void UnaryExpression() #void:
@@ -489,7 +489,7 @@ void PrimaryPrefix() #void:
   Name()
 }
 
-void PrimarySuffix() :
+void PrimarySuffix() #void:
 {Token t7;}
 {
   LOOKAHEAD(2)
@@ -503,7 +503,7 @@ void PrimarySuffix() :
 |
   "[" Expression() "]"
 |
-  "." t7=<IDENTIFIER> {jjtThis.setName(t7.image);}
+  "." <IDENTIFIER>
 |
   Arguments()
 
@@ -512,10 +512,10 @@ void PrimarySuffix() :
 void Literal() :
 {Token t5;}
 {
-  t5=<INTEGER_LITERAL>
+  t5=<INTEGER_LITERAL> {jjtThis.setName(t5.image);}
 |
-  t5=BooleanLiteral()
-    {jjtThis.setName(t5.image);}
+  BooleanLiteral()
+
 }
 
 void IntegerLiteral() :
@@ -525,13 +525,13 @@ void IntegerLiteral() :
    {jjtThis.setName(t.image);}
 }
 
-Token BooleanLiteral() #void:
+void BooleanLiteral() #void:
 {Token t;}
 {
-  t="true"
+  "true"
 |
-  t="false"
-    {return t;}
+  "false"
+
 }
 
 void Arguments() #void:
@@ -626,21 +626,21 @@ void StatementExpression() #void:
 {
   PrimaryExpression()
   [
-    AssignmentOperator() Expression()
+    AssignmentOperator() Expression() #ASSIGNMENT(2)
   ]
 }
 
 
-void IfStatement() #If :
+void IfStatement() #IF :
 {}
 {
-  "if" "(" Expression() ")" Statement() [ LOOKAHEAD(1) "else" Statement() ]
+  "if" "(" Expression() #CONDITION ")" Statement() #STATEMENT  [ LOOKAHEAD(1) "else" Statement() #ELSE ]
 }
 
-void WhileStatement() #While :
+void WhileStatement() #WHILE :
 {}
 {
-  "while" "(" Expression() ")" Statement()
+  "while" "(" Expression() #CONDITION ")" Statement() #BODY
 }
 
 
@@ -651,7 +651,7 @@ void StatementExpressionList() #void:
 }
 
 
-void ReturnStatement() #Return :
+void ReturnStatement() #RETURN :
 {}
 {
   "return" [ Expression() ] ";"

@@ -16,7 +16,7 @@ public class ASTVariableDeclaratorId extends SimpleNode {
     }
 
     public String toString() {
-        return "VarId: [" + name + "]";
+        return "varInit: " + name + "";
     }
 }
 /* JavaCC - OriginalChecksum=b70e43608c68bf87fcc6211345732301 (do not edit this line) */

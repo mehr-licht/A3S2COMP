@@ -16,7 +16,7 @@ class ASTName extends SimpleNode {
   }
 
   public String toString() {
-    return "[" + name + "]";
+    return  name;
   }
 
 

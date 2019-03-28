@@ -17,7 +17,7 @@ class ASTPrimarySuffix extends SimpleNode {
   }
 
   public String toString() {
-    return "VarId: [" + name + "]";
+    return "PS: [" + name + "]";
   }
 }
 /* JavaCC - OriginalChecksum=9d0c7fdf54558dfe7f29938174736548 (do not edit this line) */

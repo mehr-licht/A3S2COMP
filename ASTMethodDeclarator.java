@@ -17,7 +17,7 @@ class ASTMethodDeclarator extends SimpleNode {
     }
 
     public String toString() {
-        return "[" + name + "]";
+        return  name;
     }
 }
 /* JavaCC - OriginalChecksum=a95502136eda7326ad9f16d9d60726e6 (do not edit this line) */

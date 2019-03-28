@@ -1,46 +1,50 @@
-class FindMaximum {
-	int[] test_arr;
+class MonteCarloPi {
+	public boolean performSingleEstimate() {
+		int rand1;
+		int rand2;
+		boolean in_circle;
+		int squareDist;
 
-	public int find_maximum(int[] arr) {
-		int i;
-		int maximum;
-		int value;
+		rand1 = MathUtils.random(0-100, 100);
+		rand2 = MathUtils.random(0-100, 100);
 
-		i = 1;
-		maximum = arr[0];
-		while (i < arr.length) {
-			value = arr[i];
-			if (maximum < value) {
-				maximum = value;
-			} else {
-			}
-			i = i + 1;
+		squareDist = (rand1 * rand1 + rand2 * rand2) / 100;
+		if (squareDist < 100) {
+			in_circle = true;
+		} else {
+			in_circle = false;
 		}
 
-		return maximum;
+		return in_circle;
 	}
 
-	public int build_test_arr() {
-		test_arr = new int[5];
-		test_arr[0] = 14;
-		test_arr[1] = 28;
-		test_arr[2] = 0;
-		test_arr[3] = 0-5; // No unary minus in Java--
-		test_arr[4] = 12;
+	public int estimatePi100(int n) {
+		int samples_in_circle;
+		int samples_so_far;
+		int pi_estimate;
 
-		return 0;
-	}
+		samples_so_far = 0;
+		samples_in_circle = 0;
 
-	public int[] get_array() {
-		return test_arr;
+		while (samples_so_far < n) {
+			if (this.performSingleEstimate()) {
+				samples_in_circle = samples_in_circle + 1;
+			} else {
+			}
+			samples_so_far = samples_so_far + 1;
+		}
+
+		pi_estimate = 400 * samples_in_circle / n;
+		return pi_estimate;
 	}
 
 	public static void main(String[] args) {
-		FindMaximum fm;
+		int pi_estimate_times_100;
+		int num_samples;
 
-		fm = new FindMaximum();
-		fm.build_test_arr();
+		num_samples = ioPlus.requestNumber();
+		pi_estimate_times_100 = new MonteCarloPi().estimatePi100(num_samples);
 
-		ioPlus.printResult(fm.find_maximum(fm.get_array()));
+		ioPlus.printResult(pi_estimate_times_100);
 	}
 }

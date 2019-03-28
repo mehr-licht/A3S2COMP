@@ -15,7 +15,7 @@ class ASTIntegerLiteral extends SimpleNode {
   }
 
   public String toString() {
-    return "[" + name + "]";
+    return "IL[" + name + "]";
   }
 
 }

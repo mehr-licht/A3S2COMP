@@ -16,7 +16,7 @@ class ASTConstructorDeclaration extends SimpleNode {
   }
 
   public String toString() {
-    return  name ;
+    return  "Constructor: " + name ;
   }
 
 }
