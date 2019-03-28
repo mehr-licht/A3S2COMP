@@ -14,7 +14,7 @@ public class Jmm {
     if (args.length == 0) {
       System.out.println("Jmm Parser:  Reading from standard input . . .");
       myJmm = new Jmm(System.in);
-    
+
     } else if (args.length == 1) {
       System.out.println("Jmm Parser:  Reading from file " + args[0] + " . . .");
       try {
@@ -23,7 +23,7 @@ public class Jmm {
         System.out.println("Jmm Parser:  File " + args[0] + " not found.");
         return;
       }
-    
+
     } else {
       System.out.println("Jmm Parser:  Usage is one of:");
       System.out.println("         java Jmm < inputfile");
@@ -640,7 +640,16 @@ void IfStatement() #If :
 void WhileStatement() #While :
 {}
 {
-  "while" "(" Expression() ")" Statement()
+  try{
+    "while" "(" Expression() ")" Statement()
+  }
+  catch (ParseException e) {
+    System.out.println(e.toString());
+    Token t;
+    do {
+      t = getNextToken();
+    } while (t.kind != RBRACE);
+  }
 }
 
 
@@ -656,4 +665,3 @@ void ReturnStatement() #Return :
 {
   "return" [ Expression() ] ";"
 }
-
