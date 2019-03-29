@@ -1,16 +1,45 @@
-## A3S2COMP
+## Intro
 
-Commands:
+Este repositório contém o primeiro checkpoint para a UC Compiladores. 
 
-    jjtree <filename>.jjt
+## Instructions for running
 
-    javacc Parser.jj
+
+There is two ways for running this project,both on LINUX terminal:
+
+1. Runnig the following comands in order 
+
+        jjtree Jmm.jjt
+
+        javacc Jmm.jj
     
-    javac *.java
+        javac *.java
     
-    java Parser
+        java Jmm codeTestingFile
     
-File run.sh contains a bash script to run all the commands automatically in Linux
+File _codeTestingFile_  contains the code that will be readed by the parser. For the purpose of testing diferents code blocks just open the file and copy paste into the file all the code to be tested.
+
+2.Go to the project folder and run:
+
+    sudo chmod+x run.sh
+
+The following command will give the right permissions to run the bash script _run.sh_.
+
+File run.sh is a script bash who purpose is to call all the previous commands in point 1.
+
+Next, run:
+
+    sh run.sh
+
+or
+
+    ./run.sh
+
+
+Below a few documentation notes from JAVACC documentation 
+
+## Documentation Notes
+
 
     . TOKEN:         This is used to specify lexical tokens (see next example)
 
