@@ -195,7 +195,7 @@ void CompilationUnit() #void :{}
 void TypeDeclaration() #void :
 {}
 {
-  LOOKAHEAD( ( "public" )? "class" )
+  LOOKAHEAD( ( "public" )* "class" )
   ClassDeclaration()
 |
   ";"
@@ -209,7 +209,7 @@ void TypeDeclaration() #void :
 void ClassDeclaration() #void :
 {}
 {
-  ( "public" )?
+  ( "public" )*
   UnmodifiedClassDeclaration()
 }
 
@@ -230,7 +230,7 @@ void ClassBody() #void:
 void NestedClassDeclaration() #void:
 {}
 {
-  ( "static"  | "public"  )?
+  ( "static"  | "public"  )*
   UnmodifiedClassDeclaration()
 }
 
@@ -240,7 +240,7 @@ void ClassBodyDeclaration() #void:
   LOOKAHEAD(2)
   Initializer()
 |
-  LOOKAHEAD( ( "static"  | "public"  )? "class" )
+  LOOKAHEAD( ( "static"  | "public"  )* "class" )
   NestedClassDeclaration()
 |
   LOOKAHEAD( [ "public"  ] Name() "(" )
@@ -256,7 +256,7 @@ void ClassBodyDeclaration() #void:
 void MethodDeclarationLookahead() :
 {Token t10;}
 {
-  ( "public"  | "static"  )?
+  ( "public"  | "static"  )*
   ResultType() t10=<IDENTIFIER> "("
   {jjtThis.setName(t10.image);}
 }
@@ -265,7 +265,7 @@ void MethodDeclarationLookahead() :
 void FieldDeclaration() #void:
 {}
 {
-  ( "public" |  "static"  )?
+  ( "public" |  "static"  )*
   Type() VariableDeclarator() ( "," VariableDeclarator() )* ";"
 }
 
@@ -291,7 +291,7 @@ void VariableInitializer() #void:
 void MethodDeclaration() #void:
 {}
 {
-  ( "public"  | "static"   )?
+  ( "public"  | "static"   )*
   ResultType() MethodDeclarator()
   ( Block() | ";" )
 }
