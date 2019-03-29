@@ -1,0 +1,667 @@
+
+options {
+  MULTI =true;
+  LOOKAHEAD=1;
+  STATIC =true;
+}
+
+PARSER_BEGIN(Jmm)
+
+public class Jmm {
+
+  public static void main(String args[]) {
+    Jmm myJmm;
+    if (args.length == 0) {
+      System.out.println("Jmm Parser:  Reading from standard input . . .");
+      myJmm = new Jmm(System.in);
+
+    } else if (args.length == 1) {
+      System.out.println("Jmm Parser:  Reading from file " + args[0] + " . . .");
+      try {
+        myJmm = new Jmm(new java.io.FileInputStream(args[0]));
+      } catch (java.io.FileNotFoundException e) {
+        System.out.println("Jmm Parser:  File " + args[0] + " not found.");
+        return;
+      }
+
+    } else {
+      System.out.println("Jmm Parser:  Usage is one of:");
+      System.out.println("         java Jmm < inputfile");
+      System.out.println("OR");
+      System.out.println("         java Jmm inputfile");
+      return;
+    }
+    try {
+      SimpleNode root = myJmm.Start();
+        root.dump("");
+
+      System.out.println("Jmm Parser:  Java program parsed successfully.");
+    } catch (ParseException e) {
+      System.out.println(e.getMessage());
+      System.out.println("Jmm Parser:  Encountered errors during parse.");
+    }
+  }
+
+//  /*
+//   * Returns true if the next token is not in the FOLLOW list of "expansion".
+//   * It is used to decide when the end of an "expansion" has been reached.
+//   */
+//  static private boolean notTailOfExpansionUnit() {
+//    Token t;
+//    t = getToken(1);
+//    if (t.kind == BIT_OR || t.kind == COMMA || t.kind == RPAREN || t.kind == RBRACE || t.kind == RBRACKET) return false;
+//    return true;
+//  }
+
+}
+
+PARSER_END(Jmm)
+
+/* WHITE SPACE */
+
+SKIP :
+{
+  " "
+| "\t"
+| "\n"
+| "\r"
+| "\f"
+}
+
+/* COMMENTS */
+
+MORE :
+{
+  "//" : IN_SINGLE_LINE_COMMENT
+|
+  <"/**" ~["/"]> { input_stream.backup(1); } : IN_FORMAL_COMMENT
+|
+  "/*" : IN_MULTI_LINE_COMMENT
+}
+
+<IN_SINGLE_LINE_COMMENT>
+SPECIAL_TOKEN :
+{
+  <SINGLE_LINE_COMMENT: "\n" | "\r" | "\r\n" > : DEFAULT
+}
+
+<IN_FORMAL_COMMENT>
+SPECIAL_TOKEN :
+{
+  <FORMAL_COMMENT: "*/" > : DEFAULT
+}
+
+<IN_MULTI_LINE_COMMENT>
+SPECIAL_TOKEN :
+{
+  <MULTI_LINE_COMMENT: "*/" > : DEFAULT
+}
+
+<IN_SINGLE_LINE_COMMENT,IN_FORMAL_COMMENT,IN_MULTI_LINE_COMMENT>
+MORE :
+{
+  < ~[] >
+}
+
+/* JAVA RESERVED WORDS AND LITERALS */
+
+TOKEN :
+{
+ < BOOLEAN: "boolean" >
+| < CLASS: "class" >
+| < ELSE: "else" >
+| < EXTENDS: "extends" >
+| < FALSE: "false" >
+| < IF: "if" >
+| < INT: "int" >
+| < NEW: "new" >
+| < PUBLIC: "public" >
+| < RETURN: "return" >
+| < STATIC: "static" >
+| < THIS: "this" >
+| < TRUE: "true" >
+| < VOID: "void" >
+| < WHILE: "while" >
+| < LENGTH: "length">
+}
+
+/* JAVA LITERALS */
+
+TOKEN :
+{
+  < INTEGER_LITERAL: (["0"-"9"])+ >
+}
+
+/****************************************************** IDENTIFIERS */
+
+TOKEN :
+{
+  < IDENTIFIER: <LETTER> (<LETTER>|<DIGIT>)* >
+|
+  < #LETTER: ["a"-"z", "_","A"-"Z"]>
+|
+  < #DIGIT: (["0"-"9"])*>
+}
+
+/***************************************************** SEPARATORS */
+
+TOKEN :
+{
+  < LPAREN: "(" >
+| < RPAREN: ")" >
+| < LBRACE: "{" >
+| < RBRACE: "}" >
+| < LBRACKET: "[" >
+| < RBRACKET: "]" >
+| < SEMICOLON: ";" >
+| < COMMA: "," >
+| < DOT: "." >
+}
+
+/***************************************************** OPERATORS */
+
+TOKEN :
+{
+  < ASSIGN: "=" >
+| < LT: "<" >
+| < BANG: "!" >
+| < SC_AND: "&&" >
+| < PLUS: "+" >
+| < MINUS: "-" >
+| < STAR: "*" >
+| < SLASH: "/" >
+}
+
+/************************************************************************************************************************
+ * Function Start.
+ ************************************************************************************************************************/
+
+SimpleNode Start() :{}{
+    JavaCompilationUnit() {return jjtThis;}
+}
+
+void JavaCompilationUnit() #void :{}
+{
+  CompilationUnit() <EOF>
+}
+
+
+void CompilationUnit() #void :{}
+{
+  ( TypeDeclaration() )*
+}
+
+
+void TypeDeclaration() #void :
+{}
+{
+  LOOKAHEAD( ( "public" )? "class" )
+  ClassDeclaration()
+|
+  ";"
+}
+
+
+/*
+ * Declaration syntax follows.
+ */
+
+void ClassDeclaration() #void :
+{}
+{
+  ( "public" )?
+  UnmodifiedClassDeclaration()
+}
+
+void UnmodifiedClassDeclaration() :
+{Token t2;}
+{
+  "class" t2=<IDENTIFIER> [ "extends" Name() ]
+  {jjtThis.setName(t2.image);}
+  ClassBody()
+}
+
+void ClassBody() #void:
+{}
+{
+  "{" ( ClassBodyDeclaration() )* "}"
+}
+
+void NestedClassDeclaration() #void:
+{}
+{
+  ( "static"  | "public"  )?
+  UnmodifiedClassDeclaration()
+}
+
+void ClassBodyDeclaration() #void:
+{}
+{
+  LOOKAHEAD(2)
+  Initializer()
+|
+  LOOKAHEAD( ( "static"  | "public"  )? "class" )
+  NestedClassDeclaration()
+|
+  LOOKAHEAD( [ "public"  ] Name() "(" )
+  ConstructorDeclaration()
+|
+  LOOKAHEAD( MethodDeclarationLookahead() )
+  MethodDeclaration()
+|
+  FieldDeclaration()
+}
+
+// This production is to determine lookahead only.
+void MethodDeclarationLookahead() :
+{Token t10;}
+{
+  ( "public"  | "static"  )?
+  ResultType() t10=<IDENTIFIER> "("
+  {jjtThis.setName(t10.image);}
+}
+
+
+void FieldDeclaration() #void:
+{}
+{
+  ( "public" |  "static"  )?
+  Type() VariableDeclarator() ( "," VariableDeclarator() )* ";"
+}
+
+void VariableDeclarator() #void :
+{}
+{
+  VariableDeclaratorId() [ "=" #EQUAL VariableInitializer() ]
+}
+
+void VariableDeclaratorId() :
+{Token t6;}
+{
+  t6=<IDENTIFIER> ( "[" "]" )*
+    {jjtThis.setName(t6.image);}
+}
+
+void VariableInitializer() #void:
+{}
+{
+  Expression()
+}
+
+void MethodDeclaration() #void:
+{}
+{
+  ( "public"  | "static"   )?
+  ResultType() MethodDeclarator()
+  ( Block() | ";" )
+}
+
+void MethodDeclarator() :
+{Token t3;}
+{
+  t3=<IDENTIFIER> FormalParameters() ( "[" "]" )*
+    {jjtThis.setName(t3.image);}
+}
+
+void FormalParameters() #void:
+{}
+{
+  "(" [ FormalParameter() ( "," FormalParameter() )* ] ")"
+}
+
+void FormalParameter() #void:
+{}
+{
+  Type() VariableDeclaratorId()
+}
+
+void ConstructorDeclaration():
+{Token t9;}
+{
+  [ "public"  ]
+  t9=<IDENTIFIER> FormalParameters() {jjtThis.setName(t9.image);}
+  "{"
+    [ LOOKAHEAD(ExplicitConstructorInvocation()) ExplicitConstructorInvocation() ]
+    ( BlockStatement() )*
+  "}"
+}
+
+void ExplicitConstructorInvocation() #void:
+{}
+{
+   "this" Arguments() ";"
+}
+
+void Initializer() #void:
+{}
+{
+  [ "static" ] Block()
+}
+
+
+/*
+ * Type, name and expression syntax follows.
+ */
+
+void Type() #void:
+{}
+{
+  ( PrimitiveType() | Name() ) ( "[" "]" )*
+}
+
+void PrimitiveType() :
+{Token t;}
+{
+  t="boolean"
+|
+  t="int"
+  {jjtThis.setName(t.image);}
+}
+
+void ResultType() #void:
+{}
+{
+  "void"
+|
+  Type()
+}
+
+void Name() :
+{Token t;}
+{
+  t=<IDENTIFIER>
+  ( LOOKAHEAD(2) "." <IDENTIFIER> )*
+   {jjtThis.setName(t.image);}
+}
+
+void NameList() #void:
+{}
+{
+  Name() ( "," Name() )*
+}
+
+
+/*
+ * Expression syntax follows.
+ */
+
+void Expression() #void:
+{}
+{
+  ConditionalAndExpression() [ AssignmentOperator() Expression() ]
+}
+
+void AssignmentOperator() #void:
+{}
+{
+  "=" #ASSIGNMENT
+}
+
+void ConditionalAndExpression() #void:
+{}
+{
+  RelationalExpression() ( "&&" #AND RelationalExpression() )*
+}
+
+
+void RelationalExpression() #void:
+{}
+{
+  AdditiveExpression() ( LOOKAHEAD(2) ( "<"  #LessThen ) AdditiveExpression() )*
+}
+
+
+void AdditiveExpression() #void:
+{}
+{
+  MultiplicativeExpression() ( ( "+" | "-" ) #ADDSUB MultiplicativeExpression() )*
+}
+
+void MultiplicativeExpression() #void:
+{}
+{
+  UnaryExpression() ( ( "*" | "/" ) #DIVMULT UnaryExpression() )*
+}
+
+void UnaryExpression() #void:
+{}
+{
+  ( "+" | "-" ) UnaryExpression()
+|
+  UnaryExpressionNotPlusMinus()
+}
+
+
+void UnaryExpressionNotPlusMinus() #void:
+{}
+{
+  ( "!"  ) UnaryExpression()
+|
+  LOOKAHEAD( CastLookahead() )
+  CastExpression()
+|
+  PrimaryExpression()
+}
+
+void CastLookahead() :
+{}
+{
+  LOOKAHEAD(2)
+  "(" PrimitiveType()
+|
+  LOOKAHEAD("(" Name() "[")
+  "(" Name() "[" "]"
+|
+  "(" Name() ")" ( "!" | "(" | <IDENTIFIER> | "this" | "new" | Literal() )
+}
+
+
+void CastExpression() #void:
+{}
+{
+  LOOKAHEAD("(" PrimitiveType())
+  "(" Type() ")" UnaryExpression()
+|
+  LOOKAHEAD("(" Name())
+  "(" Type() ")" UnaryExpressionNotPlusMinus()
+}
+
+void PrimaryExpression() #void:
+{}
+{
+  PrimaryPrefix() ( LOOKAHEAD(2) PrimarySuffix() )*
+}
+
+void PrimaryPrefix() #void:
+{}
+{
+  Literal()
+|
+  "this"
+|
+  "(" Expression() ")"
+|
+  AllocationExpression()
+|
+  LOOKAHEAD( ResultType() "." "class" )
+  ResultType() "." "class"
+|
+  Name()
+}
+
+void PrimarySuffix() :
+{Token t7;}
+{
+  LOOKAHEAD(2)
+  "." "this"
+|
+  LOOKAHEAD(2)
+  "." AllocationExpression()
+|
+   LOOKAHEAD(2)
+   "." "length"
+|
+  "[" Expression() "]"
+|
+  "." t7=<IDENTIFIER> {jjtThis.setName(t7.image);}
+|
+  Arguments()
+
+}
+
+void Literal() :
+{Token t5;}
+{
+  t5=<INTEGER_LITERAL>
+|
+  t5=BooleanLiteral()
+    {jjtThis.setName(t5.image);}
+}
+
+void IntegerLiteral() :
+{Token t;}
+{
+  t=<INTEGER_LITERAL>
+   {jjtThis.setName(t.image);}
+}
+
+Token BooleanLiteral() #void:
+{Token t;}
+{
+  t="true"
+|
+  t="false"
+    {return t;}
+}
+
+void Arguments() #void:
+{}
+{
+  "(" [ ArgumentList() ] ")"
+}
+
+void ArgumentList() #void:
+{}
+{
+  Expression() ( "," Expression() )*
+}
+
+void AllocationExpression() #void:
+{}
+{
+  LOOKAHEAD(2)
+  "new" PrimitiveType() ArrayDimsAndInits()
+|
+  "new" Name()
+    (
+      ArrayDimsAndInits()
+    |
+      Arguments() [ ClassBody() ]
+    )
+}
+
+void ArrayDimsAndInits() #void:
+{}
+{
+  ( LOOKAHEAD(2) "[" Expression() "]" )+ ( LOOKAHEAD(2) "[" "]" )*
+//|
+//  ( "[" "]" )+ ArrayInitializer()
+}
+
+
+/*
+ * Statement syntax follows.
+ */
+
+void Statement() #void :
+{}
+{
+  LOOKAHEAD(2)
+  Block()
+|
+  EmptyStatement()
+|
+  StatementExpression() ";"
+|
+  IfStatement()
+|
+  WhileStatement()
+|
+  ReturnStatement()
+}
+
+
+void Block() #void:
+{}
+{
+  "{" ( BlockStatement() )* "}"
+}
+
+void BlockStatement() #void:
+{}
+{
+  LOOKAHEAD( Type() <IDENTIFIER>)
+  LocalVariableDeclaration() ";"
+|
+  Statement()
+|
+  UnmodifiedClassDeclaration()
+
+}
+
+void LocalVariableDeclaration() #void:
+{}
+{
+   Type() VariableDeclarator() ( "," VariableDeclarator() )*
+}
+
+void EmptyStatement() #void:
+{}
+{
+  ";"
+}
+
+void StatementExpression() #void:
+{}
+{
+  PrimaryExpression()
+  [
+    AssignmentOperator() Expression()
+  ]
+}
+
+
+void IfStatement() #If :
+{}
+{
+  "if" "(" Expression() ")" Statement() [ LOOKAHEAD(1) "else" Statement() ]
+}
+
+void WhileStatement() #While :
+{}
+{
+  try{
+    "while" "(" Expression() ")" Statement()
+  }
+  catch (ParseException e) {
+    System.out.println(e.toString());
+    Token t;
+    do {
+      t = getNextToken();
+    } while (t.kind != RBRACE);
+  }
+}
+
+
+void StatementExpressionList() #void:
+{}
+{
+  StatementExpression() ( "," StatementExpression() )*
+}
+
+
+void ReturnStatement() #Return :
+{}
+{
+  "return" [ Expression() ] ";"
+}
