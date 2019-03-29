@@ -637,17 +637,20 @@ void IfStatement() #IF :
 void WhileStatement() #WHILE :
 {}
 {
-  try{
-    "while" "(" Expression() ")" Statement()
-  }
-  catch (ParseException e) {
-    System.out.println(e.toString());
-    Token t;
-    do {
-      t = getNextToken();
-    } while (t.kind != RBRACE);
-  }
+    "while" "("
+      try {
+        Expression()
+      }
+      catch (ParseException e) {
+        System.out.println(e.toString());
+        Token t;
+        do {
+          t = getNextToken();
+        } while (t.kind != RPAREN);
+      }
+    ")" Statement()
 }
+
 
 
 void StatementExpressionList() #void:
