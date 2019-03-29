@@ -420,7 +420,7 @@ void AdditiveExpression() #void:
 void MultiplicativeExpression() #void:
 {}
 {
-  UnaryExpression() ( ( "*" | "/" ) #DIVMULT UnaryExpression() )*
+  UnaryExpressionNotPlusMinus() ( ( "*" | "/" ) #DIVMULT UnaryExpressionNotPlusMinus() )*
 }
 
 void UnaryExpression() #void:
@@ -435,7 +435,7 @@ void UnaryExpression() #void:
 void UnaryExpressionNotPlusMinus() #void:
 {}
 {
-  ( "!"  ) UnaryExpression()
+  ( "!"  ) UnaryExpressionNotPlusMinus()
 |
   LOOKAHEAD( CastLookahead() )
   CastExpression()
@@ -459,9 +459,6 @@ void CastLookahead() :
 void CastExpression() #void:
 {}
 {
-  LOOKAHEAD("(" PrimitiveType())
-  "(" Type() ")" UnaryExpression()
-|
   LOOKAHEAD("(" Name())
   "(" Type() ")" UnaryExpressionNotPlusMinus()
 }
