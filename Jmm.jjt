@@ -639,7 +639,7 @@ void WhileStatement() #WHILE :
 {
     "while" "("
       try {
-        Expression()
+        Expression() #CONDITION
       }
       catch (ParseException e) {
         System.out.println(e.toString());
@@ -648,7 +648,7 @@ void WhileStatement() #WHILE :
           t = getNextToken();
         } while (t.kind != RPAREN);
       }
-    ")" Statement()
+    ")" Statement() #BODY
 }
 
 
