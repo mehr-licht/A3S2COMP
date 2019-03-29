@@ -1,16 +1,13 @@
 options {
         LOOKAHEAD=1;
-        MULTI=true; //multi mode the type of the parse tree node is derived from the name of the node.
+        MULTI=true;
         DEBUG_PARSER=true;
-        KEEP_LINE_COLUMN = false;
         }
 
 PARSER_BEGIN(Jmm)
 
-//import java.text.ParseException;
-import java.io.*;
-
-public class Jmm {
+public class Jmm
+{
  public static void main(String args[]) throws ParseException {
 
      //Parser initialization
@@ -40,25 +37,17 @@ public class Jmm {
 
      try{
         SimpleNode root = myJmm.Start();
+        System.out.println("Jmm Parser: Input wad readed sucessfully  ");
         root.dump("");
 
      }catch (ParseException e){
-        System.out.println("### 1 ### Jmm Parser: Error during the parser: ###");
-            e.printStackTrace();
-        System.out.println("--------------------------------------------");
-        // System.out.print("Offset:  ");//System.out.println(e.getErrorOffset());
-
-        System.out.println("1 - Message delivered : " + e.getMessage());
-
-
+        System.out.println(" Jmm Parser: Error during the parser: ");
+        System.out.println(e.getMessage());
 
      }catch(TokenMgrError e){
-        System.out.println("### 2 ### Jmm Parser: Error during the parser: ##");
-        //        System.out.println("Message delivered: " + e.getMessage());
-        //        e.printStackTrace();
-
+        System.out.println(" Jmm Parser: Error during the parser: ");
+                System.out.println(e.getMessage());
      }
-     System.out.println("Jmm Parser: Input wad readed sucessfully  ");
 
      System.out.println("---------- Execution Finished ------------" );//+ myJmm.eval(root));
 }
@@ -182,9 +171,8 @@ SimpleNode Start(): {}
 }
 
 
-void Program() #void: {}
+void Program(): {Token t;}
 {
-
     ClassDeclaration()  //changed this for debugging reasons should be ClassDeclaration()
 
     <EOF>                // also we need to uncomment ClassDeclaration()
@@ -192,12 +180,11 @@ void Program() #void: {}
 
 //LEXICO
 
-void ClassDeclaration(): { Token t1, t2;}
+void ClassDeclaration(): {Token t1, t2;}
 {
 
     <CLASS>
     t1=<IDENTIFIER>
-    {        jjtThis.setName(t1.image);      }
     (<EXTENDS> t2=<IDENTIFIER>)?
     <LCHAVETA>
 
@@ -270,9 +257,10 @@ void VarDeclaration(): {Token t1, t2;}
 
 void Statement():{Token t1;}
 {
-     <LCHAVETA> ( Statement() )* <RCHAVETA>
-    | <IF> #If <LPAR> Expression() <RPAR> Statement() <ELSE> Statement()
-    | <WHILE> #While <LPAR> Expression() <RPAR> Statement()
+
+      <LCHAVETA> ( Statement() )* <RCHAVETA>
+    | <IF> <LPAR> Expression() <RPAR> Statement() <ELSE> Statement()
+    | <WHILE> <LPAR> Expression() <RPAR> Statement()
     | LOOKAHEAD (2) Expression() <SCOLON>  //LL(2) porque Expression() -> <IDENTIFIER> na Expression e na linha a seguir t1
     | LOOKAHEAD (2) t1=<IDENTIFIER> SolveAmbiguityInStatement() //LL(2) porque -> <IDENTIFIER> daqui e da Expression
     //{jjtThis.setName(t1.image);}
@@ -284,7 +272,7 @@ void SolveAmbiguityInStatement() #void:{}{
 
 }
 
-void Expression() : {Token t1,t2;}
+void Expression(): {Token t1,t2;}
 {
     (
       t1=<INTEGERLITERAL> //numero
@@ -321,7 +309,9 @@ void SolveAmbiguityInNew() #Novos: {Token t1,t2;}
     | t2=<IDENTIFIER> <LPAR> <RPAR>
 }
 
-void And() #And: {Token op;}
+
+
+void And() #void: {Token op;}
 {
     LessThan() (op=<BINAND> LessThan() #And(2) )*
 }
