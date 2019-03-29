@@ -10,7 +10,5 @@ class ASTIf extends SimpleNode {
     super(p, id);
   }
 
-
-
 }
 /* JavaCC - OriginalChecksum=9580f790015df9a37572a17646e3922e (do not edit this line) */
