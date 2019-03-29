@@ -459,7 +459,7 @@ void CastLookahead() :
 void CastExpression() #void:
 {}
 {
-  LOOKAHEAD("(" Name())
+
   "(" Type() ")" UnaryExpressionNotPlusMinus()
 }
 
