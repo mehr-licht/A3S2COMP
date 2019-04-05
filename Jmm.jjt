@@ -256,7 +256,7 @@ void ClassBodyDeclaration() #void:
 void MethodDeclarationLookahead() :
 {Token t10;}
 {
-  ( "public"  | "static"  )*
+  ( <PUBLIC>  | <STATIC>  )*
   ResultType() t10=<IDENTIFIER> "("
   {jjtThis.setName(t10.image);}
 }
@@ -265,8 +265,8 @@ void MethodDeclarationLookahead() :
 void FieldDeclaration() #void:
 {}
 {
-  ( "public" |  "static"  )*
-  Type() VariableDeclarator() ( "," VariableDeclarator() )* ";"
+  ( <PUBLIC> |  <STATIC>  )*
+  Type() VariableDeclarator() ( <COMMA> VariableDeclarator() )* ";"
 }
 
 void VariableDeclarator() #void:
@@ -420,15 +420,7 @@ void AdditiveExpression() #void:
 void MultiplicativeExpression() #void:
 {}
 {
-  UnaryExpression() ( ( "*" | "/" )  UnaryExpression() #DIVMULT(2) )*
-}
-
-void UnaryExpression() #void:
-{}
-{
-  ( "+" | "-" ) UnaryExpression()
-|
-  UnaryExpressionNotPlusMinus()
+  UnaryExpressionNotPlusMinus() ( ( "*" | "/" )  UnaryExpressionNotPlusMinus() #DIVMULT(2) )*
 }
 
 
