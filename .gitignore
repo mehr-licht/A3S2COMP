@@ -27,6 +27,8 @@ hs_err_pid*
 
 *.xml
 
+AST_files/
+
 AST_files.JJTJmmState\.java
 
 AST_files.JmmConstants\.java
