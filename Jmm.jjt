@@ -3,44 +3,35 @@ options {
   MULTI =true;
   LOOKAHEAD=1;
   STATIC =true;
+ // NODE_SCOPE_HOOK = true;
+  ERROR_REPORTING = true;
+  JJTREE_OUTPUT_DIRECTORY = "AST_files";
 }
 
 PARSER_BEGIN(Jmm)
 
+package AST_files;
+import AST_files.SimpleNode;
+
+
+//Class
 public class Jmm {
+    public static String erro = "";
 
-  public static void main(String args[]) {
-    Jmm myJmm;
-    if (args.length == 0) {
-      System.out.println("Jmm Parser:  Reading from standard input . . .");
-      myJmm = new Jmm(System.in);
+    public Jmm(){
 
-    } else if (args.length == 1) {
-      System.out.println("Jmm Parser:  Reading from file " + args[0] + " . . .");
-      try {
-        myJmm = new Jmm(new java.io.FileInputStream(args[0]));
-      } catch (java.io.FileNotFoundException e) {
-        System.out.println("Jmm Parser:  File " + args[0] + " not found.");
-        return;
-      }
-
-    } else {
-      System.out.println("Jmm Parser:  Usage is one of:");
-      System.out.println("         java Jmm < inputfile");
-      System.out.println("OR");
-      System.out.println("         java Jmm inputfile");
-      return;
     }
-    try {
-      SimpleNode root = myJmm.Start();
-        root.dump("");
 
-      System.out.println("Jmm Parser:  Java program parsed successfully.");
-    } catch (ParseException e) {
-      System.out.println(e.getMessage());
-      System.out.println("Jmm Parser:  Encountered errors during parse.");
+    //TODO if necessary
+    private static void jjtreeOpenNodeScope(Node n)	{
+    	 // ((SimpleNode)n).setLineNumber(getToken(1).beginLine);
     }
-  }
+
+    //TODO if necessary
+    private static void jjtreeCloseNodeScope(Node n){
+      //closeNodeHook();
+    }
+
 
 //  /*
 //   * Returns true if the next token is not in the FOLLOW list of "expansion".

@@ -27,15 +27,15 @@ hs_err_pid*
 
 *.xml
 
-JJTJmmState\.java
+AST_files.JJTJmmState\.java
 
-JmmConstants\.java
+AST_files.JmmConstants\.java
 
-JmmTokenManager\.java
+AST_files.JmmTokenManager\.java
 
-JmmTreeConstants\.java
+AST_files.JmmTreeConstants\.java
 
-ParseException\.java
+AST_files.ParseException\.java
 
 SimpleCharStream\.java
 
@@ -45,7 +45,7 @@ Token\.java
 
 TokenMgrError\.java
 
-Node\.java
+AST_files.Node\.java
 
 Jmm\.java
 

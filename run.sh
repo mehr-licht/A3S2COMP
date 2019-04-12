@@ -1,11 +1,15 @@
 #!bin/bash
 jjtree Jmm.jjt;
 echo               -------------- jjtree Jmm.jjt     -------------------;
+cd AST_files;
 javacc Jmm.jj;
 echo               -------------- javacc Jmm.jj     -------------------;
-    javac *.java;
+cd ..
+javac -verbose -d classFiles/ AST_files/*.java;
 echo                       -------------- javac *.java     -------------------;
+javac -verbose -d classFiles/ *.java
+cd classFiles
 echo            -------------- java Jmm codeTestingFile     -------------------;
-java Jmm codeTestingFile;
+java MainProject ../codeTestingFile;
 
 
