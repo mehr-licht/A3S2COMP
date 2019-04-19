@@ -4,8 +4,10 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class SymbolTable implements Cloneable {
+
     private LinkedHashMap<String, Symbol> parameters;
     private LinkedHashMap<String, Symbol> variables;
+
     private Symbol returnSymbol = null;
     private boolean returned = false;
     private int lastRegister;

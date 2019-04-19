@@ -334,18 +334,18 @@ void Initializer() #void:
  * Type, name and expression syntax follows.
  */
 
-void Type() #void:
-{}
-{
-  ( PrimitiveType() | Name() ) ( "[" "]" )*
-}
-
-void PrimitiveType() #void:
+void Type() :
 {Token t;}
 {
-  "boolean"
+  ( PrimitiveType() | Name() ) ( t="[" "]" {jjtThis.setName(t.image);})*
+}
+
+void PrimitiveType() :
+{Token t;}
+{
+  t="boolean" {jjtThis.setName(t.image);}
 |
-  "int"
+  t="int" {jjtThis.setName(t.image);}
 
 }
 

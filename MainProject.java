@@ -5,11 +5,17 @@ import java.util.Map;
 import java.nio.file.Files;
 import AST_files.*;
 import Symbol.*;
+//import sun.jvm.hotspot.memory.SymbolTable;
+
 import java.nio.file.Paths;
 import java.util.List;
 
 
 public class MainProject {
+
+    private HashMap<String, SymbolTable> symbol_table = new HashMap<String,SymbolTable>();
+    private String moduleName;
+    private int contadorErros = 0;
 
     //Main
     public static void main(String args[]) {
@@ -43,6 +49,8 @@ public class MainProject {
         try {
             SimpleNode root = myJmm.Start();
             root.dump("");
+            construc_Symbol_Table(root);
+            //construct_Functiond_SymbolTable(root); //TODO
             //adicionar a funcao de leitura da arvore
             //adicioanr a funcao da tabela de simbolos
 
@@ -52,6 +60,24 @@ public class MainProject {
             System.out.println("Jmm Parser:  Encountered errors during parse.");
         }
     }
+
+    public void construc_Symbol_Table(SimpleNode root){
+        if(root!= null && root instanceof ASTStart){
+            ASTStart start = (ASTStart) root;
+        //    this.moduleName == "module - " + module.name;
+
+            System.out.println("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+            /**Global one*/
+            SymbolTable globalST = new SymbolTable();
+            for(int i =0; i < start.jjtGetNumChildren(); i++){
+
+            }
+
+
+
+        }
+    };
+
 
 
 

@@ -12,21 +12,23 @@ public interface JmmTreeConstants
   public int JJTMETODO = 6;
   public int JJTMETHODDECLARATOR = 7;
   public int JJTCONSTRUCTORDECLARATION = 8;
-  public int JJTNAME = 9;
-  public int JJTASSIGNMENT = 10;
-  public int JJTLESSTHEN = 11;
-  public int JJTADDSUB = 12;
-  public int JJTDIVMULT = 13;
-  public int JJTCASTLOOKAHEAD = 14;
-  public int JJTLITERAL = 15;
-  public int JJTINTEGERLITERAL = 16;
-  public int JJTIF = 17;
-  public int JJTCONDITION = 18;
-  public int JJTSTATEMENT = 19;
-  public int JJTELSE = 20;
-  public int JJTWHILE = 21;
-  public int JJTBODY = 22;
-  public int JJTRETURN = 23;
+  public int JJTTYPE = 9;
+  public int JJTPRIMITIVETYPE = 10;
+  public int JJTNAME = 11;
+  public int JJTASSIGNMENT = 12;
+  public int JJTLESSTHEN = 13;
+  public int JJTADDSUB = 14;
+  public int JJTDIVMULT = 15;
+  public int JJTCASTLOOKAHEAD = 16;
+  public int JJTLITERAL = 17;
+  public int JJTINTEGERLITERAL = 18;
+  public int JJTIF = 19;
+  public int JJTCONDITION = 20;
+  public int JJTSTATEMENT = 21;
+  public int JJTELSE = 22;
+  public int JJTWHILE = 23;
+  public int JJTBODY = 24;
+  public int JJTRETURN = 25;
 
 
   public String[] jjtNodeName = {
@@ -39,6 +41,8 @@ public interface JmmTreeConstants
     "METODO",
     "MethodDeclarator",
     "ConstructorDeclaration",
+    "Type",
+    "PrimitiveType",
     "Name",
     "ASSIGNMENT",
     "LESSTHEN",
@@ -56,4 +60,4 @@ public interface JmmTreeConstants
     "RETURN",
   };
 }
-/* JavaCC - OriginalChecksum=751c39487536d88562aa642a84bf8f6c (do not edit this line) */
+/* JavaCC - OriginalChecksum=59b7527df5d86f6e6ed47a8a3570d6ab (do not edit this line) */
