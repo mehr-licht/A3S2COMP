@@ -4,6 +4,8 @@ package AST_files;
 /* JavaCCOptions:MULTI=true,NODE_USES_PARSER=false,VISITOR=false,TRACK_TOKENS=false,NODE_PREFIX=AST,NODE_EXTENDS=,NODE_FACTORY=,SUPPORT_CLASS_VISIBILITY_PUBLIC=true */
 public
 class ASTBooleanLiteral extends SimpleNode {
+  public String type;
+
   public ASTBooleanLiteral(int id) {
     super(id);
   }
@@ -12,5 +14,13 @@ class ASTBooleanLiteral extends SimpleNode {
     super(p, id);
   }
 
+  public void setType(String t){
+
+    this.type = t;
+  }
+
+  public String toString() {
+    return type;
+  }
 }
 /* JavaCC - OriginalChecksum=992dfd318e4eccf9b32c802dc717a316 (do not edit this line) */

@@ -225,31 +225,30 @@ void NestedClassDeclaration() #void:
   UnmodifiedClassDeclaration()
 }
 
-void ClassBodyDeclaration() #void:
+void ClassBodyDeclaration():
 {}
 {
   LOOKAHEAD(2)
-  Initializer()
+  Initializer() #INICIALIZACAO
 |
   LOOKAHEAD( ( "static"  | "public"  )* "class" )
-  NestedClassDeclaration()
+  NestedClassDeclaration() # NCD
 |
   LOOKAHEAD( [ "public"  ] Name() "(" )
-  ConstructorDeclaration()
+  ConstructorDeclaration() #CONSTRUCTOR
 |
   LOOKAHEAD( MethodDeclarationLookahead() )
-  MethodDeclaration()
+  MethodDeclaration() #METODO(>1)
 |
-  FieldDeclaration()
+  FieldDeclaration() #FD
 }
 
 // This production is to determine lookahead only.
 void MethodDeclarationLookahead() :
-{Token t10;}
+{Token t2;}
 {
   ( "public"  | "static"  )*
-  ResultType() t10=<IDENTIFIER> "("
-  {jjtThis.setName(t10.image);}
+  ResultType() t2=<IDENTIFIER> "("
 }
 
 
@@ -279,8 +278,7 @@ void VariableInitializer() #void:
   Expression()
 }
 
-void MethodDeclaration() #METODO(>1):
-{}
+void MethodDeclaration() :{}
 {
   ( "public"  | "static"   )*
   ResultType() MethodDeclarator()
@@ -335,9 +333,9 @@ void Initializer() #void:
  */
 
 void Type() :
-{Token t;}
+{Token t, t1;}
 {
-  ( PrimitiveType() | Name() ) ( t="[" "]" {jjtThis.setName(t.image);})*
+  ( PrimitiveType() | Name() ) ( "[" "]" {jjtThis.setIsArray();})*
 }
 
 void PrimitiveType() :
@@ -349,24 +347,22 @@ void PrimitiveType() :
 
 }
 
-void ResultType() #void:
-{}
+void ResultType():
+{Token t;}
 {
-  "void"
+  t="void" {jjtThis.setName(t.image);}
 |
   Type()
 }
 
 void Name() :
-{Token t;}
+{Token t,t1;}
 {
-  t=<IDENTIFIER>
-  ( LOOKAHEAD(2) "." <IDENTIFIER> )*
-   {jjtThis.setName(t.image);}
+  t=<IDENTIFIER> {jjtThis.setName(t.image);}
+   ( LOOKAHEAD(2) "." t1=<IDENTIFIER>  {jjtThis.setName2(t1.image);} )*
 }
 
-void NameList() #void:
-{}
+void NameList() #void:{}
 {
   Name() ( "," Name() )*
 }
@@ -435,7 +431,7 @@ void UnaryExpressionNotPlusMinus() #void:
 }
 
 void CastLookahead() :
-{}
+{Token t;}
 {
   LOOKAHEAD(2)
   "(" PrimitiveType()
@@ -460,8 +456,8 @@ void PrimaryExpression() #void:
   PrimaryPrefix() ( LOOKAHEAD(2) PrimarySuffix() )*
 }
 
-void PrimaryPrefix() #void:
-{}
+void PrimaryPrefix():
+{Token t;}
 {
   Literal()
 |
@@ -477,7 +473,7 @@ void PrimaryPrefix() #void:
   Name()
 }
 
-void PrimarySuffix() #void:
+void PrimarySuffix():
 {Token t7;}
 {
   LOOKAHEAD(2)
@@ -513,12 +509,14 @@ void IntegerLiteral() :
    {jjtThis.setName(t.image);}
 }
 
-void BooleanLiteral() #void:
+
+
+void BooleanLiteral():
 {Token t;}
 {
-  "true"
+  t="true" {jjtThis.setType(t.image);}
 |
-  "false"
+  t="false" {jjtThis.setType(t.image);}
 
 }
 
@@ -535,7 +533,7 @@ void ArgumentList() #void:
 }
 
 void AllocationExpression() #void:
-{}
+{Token t;}
 {
   LOOKAHEAD(2)
   "new" PrimitiveType() ArrayDimsAndInits()
@@ -598,7 +596,7 @@ void BlockStatement() #void:
 }
 
 void LocalVariableDeclaration() #void:
-{}
+{Token t;}
 {
    Type() VariableDeclarator() ( "," VariableDeclarator() )*
 }

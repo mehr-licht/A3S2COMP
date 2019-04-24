@@ -4,7 +4,9 @@ package AST_files;
 /* JavaCCOptions:MULTI=true,NODE_USES_PARSER=false,VISITOR=false,TRACK_TOKENS=false,NODE_PREFIX=AST,NODE_EXTENDS=,NODE_FACTORY=,SUPPORT_CLASS_VISIBILITY_PUBLIC=true */
 public
 class ASTType extends SimpleNode {
-private String name;
+  private String name;
+  private boolean isArray = false;
+
 
   public ASTType(int id) {
     super(id);
@@ -14,12 +16,16 @@ private String name;
     super(p, id);
   }
 
+  public void setIsArray(){
+    this.isArray = true;
+  }
   public void setName(String n) {
-    name = n;
+
+    this.name = n;
   }
 
   public String toString() {
-    return "[" + name + "]";
+    return name;
   }
 
 }

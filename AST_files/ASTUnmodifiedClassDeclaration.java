@@ -19,7 +19,7 @@ class ASTUnmodifiedClassDeclaration extends SimpleNode {
     }
 
     public String toString() {
-        return "Classe: [" + name + "]";
+        return name;
     }
 }
 /* JavaCC - OriginalChecksum=9feb76a1a6fe5e6d88b605d3a9190d1f (do not edit this line) */

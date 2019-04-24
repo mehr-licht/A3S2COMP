@@ -68,10 +68,52 @@ public class MainProject {
 
             System.out.println("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
             /**Global one*/
-            SymbolTable globalST = new SymbolTable();
-            for(int i =0; i < start.jjtGetNumChildren(); i++){
+            SymbolTable globalSymbolTable = new SymbolTable();
+            //start.
 
-            }
+
+            for(int i =0; i < start.jjtGetChild(0).jjtGetNumChildren(); i++){
+                System.out.println(start.jjtGetChild(0).jjtGetChild(i)); //resulta 1 - porque temos uma funcao intermedia que nao faz nda
+                System.out.println(start.jjtGetChild(0).jjtGetChild(i).jjtGetNumChildren()); //resulta 1 - porque temos uma funcao intermedia que nao faz nda
+
+                System.out.println(start.jjtGetChild(0) + "entrou no for"); //result 3 metodos como apresentado na AST
+//                System.out.println(start.jjtGetChild(1) + "entrou2 no for"); //result 3 metodos como apresentado na AST
+
+                //declarations
+//                if (start.jjtGetChild(i) instanceof ASTMethodDeclaration) {
+//                    ASTMethodDeclarator element = (ASTMethodDeclarator) start.jjtGetChild(i).jjtGetChild(0);
+//
+//                    System.out.println(element.jjtGetNumChildren());
+//                    if (globalSymbolTable.getFromAll(element.getName) != null && (globalSymbolTable.getAcessType(element.getName) == "array" && start.jjtGetChild(i).jjtGetNumChildren() == 2))
+//                        printSemanticError(element.getName, element.getLine, "Redefinition of global variable.");
+//                    else if (globalSymbolTable.getFromAll(element.getName) != null && (globalSymbolTable.getAcessType(element.getName) == "int" && start.jjtGetChild(i).jjtGetNumChildren() != 2))
+//                        printSemanticError(element.getName, element.getLine, "Redefinition of global variable.");
+//                    else {
+//                        if (start.jjtGetChild(i).jjtGetNumChildren() == 2) {
+//                            globalSymbolTable.addVariable(element.getName, "array");
+//                        } else {
+//                            globalSymbolTable.addVariable(element.getName, "int");
+//                        }
+//                    }
+                    //functions
+//                } else{
+                        //TODO testar com outro codigo para ver se entra no else
+//                    else if (module.jjtGetChild(i) instanceof ASTFunction) {
+//                    ASTFunction function = (ASTFunction) module.jjtGetChild(i);
+//
+//                    if (this.symbolTables.get(function.name) == null)
+//                        this.symbolTables.put(function.name, new SymbolTable());
+//                    else {
+//                        printSemanticError(function.name, function.line, "Duplicate function.");
+//                    }
+//
+//                    fillFunctionParametersReturn(function);
+//                }
+//            }
+//            this.symbolTables.put(this.moduleName, globalSymbolTable);
+
+
+        }
 
 
 

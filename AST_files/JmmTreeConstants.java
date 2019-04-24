@@ -6,51 +6,71 @@ public interface JmmTreeConstants
   public int JJTSTART = 0;
   public int JJTVOID = 1;
   public int JJTUNMODIFIEDCLASSDECLARATION = 2;
-  public int JJTMETHODDECLARATIONLOOKAHEAD = 3;
-  public int JJTINIT = 4;
-  public int JJTVARIABLEDECLARATORID = 5;
-  public int JJTMETODO = 6;
-  public int JJTMETHODDECLARATOR = 7;
-  public int JJTCONSTRUCTORDECLARATION = 8;
-  public int JJTTYPE = 9;
-  public int JJTPRIMITIVETYPE = 10;
-  public int JJTNAME = 11;
-  public int JJTASSIGNMENT = 12;
-  public int JJTLESSTHEN = 13;
-  public int JJTADDSUB = 14;
-  public int JJTDIVMULT = 15;
-  public int JJTCASTLOOKAHEAD = 16;
-  public int JJTLITERAL = 17;
-  public int JJTINTEGERLITERAL = 18;
-  public int JJTIF = 19;
-  public int JJTCONDITION = 20;
-  public int JJTSTATEMENT = 21;
-  public int JJTELSE = 22;
-  public int JJTWHILE = 23;
-  public int JJTBODY = 24;
-  public int JJTRETURN = 25;
+  public int JJTCLASSBODYDECLARATION = 3;
+  public int JJTINICIALIZACAO = 4;
+  public int JJTNCD = 5;
+  public int JJTCONSTRUCTOR = 6;
+  public int JJTMETODO = 7;
+  public int JJTFD = 8;
+  public int JJTMETHODDECLARATIONLOOKAHEAD = 9;
+  public int JJTINIT = 10;
+  public int JJTVARIABLEDECLARATORID = 11;
+  public int JJTMETHODDECLARATION = 12;
+  public int JJTMETHODDECLARATOR = 13;
+  public int JJTCONSTRUCTORDECLARATION = 14;
+  public int JJTTYPE = 15;
+  public int JJTPRIMITIVETYPE = 16;
+  public int JJTRESULTTYPE = 17;
+  public int JJTNAME = 18;
+  public int JJTASSIGNMENT = 19;
+  public int JJTLESSTHEN = 20;
+  public int JJTADDSUB = 21;
+  public int JJTDIVMULT = 22;
+  public int JJTCASTLOOKAHEAD = 23;
+  public int JJTPRIMARYPREFIX = 24;
+  public int JJTPRIMARYSUFFIX = 25;
+  public int JJTLITERAL = 26;
+  public int JJTINTEGERLITERAL = 27;
+  public int JJTBOOLEANLITERAL = 28;
+  public int JJTIF = 29;
+  public int JJTCONDITION = 30;
+  public int JJTSTATEMENT = 31;
+  public int JJTELSE = 32;
+  public int JJTWHILE = 33;
+  public int JJTBODY = 34;
+  public int JJTRETURN = 35;
 
 
   public String[] jjtNodeName = {
     "Start",
     "void",
     "UnmodifiedClassDeclaration",
+    "ClassBodyDeclaration",
+    "INICIALIZACAO",
+    "NCD",
+    "CONSTRUCTOR",
+    "METODO",
+    "FD",
     "MethodDeclarationLookahead",
     "INIT",
     "VariableDeclaratorId",
-    "METODO",
+    "MethodDeclaration",
     "MethodDeclarator",
     "ConstructorDeclaration",
     "Type",
     "PrimitiveType",
+    "ResultType",
     "Name",
     "ASSIGNMENT",
     "LESSTHEN",
     "ADDSUB",
     "DIVMULT",
     "CastLookahead",
+    "PrimaryPrefix",
+    "PrimarySuffix",
     "Literal",
     "IntegerLiteral",
+    "BooleanLiteral",
     "IF",
     "CONDITION",
     "STATEMENT",
@@ -60,4 +80,4 @@ public interface JmmTreeConstants
     "RETURN",
   };
 }
-/* JavaCC - OriginalChecksum=59b7527df5d86f6e6ed47a8a3570d6ab (do not edit this line) */
+/* JavaCC - OriginalChecksum=31b7c8e3dfbef14e1288d2d125bf26af (do not edit this line) */

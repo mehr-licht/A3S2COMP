@@ -5,6 +5,7 @@ package AST_files;
 public
 class ASTMethodDeclarator extends SimpleNode {
   private String name;
+  private int line = 0;
 
   public ASTMethodDeclarator(int id) {
     super(id);
@@ -20,6 +21,12 @@ class ASTMethodDeclarator extends SimpleNode {
 
     public String toString() {
         return  name;
+    }
+    public String getName(){
+      return name;
+    }
+    public int getLine(){
+      return line;
     }
 }
 /* JavaCC - OriginalChecksum=a95502136eda7326ad9f16d9d60726e6 (do not edit this line) */

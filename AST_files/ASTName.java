@@ -4,7 +4,10 @@ package AST_files;
 /* JavaCCOptions:MULTI=true,NODE_USES_PARSER=false,VISITOR=false,TRACK_TOKENS=false,NODE_PREFIX=AST,NODE_EXTENDS=,NODE_FACTORY=,SUPPORT_CLASS_VISIBILITY_PUBLIC=true */
 public
 class ASTName extends SimpleNode {
-  private String name;
+  private String nameIdent;
+  private String nameIdent2;
+
+
   public ASTName(int id) {
     super(id);
   }
@@ -14,11 +17,15 @@ class ASTName extends SimpleNode {
   }
 
   public void setName(String n) {
-    name = n;
+    nameIdent = n;
+  }
+
+  public void setName2(String n) {
+    nameIdent2 = n;
   }
 
   public String toString() {
-    return  name;
+    return  nameIdent + " "+  nameIdent2;
   }
 
 

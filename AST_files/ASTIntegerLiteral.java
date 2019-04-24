@@ -5,6 +5,7 @@ package AST_files;
 public
 class ASTIntegerLiteral extends SimpleNode {
   private String name;
+
   public ASTIntegerLiteral(int id) {
     super(id);
   }
@@ -12,11 +13,13 @@ class ASTIntegerLiteral extends SimpleNode {
   public ASTIntegerLiteral(Jmm p, int id) {
     super(p, id);
   }
+
   public void setName(String n) {
     name = n;
   }
 
   public String toString() {
+
     return "IL[" + name + "]";
   }
 

@@ -4,6 +4,9 @@ package AST_files;
 /* JavaCCOptions:MULTI=true,NODE_USES_PARSER=false,VISITOR=false,TRACK_TOKENS=false,NODE_PREFIX=AST,NODE_EXTENDS=,NODE_FACTORY=,SUPPORT_CLASS_VISIBILITY_PUBLIC=true */
 public
 class ASTMethodDeclaration extends SimpleNode {
+  private String name;
+  private int line = 0;
+
   public ASTMethodDeclaration(int id) {
     super(id);
   }
@@ -11,6 +14,19 @@ class ASTMethodDeclaration extends SimpleNode {
   public ASTMethodDeclaration(Jmm p, int id) {
     super(p, id);
   }
+  public void setName(String n) {
+    name = n;
+}
+
+public String toString() {
+    return  name;
+}
+public String getName(){
+  return name;
+}
+public int getLine(){
+  return line;
+}
 
 }
 /* JavaCC - OriginalChecksum=d5ee27a2b7b420af3112231d3c4175f5 (do not edit this line) */

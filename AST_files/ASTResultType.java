@@ -4,6 +4,8 @@ package AST_files;
 /* JavaCCOptions:MULTI=true,NODE_USES_PARSER=false,VISITOR=false,TRACK_TOKENS=false,NODE_PREFIX=AST,NODE_EXTENDS=,NODE_FACTORY=,SUPPORT_CLASS_VISIBILITY_PUBLIC=true */
 public
 class ASTResultType extends SimpleNode {
+  private String name;
+
   public ASTResultType(int id) {
     super(id);
   }
@@ -12,5 +14,12 @@ class ASTResultType extends SimpleNode {
     super(p, id);
   }
 
+  public void setName(String n) {
+    name = n;
+  }
+
+  public String toString() {
+    return name;
+  }
 }
 /* JavaCC - OriginalChecksum=dfaa930842fa6dc3e3551dc72c4b20a7 (do not edit this line) */

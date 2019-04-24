@@ -19,7 +19,7 @@ class ASTPrimitiveType extends SimpleNode {
   }
 
   public String toString() {
-    return "Type [" + name + "]";
+    return name;
   }
 
 }
