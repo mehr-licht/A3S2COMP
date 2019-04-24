@@ -5,7 +5,7 @@ package AST_files;
 public
 class ASTConstructorDeclaration extends SimpleNode {
   public int line;
-
+  public String value;
   public ASTConstructorDeclaration(int id) {
     super(id);
   }
@@ -14,6 +14,9 @@ class ASTConstructorDeclaration extends SimpleNode {
     super(p, id);
   }
 
+  public String toString(){
+    return value  ;
+  }
 
   /** Accept the visitor. **/
   public Object jjtAccept(JmmVisitor visitor, Object data) {

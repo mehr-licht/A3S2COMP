@@ -6,46 +6,43 @@ public interface JmmTreeConstants
   public int JJTSTART = 0;
   public int JJTVOID = 1;
   public int JJTUNMODIFIEDCLASSDECLARATION = 2;
-  public int JJTCLASSBODYDECLARATION = 3;
-  public int JJTINICIALIZACAO = 4;
-  public int JJTNCD = 5;
-  public int JJTCONSTRUCTOR = 6;
-  public int JJTMETODO = 7;
-  public int JJTFD = 8;
-  public int JJTMETHODDECLARATIONLOOKAHEAD = 9;
-  public int JJTINIT = 10;
-  public int JJTVARIABLEDECLARATORID = 11;
-  public int JJTMETHODDECLARATION = 12;
-  public int JJTMETHODDECLARATOR = 13;
-  public int JJTCONSTRUCTORDECLARATION = 14;
-  public int JJTTYPE = 15;
-  public int JJTPRIMITIVETYPE = 16;
-  public int JJTRESULTTYPE = 17;
-  public int JJTNAME = 18;
-  public int JJTASSIGNMENT = 19;
-  public int JJTLESSTHEN = 20;
-  public int JJTADDSUB = 21;
-  public int JJTDIVMULT = 22;
-  public int JJTCASTLOOKAHEAD = 23;
-  public int JJTPRIMARYPREFIX = 24;
-  public int JJTPRIMARYSUFFIX = 25;
-  public int JJTLITERAL = 26;
-  public int JJTINTEGERLITERAL = 27;
-  public int JJTBOOLEANLITERAL = 28;
-  public int JJTIF = 29;
-  public int JJTCONDITION = 30;
-  public int JJTSTATEMENT = 31;
-  public int JJTELSE = 32;
-  public int JJTWHILE = 33;
-  public int JJTBODY = 34;
-  public int JJTRETURN = 35;
+  public int JJTINICIALIZACAO = 3;
+  public int JJTNCD = 4;
+  public int JJTCONSTRUCTOR = 5;
+  public int JJTMETODO = 6;
+  public int JJTFD = 7;
+  public int JJTMETHODDECLARATIONLOOKAHEAD = 8;
+  public int JJTINIT = 9;
+  public int JJTVARIABLEDECLARATORID = 10;
+  public int JJTMETHODDECLARATION = 11;
+  public int JJTMETHODDECLARATOR = 12;
+  public int JJTCONSTRUCTORDECLARATION = 13;
+  public int JJTTYPE = 14;
+  public int JJTPRIMITIVETYPE = 15;
+  public int JJTRESULTTYPE = 16;
+  public int JJTNAME = 17;
+  public int JJTASSIGNMENT = 18;
+  public int JJTLESSTHEN = 19;
+  public int JJTADDSUB = 20;
+  public int JJTDIVMULT = 21;
+  public int JJTCASTLOOKAHEAD = 22;
+  public int JJTPRIMARYSUFFIX = 23;
+  public int JJTLITERAL = 24;
+  public int JJTINTEGERLITERAL = 25;
+  public int JJTBOOLEANLITERAL = 26;
+  public int JJTIF = 27;
+  public int JJTCONDITION = 28;
+  public int JJTSTATEMENT = 29;
+  public int JJTELSE = 30;
+  public int JJTWHILE = 31;
+  public int JJTBODY = 32;
+  public int JJTRETURN = 33;
 
 
   public String[] jjtNodeName = {
     "Start",
     "void",
     "UnmodifiedClassDeclaration",
-    "ClassBodyDeclaration",
     "INICIALIZACAO",
     "NCD",
     "CONSTRUCTOR",
@@ -66,7 +63,6 @@ public interface JmmTreeConstants
     "ADDSUB",
     "DIVMULT",
     "CastLookahead",
-    "PrimaryPrefix",
     "PrimarySuffix",
     "Literal",
     "IntegerLiteral",
@@ -80,4 +76,4 @@ public interface JmmTreeConstants
     "RETURN",
   };
 }
-/* JavaCC - OriginalChecksum=31b7c8e3dfbef14e1288d2d125bf26af (do not edit this line) */
+/* JavaCC - OriginalChecksum=039f3134657aca7f914738d4b680613e (do not edit this line) */

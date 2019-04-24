@@ -4,7 +4,7 @@ package AST_files;
 
 public
 class ASTBooleanLiteral extends SimpleNode {
-  public String name;
+  public String value;
   public int line;
 
   public ASTBooleanLiteral(int id) {
@@ -16,7 +16,7 @@ class ASTBooleanLiteral extends SimpleNode {
   }
 
   public String toString(){
-    return name;
+    return value;
   }
 
   /** Accept the visitor. **/

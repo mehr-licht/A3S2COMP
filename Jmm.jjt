@@ -226,7 +226,7 @@ void NestedClassDeclaration() #void:
   UnmodifiedClassDeclaration()
 }
 
-void ClassBodyDeclaration():
+void ClassBodyDeclaration() #void:
 {}
 {
   LOOKAHEAD(2)
@@ -246,10 +246,11 @@ void ClassBodyDeclaration():
 
 // This production is to determine lookahead only.
 void MethodDeclarationLookahead() :
-{}
+{Token t;}
 {
   ( "public"  | "static"  )*
-  ResultType() <IDENTIFIER> "("
+  ResultType() t=<IDENTIFIER> "("
+  {jjtThis.value = t.image; jjtThis.line = t.beginLine;}
 }
 
 
@@ -459,7 +460,7 @@ void PrimaryExpression() #void:
   PrimaryPrefix() ( LOOKAHEAD(2) PrimarySuffix() )*
 }
 
-void PrimaryPrefix():
+void PrimaryPrefix() #void:
 {}
 {
   Literal()

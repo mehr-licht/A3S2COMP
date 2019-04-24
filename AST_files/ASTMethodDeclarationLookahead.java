@@ -4,6 +4,9 @@ package AST_files;
 
 public
 class ASTMethodDeclarationLookahead extends SimpleNode {
+  public int line;
+  public String value;
+
   public ASTMethodDeclarationLookahead(int id) {
     super(id);
   }
@@ -12,6 +15,9 @@ class ASTMethodDeclarationLookahead extends SimpleNode {
     super(p, id);
   }
 
+  public String toString(){
+    return value;
+  }
 
   /** Accept the visitor. **/
   public Object jjtAccept(JmmVisitor visitor, Object data) {

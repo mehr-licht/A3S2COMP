@@ -7,6 +7,7 @@ class ASTVariableDeclaratorId extends SimpleNode {
   public String value;
   public int line;
   public boolean isArray = false;
+
   public ASTVariableDeclaratorId(int id) {
     super(id);
   }
@@ -17,6 +18,10 @@ class ASTVariableDeclaratorId extends SimpleNode {
 
   public void isArray(){
     isArray = true;
+  }
+
+  public String toString(){
+    return value;
   }
   /** Accept the visitor. **/
   public Object jjtAccept(JmmVisitor visitor, Object data) {

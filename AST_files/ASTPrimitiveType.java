@@ -5,6 +5,7 @@ package AST_files;
 public
 class ASTPrimitiveType extends SimpleNode {
   public int line;
+  public String value;
 
   public ASTPrimitiveType(int id) {
     super(id);
@@ -14,7 +15,9 @@ class ASTPrimitiveType extends SimpleNode {
     super(p, id);
   }
 
-
+public String toString(){
+    return value;
+}
   /** Accept the visitor. **/
   public Object jjtAccept(JmmVisitor visitor, Object data) {
     return visitor.visit(this, data);
