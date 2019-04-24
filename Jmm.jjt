@@ -2,6 +2,7 @@
 options {
   MULTI =true;
   LOOKAHEAD=1;
+  VISITOR=true;
   STATIC =true;
  // NODE_SCOPE_HOOK = true;
   ERROR_REPORTING = true;
@@ -208,7 +209,6 @@ void UnmodifiedClassDeclaration() :
 {Token t2;}
 {
   "class" t2=<IDENTIFIER> [ "extends" Name() ]
-  {jjtThis.setName(t2.image);}
   ClassBody()
 }
 
@@ -269,7 +269,6 @@ void VariableDeclaratorId() :
 {Token t6;}
 {
   t6=<IDENTIFIER> ( "[" "]" )*
-    {jjtThis.setName(t6.image);}
 }
 
 void VariableInitializer() #void:
@@ -289,7 +288,6 @@ void MethodDeclarator() :
 {Token t3;}
 {
   t3=<IDENTIFIER> FormalParameters() ( "[" "]" )*
-    {jjtThis.setName(t3.image);}
 }
 
 void FormalParameters() #void:
@@ -308,7 +306,7 @@ void ConstructorDeclaration():
 {Token t9;}
 {
   [ "public"  ]
-  t9=<IDENTIFIER> FormalParameters() {jjtThis.setName(t9.image);}
+  t9=<IDENTIFIER> FormalParameters()
   "{"
     [ LOOKAHEAD(ExplicitConstructorInvocation()) ExplicitConstructorInvocation() ]
     ( BlockStatement() )*
@@ -335,22 +333,22 @@ void Initializer() #void:
 void Type() :
 {Token t, t1;}
 {
-  ( PrimitiveType() | Name() ) ( "[" "]" {jjtThis.setIsArray();})*
+  ( PrimitiveType() | Name() ) ( "[" "]" )*
 }
 
 void PrimitiveType() :
 {Token t;}
 {
-  t="boolean" {jjtThis.setName(t.image);}
+  t="boolean"
 |
-  t="int" {jjtThis.setName(t.image);}
+  t="int"
 
 }
 
 void ResultType():
 {Token t;}
 {
-  t="void" {jjtThis.setName(t.image);}
+  t="void"
 |
   Type()
 }
@@ -358,8 +356,8 @@ void ResultType():
 void Name() :
 {Token t,t1;}
 {
-  t=<IDENTIFIER> {jjtThis.setName(t.image);}
-   ( LOOKAHEAD(2) "." t1=<IDENTIFIER>  {jjtThis.setName2(t1.image);} )*
+  t=<IDENTIFIER>
+   ( LOOKAHEAD(2) "." t1=<IDENTIFIER>   )*
 }
 
 void NameList() #void:{}
@@ -496,7 +494,7 @@ void PrimarySuffix():
 void Literal() :
 {Token t5;}
 {
-  t5=<INTEGER_LITERAL> {jjtThis.setName(t5.image);}
+  t5=<INTEGER_LITERAL>
 |
   BooleanLiteral()
 
@@ -506,7 +504,7 @@ void IntegerLiteral() :
 {Token t;}
 {
   t=<INTEGER_LITERAL>
-   {jjtThis.setName(t.image);}
+
 }
 
 
@@ -514,9 +512,9 @@ void IntegerLiteral() :
 void BooleanLiteral():
 {Token t;}
 {
-  t="true" {jjtThis.setType(t.image);}
+  t="true"
 |
-  t="false" {jjtThis.setType(t.image);}
+  t="false"
 
 }
 

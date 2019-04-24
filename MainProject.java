@@ -14,6 +14,7 @@ import java.util.List;
 public class MainProject {
 
     private HashMap<String, SymbolTable> symbol_table = new HashMap<String,SymbolTable>();
+
     private String moduleName;
     private int contadorErros = 0;
 
