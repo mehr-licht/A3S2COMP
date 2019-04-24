@@ -4,6 +4,8 @@ package AST_files;
 
 public
 class ASTUnmodifiedClassDeclaration extends SimpleNode {
+  public String value;
+
   public ASTUnmodifiedClassDeclaration(int id) {
     super(id);
   }

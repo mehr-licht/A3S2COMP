@@ -4,6 +4,8 @@ package AST_files;
 
 public
 class ASTPrimarySuffix extends SimpleNode {
+  public int line;
+
   public ASTPrimarySuffix(int id) {
     super(id);
   }

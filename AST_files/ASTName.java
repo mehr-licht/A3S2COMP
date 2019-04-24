@@ -4,6 +4,8 @@ package AST_files;
 
 public
 class ASTName extends SimpleNode {
+  public int line;
+
   public ASTName(int id) {
     super(id);
   }

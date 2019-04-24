@@ -4,6 +4,9 @@ package AST_files;
 
 public
 class ASTBooleanLiteral extends SimpleNode {
+  public String name;
+  public int line;
+
   public ASTBooleanLiteral(int id) {
     super(id);
   }
@@ -12,6 +15,9 @@ class ASTBooleanLiteral extends SimpleNode {
     super(p, id);
   }
 
+  public String toString(){
+    return name;
+  }
 
   /** Accept the visitor. **/
   public Object jjtAccept(JmmVisitor visitor, Object data) {

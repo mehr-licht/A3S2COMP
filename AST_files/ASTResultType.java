@@ -4,6 +4,8 @@ package AST_files;
 
 public
 class ASTResultType extends SimpleNode {
+  public int line;
+
   public ASTResultType(int id) {
     super(id);
   }

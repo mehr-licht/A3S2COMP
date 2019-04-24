@@ -206,10 +206,11 @@ void ClassDeclaration() #void :
 }
 
 void UnmodifiedClassDeclaration() :
-{Token t2;}
+{Token t0;}
 {
-  "class" t2=<IDENTIFIER> [ "extends" Name() ]
+  "class" t0=<IDENTIFIER> [ "extends" Name() ]
   ClassBody()
+  {jjtThis.value = t0.image;}
 }
 
 void ClassBody() #void:
@@ -245,10 +246,10 @@ void ClassBodyDeclaration():
 
 // This production is to determine lookahead only.
 void MethodDeclarationLookahead() :
-{Token t2;}
+{}
 {
   ( "public"  | "static"  )*
-  ResultType() t2=<IDENTIFIER> "("
+  ResultType() <IDENTIFIER> "("
 }
 
 
@@ -266,9 +267,10 @@ void VariableDeclarator() #void:
 }
 
 void VariableDeclaratorId() :
-{Token t6;}
+{Token t1;}
 {
-  t6=<IDENTIFIER> ( "[" "]" )*
+  t1=<IDENTIFIER> ( "[" "]" {jjtThis.isArray();})*
+  {jjtThis.value = t1.image; jjtThis.line = t1.beginLine;}
 }
 
 void VariableInitializer() #void:
@@ -288,6 +290,7 @@ void MethodDeclarator() :
 {Token t3;}
 {
   t3=<IDENTIFIER> FormalParameters() ( "[" "]" )*
+  {jjtThis.value = t3.image; jjtThis.line = t3.beginLine;}
 }
 
 void FormalParameters() #void:
@@ -303,14 +306,15 @@ void FormalParameter() #void:
 }
 
 void ConstructorDeclaration():
-{Token t9;}
+{Token t4;}
 {
   [ "public"  ]
-  t9=<IDENTIFIER> FormalParameters()
+  t4=<IDENTIFIER> FormalParameters()
   "{"
     [ LOOKAHEAD(ExplicitConstructorInvocation()) ExplicitConstructorInvocation() ]
     ( BlockStatement() )*
   "}"
+  {jjtThis.value = t4.image; jjtThis.line = t4.beginLine;}
 }
 
 void ExplicitConstructorInvocation() #void:
@@ -331,7 +335,7 @@ void Initializer() #void:
  */
 
 void Type() :
-{Token t, t1;}
+{}
 {
   ( PrimitiveType() | Name() ) ( "[" "]" )*
 }
@@ -339,16 +343,16 @@ void Type() :
 void PrimitiveType() :
 {Token t;}
 {
-  t="boolean"
+  t="boolean" {jjtThis.value = t.image; jjtThis.line = t.beginLine;}
 |
-  t="int"
+  t="int" {jjtThis.value = t.image; jjtThis.line = t.beginLine;}
 
 }
 
 void ResultType():
 {Token t;}
 {
-  t="void"
+  t="void" {jjtThis.value = t.image; jjtThis.line = t.beginLine;}
 |
   Type()
 }
@@ -356,8 +360,9 @@ void ResultType():
 void Name() :
 {Token t,t1;}
 {
-  t=<IDENTIFIER>
-   ( LOOKAHEAD(2) "." t1=<IDENTIFIER>   )*
+  t=<IDENTIFIER>  {jjtThis.value = t.image; jjtThis.line = t.beginLine;}
+   ( LOOKAHEAD(2) "." t1=<IDENTIFIER>   {jjtThis.value = t1.image; jjtThis.line = t1.beginLine;})*
+
 }
 
 void NameList() #void:{}
@@ -429,7 +434,7 @@ void UnaryExpressionNotPlusMinus() #void:
 }
 
 void CastLookahead() :
-{Token t;}
+{}
 {
   LOOKAHEAD(2)
   "(" PrimitiveType()
@@ -455,7 +460,7 @@ void PrimaryExpression() #void:
 }
 
 void PrimaryPrefix():
-{Token t;}
+{}
 {
   Literal()
 |
@@ -472,7 +477,7 @@ void PrimaryPrefix():
 }
 
 void PrimarySuffix():
-{Token t7;}
+{Token t10;}
 {
   LOOKAHEAD(2)
   "." "this"
@@ -485,36 +490,36 @@ void PrimarySuffix():
 |
   "[" Expression() "]"
 |
-  "." <IDENTIFIER>
+  "." t10=<IDENTIFIER> {jjtThis.value = t10.image; jjtThis.line = t10.beginLine;}
 |
   Arguments()
 
 }
 
 void Literal() :
-{Token t5;}
+{Token t11;}
 {
-  t5=<INTEGER_LITERAL>
+  t11=<INTEGER_LITERAL> {jjtThis.value = t11.image; jjtThis.line = t11.beginLine;}
 |
   BooleanLiteral()
 
 }
 
 void IntegerLiteral() :
-{Token t;}
+{Token t12;}
 {
-  t=<INTEGER_LITERAL>
+  t12=<INTEGER_LITERAL> {jjtThis.value = t12.image; jjtThis.line = t12.beginLine;}
 
 }
 
 
 
 void BooleanLiteral():
-{Token t;}
+{Token t13;}
 {
-  t="true"
+  t13="true" {jjtThis.value = t13.image; jjtThis.line = t13.beginLine;}
 |
-  t="false"
+  t13="false" {jjtThis.value = t13.image; jjtThis.line = t13.beginLine;}
 
 }
 
@@ -531,7 +536,7 @@ void ArgumentList() #void:
 }
 
 void AllocationExpression() #void:
-{Token t;}
+{}
 {
   LOOKAHEAD(2)
   "new" PrimitiveType() ArrayDimsAndInits()
@@ -594,7 +599,7 @@ void BlockStatement() #void:
 }
 
 void LocalVariableDeclaration() #void:
-{Token t;}
+{}
 {
    Type() VariableDeclarator() ( "," VariableDeclarator() )*
 }

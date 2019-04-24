@@ -4,6 +4,9 @@ package AST_files;
 
 public
 class ASTVariableDeclaratorId extends SimpleNode {
+  public String value;
+  public int line;
+  public boolean isArray = false;
   public ASTVariableDeclaratorId(int id) {
     super(id);
   }
@@ -12,7 +15,9 @@ class ASTVariableDeclaratorId extends SimpleNode {
     super(p, id);
   }
 
-
+  public void isArray(){
+    isArray = true;
+  }
   /** Accept the visitor. **/
   public Object jjtAccept(JmmVisitor visitor, Object data) {
     return visitor.visit(this, data);

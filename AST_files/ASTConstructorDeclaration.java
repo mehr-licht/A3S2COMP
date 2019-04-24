@@ -4,6 +4,8 @@ package AST_files;
 
 public
 class ASTConstructorDeclaration extends SimpleNode {
+  public int line;
+
   public ASTConstructorDeclaration(int id) {
     super(id);
   }

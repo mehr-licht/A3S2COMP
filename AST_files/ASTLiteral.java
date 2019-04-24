@@ -4,6 +4,8 @@ package AST_files;
 
 public
 class ASTLiteral extends SimpleNode {
+  public int line;
+
   public ASTLiteral(int id) {
     super(id);
   }

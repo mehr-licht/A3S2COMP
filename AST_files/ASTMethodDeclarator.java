@@ -4,6 +4,9 @@ package AST_files;
 
 public
 class ASTMethodDeclarator extends SimpleNode {
+  public String value;
+  public int line;
+
   public ASTMethodDeclarator(int id) {
     super(id);
   }

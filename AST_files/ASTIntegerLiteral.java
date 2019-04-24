@@ -4,6 +4,8 @@ package AST_files;
 
 public
 class ASTIntegerLiteral extends SimpleNode {
+  public int line;
+
   public ASTIntegerLiteral(int id) {
     super(id);
   }

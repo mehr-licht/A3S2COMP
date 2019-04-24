@@ -4,6 +4,8 @@ package AST_files;
 
 public
 class ASTPrimitiveType extends SimpleNode {
+  public int line;
+
   public ASTPrimitiveType(int id) {
     super(id);
   }
