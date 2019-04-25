@@ -417,9 +417,9 @@ void MultiplicativeExpression():
 
 
 void UnaryExpressionNotPlusMinus() #void:
-{Token t;}
+{}
 {
-  ( t=<BANG>  ) UnaryExpressionNotPlusMinus()
+  ( <BANG>  ) UnaryExpressionNotPlusMinus()
 |
   LOOKAHEAD( CastLookahead() )
   CastExpression()
