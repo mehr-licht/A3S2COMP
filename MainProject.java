@@ -1,10 +1,12 @@
+package A3S2COMP;
+
 import java.io.*;
 import java.util.*;
 import java.util.HashMap;
 import java.util.Map;
 import java.nio.file.Files;
 import AST_files.*;
-import Symbol.*;
+//import sun.jvm.hotspot.memory.SymbolTable;
 //import sun.jvm.hotspot.memory.SymbolTable;
 
 import java.nio.file.Paths;
@@ -49,13 +51,22 @@ public class MainProject {
     public MainProject(Jmm myJmm){
         try {
             SimpleNode root = myJmm.Start();
+
+            System.out.println("Nokun 1");
+            SymbolTable symbolTable = new SymbolTable();
+            System.out.println("Nokun 2");
+            root.jjtAccept(symbolTable.getSymbolTableVisitor(),null);
+            symbolTable.setLineNumbers();
             root.dump("");
-            construc_Symbol_Table(root);
+            System.out.println("Nokun 3");
+
+            //construc_Symbol_Table(root);
             //construct_Functiond_SymbolTable(root); //TODO
             //adicionar a funcao de leitura da arvore
             //adicioanr a funcao da tabela de simbolos
 
             System.out.println("Jmm Parser:  Java program parsed successfully.");
+            System.exit(0);
         } catch (ParseException e) {
             System.out.println(e.getMessage());
             System.out.println("Jmm Parser:  Encountered errors during parse.");
@@ -122,8 +133,7 @@ public class MainProject {
     };
 
 
-
-
-
-
 }
+
+
+
