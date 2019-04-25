@@ -18,4 +18,4 @@ class ASTClassBodyDeclaration extends SimpleNode {
     return visitor.visit(this, data);
   }
 }
-/* JavaCC - OriginalChecksum=3a1ea7d15f6979f41e2b27baf856ad4d (do not edit this line) */
+/* JavaCC - OriginalChecksum=b3276fbd3695a034983a02765d840275 (do not edit this line) */

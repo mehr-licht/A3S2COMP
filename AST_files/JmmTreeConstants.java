@@ -28,15 +28,14 @@ public interface JmmTreeConstants
   public int JJTCASTLOOKAHEAD = 22;
   public int JJTPRIMARYSUFFIX = 23;
   public int JJTLITERAL = 24;
-  public int JJTINTEGERLITERAL = 25;
-  public int JJTBOOLEANLITERAL = 26;
-  public int JJTIF = 27;
-  public int JJTCONDITION = 28;
-  public int JJTSTATEMENT = 29;
-  public int JJTELSE = 30;
-  public int JJTWHILE = 31;
-  public int JJTBODY = 32;
-  public int JJTRETURN = 33;
+  public int JJTBOOLEANLITERAL = 25;
+  public int JJTIF = 26;
+  public int JJTCONDITION = 27;
+  public int JJTSTATEMENT = 28;
+  public int JJTELSE = 29;
+  public int JJTWHILE = 30;
+  public int JJTBODY = 31;
+  public int JJTRETURN = 32;
 
 
   public String[] jjtNodeName = {
@@ -65,7 +64,6 @@ public interface JmmTreeConstants
     "CastLookahead",
     "PrimarySuffix",
     "Literal",
-    "IntegerLiteral",
     "BooleanLiteral",
     "IF",
     "CONDITION",
@@ -76,4 +74,4 @@ public interface JmmTreeConstants
     "RETURN",
   };
 }
-/* JavaCC - OriginalChecksum=039f3134657aca7f914738d4b680613e (do not edit this line) */
+/* JavaCC - OriginalChecksum=57c794f36fb34063c9550f7dc88a777e (do not edit this line) */
