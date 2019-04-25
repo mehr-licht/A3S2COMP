@@ -402,31 +402,24 @@ void RelationalExpression() #void:
 }
 
 
-void AdditiveExpression() #void:
-{}
+void AdditiveExpression() :
+{Token t;}
 {
-  MultiplicativeExpression() ( ( <PLUS> | <MINUS> )  MultiplicativeExpression() #ADDSUB(2) )*
+  MultiplicativeExpression() ( ( t=<PLUS> | t=<MINUS> )  MultiplicativeExpression() {jjtThis.value = t.image; jjtThis.line = t.beginLine;}#ADDSUB(2) )*
 }
 
-void MultiplicativeExpression() #void:
-{}
+void MultiplicativeExpression():
+{Token t;}
 {
-  UnaryExpression() ( ( <STAR> | <SLASH> )  UnaryExpression() #DIVMULT(2) )*
+  UnaryExpressionNotPlusMinus() ( ( t=<STAR> | t=<SLASH> ) UnaryExpressionNotPlusMinus() {jjtThis.value = t.image; jjtThis.line = t.beginLine; }#DIVMULT(2) )*
 }
 
-void UnaryExpression() #void:
-{}
-{
-  ( <PLUS> | <MINUS> ) UnaryExpression()
-|
-  UnaryExpressionNotPlusMinus()
-}
 
 
 void UnaryExpressionNotPlusMinus() #void:
-{}
+{Token t;}
 {
-  ( <BANG>  ) UnaryExpressionNotPlusMinus()
+  ( t=<BANG>  ) UnaryExpressionNotPlusMinus()
 |
   LOOKAHEAD( CastLookahead() )
   CastExpression()

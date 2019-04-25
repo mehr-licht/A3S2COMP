@@ -4,6 +4,9 @@ package AST_files;
 
 public
 class ASTDIVMULT extends SimpleNode {
+  public int line;
+  public  String value;
+
   public ASTDIVMULT(int id) {
     super(id);
   }
@@ -12,7 +15,9 @@ class ASTDIVMULT extends SimpleNode {
     super(p, id);
   }
 
-
+  public String toString(){
+    return value;
+  }
   /** Accept the visitor. **/
   public Object jjtAccept(JmmVisitor visitor, Object data) {
     return visitor.visit(this, data);
