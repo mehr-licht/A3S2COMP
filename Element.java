@@ -1,4 +1,3 @@
-package A3S2COMP;
 
 import java.util.LinkedList;
 

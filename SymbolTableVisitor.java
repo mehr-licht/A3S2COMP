@@ -1,10 +1,7 @@
-package A3S2COMP;
-
 import java.util.LinkedList;
-import AST_files.*;
 
 public class SymbolTableVisitor implements JmmVisitor {
-
+    
     SymbolTableContextManager symbolTableContextManager;
 
 

@@ -1,11 +1,9 @@
-package A3S2COMP;
 
 import java.io.*;
 import java.util.*;
 import java.util.HashMap;
 import java.util.Map;
 import java.nio.file.Files;
-import AST_files.*;
 //import sun.jvm.hotspot.memory.SymbolTable;
 //import sun.jvm.hotspot.memory.SymbolTable;
 
@@ -22,15 +20,15 @@ public class MainProject {
 
     //Main
     public static void main(String args[]) {
-        Jmm myJmm;
+        Jmm jmm;
         if (args.length == 0) {
             System.out.println("Jmm Parser:  Reading from standard input . . .");
-            myJmm = new Jmm(System.in);
+            jmm = new Jmm(System.in);
 
         } else if (args.length == 1) {
             System.out.println("Jmm Parser:  Reading from file " + args[0] + " . . .");
             try {
-                myJmm = new Jmm(new java.io.FileInputStream(args[0]));
+                jmm = new Jmm(new java.io.FileInputStream(args[0]));
             } catch (java.io.FileNotFoundException e) {
                 System.out.println("Jmm Parser:  File " + args[0] + " not found.");
                 return;
@@ -44,13 +42,13 @@ public class MainProject {
             return;
         }
 
-        new MainProject(myJmm);
+        new MainProject(jmm);
 
     }
 
-    public MainProject(Jmm myJmm){
+    public MainProject(Jmm jmm){
         try {
-            SimpleNode root = myJmm.Start();
+            SimpleNode root = jmm.Start();
 
             System.out.println("Nokun 1");
             SymbolTable symbolTable = new SymbolTable();
@@ -58,19 +56,26 @@ public class MainProject {
             root.jjtAccept(symbolTable.getSymbolTableVisitor(),null);
             symbolTable.setLineNumbers();
             root.dump("");
+            System.out.println("Nokun 3.0");
+            
+            System.out.println(symbolTable.getElements().isEmpty());
+           // System.out.println(symbolTable.getParameters().isEmpty());
+            
             System.out.println("Nokun 3");
-
+            
+            
             //construc_Symbol_Table(root);
             //construct_Functiond_SymbolTable(root); //TODO
             //adicionar a funcao de leitura da arvore
             //adicioanr a funcao da tabela de simbolos
 
             System.out.println("Jmm Parser:  Java program parsed successfully.");
-            System.exit(0);
+            
         } catch (ParseException e) {
             System.out.println(e.getMessage());
             System.out.println("Jmm Parser:  Encountered errors during parse.");
         }
+        System.exit(0);
     }
 
     public void construc_Symbol_Table(SimpleNode root){

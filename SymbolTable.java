@@ -1,10 +1,6 @@
-package A3S2COMP;
-
-import AST_files.*;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
-
 
 public class SymbolTable {
 
