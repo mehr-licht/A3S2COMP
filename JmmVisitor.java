@@ -21,12 +21,13 @@ public interface JmmVisitor
   public Object visit(ASTName node, Object data);
   public Object visit(ASTASSIGNMENT node, Object data);
   public Object visit(ASTLESSTHEN node, Object data);
+  public Object visit(ASTAdditiveExpression node, Object data);
   public Object visit(ASTADDSUB node, Object data);
+  public Object visit(ASTMultiplicativeExpression node, Object data);
   public Object visit(ASTDIVMULT node, Object data);
   public Object visit(ASTCastLookahead node, Object data);
   public Object visit(ASTPrimarySuffix node, Object data);
   public Object visit(ASTLiteral node, Object data);
-  public Object visit(ASTIntegerLiteral node, Object data);
   public Object visit(ASTBooleanLiteral node, Object data);
   public Object visit(ASTIF node, Object data);
   public Object visit(ASTCONDITION node, Object data);
@@ -36,4 +37,4 @@ public interface JmmVisitor
   public Object visit(ASTBODY node, Object data);
   public Object visit(ASTRETURN node, Object data);
 }
-/* JavaCC - OriginalChecksum=fec3d8bd6d8561c2657e22d60c05951f (do not edit this line) */
+/* JavaCC - OriginalChecksum=3c28743784303ae35964c9d7d46d3274 (do not edit this line) */

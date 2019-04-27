@@ -187,10 +187,10 @@ void CompilationUnit() #void :{}
 void TypeDeclaration() #void :
 {}
 {
-  LOOKAHEAD( ( "public" )* "class" )
+  LOOKAHEAD( ( <PUBLIC> )* <CLASS> )
   ClassDeclaration()
 |
-  ";"
+  <SEMICOLON>
 }
 
 
@@ -201,14 +201,14 @@ void TypeDeclaration() #void :
 void ClassDeclaration() #void :
 {}
 {
-  ( "public" )*
+  ( <PUBLIC> )*
   UnmodifiedClassDeclaration()
 }
 
 void UnmodifiedClassDeclaration() :
 {Token t0;}
 {
-  "class" t0=<IDENTIFIER> [ "extends" Name() ]
+  <CLASS> t0=<IDENTIFIER> [ <EXTENDS> Name() ]
   ClassBody()
   {jjtThis.value = t0.image;}
 }
@@ -216,13 +216,13 @@ void UnmodifiedClassDeclaration() :
 void ClassBody() #void:
 {}
 {
-  "{" ( ClassBodyDeclaration() )* "}"
+  <LBRACE> ( ClassBodyDeclaration() )* <RBRACE>
 }
 
 void NestedClassDeclaration() #void:
 {}
 {
-  ( "static"  | "public"  )*
+  ( <STATIC>  | <PUBLIC>  )*
   UnmodifiedClassDeclaration()
 }
 
@@ -232,10 +232,10 @@ void ClassBodyDeclaration() #void:
   LOOKAHEAD(2)
   Initializer() #INICIALIZACAO
 |
-  LOOKAHEAD( ( "static"  | "public"  )* "class" )
+  LOOKAHEAD( ( <STATIC>  | <PUBLIC>  )* <CLASS> )
   NestedClassDeclaration() # NCD
 |
-  LOOKAHEAD( [ "public"  ] Name() "(" )
+  LOOKAHEAD( [ <PUBLIC>  ] Name() <LPAREN> )
   ConstructorDeclaration() #CONSTRUCTOR
 |
   LOOKAHEAD( MethodDeclarationLookahead() )
@@ -248,8 +248,8 @@ void ClassBodyDeclaration() #void:
 void MethodDeclarationLookahead() :
 {Token t;}
 {
-  ( "public"  | "static"  )*
-  ResultType() t=<IDENTIFIER> "("
+  ( <PUBLIC>  | <STATIC>  )*
+  ResultType() t=<IDENTIFIER> <LPAREN>
   {jjtThis.value = t.image; jjtThis.line = t.beginLine;}
 }
 
@@ -257,20 +257,20 @@ void MethodDeclarationLookahead() :
 void FieldDeclaration() #void:
 {}
 {
-  ( "public" |  "static"  )*
-  Type() VariableDeclarator() ( "," VariableDeclarator() )* ";"
+  ( <PUBLIC> |  <STATIC>  )*
+  Type() VariableDeclarator() ( <COMMA> VariableDeclarator() )* <SEMICOLON>
 }
 
 void VariableDeclarator() #void:
 {}
 {
-  VariableDeclaratorId() [ "="  VariableInitializer() #INIT(>1) ]
+  VariableDeclaratorId() [ <ASSIGN>  VariableInitializer() #INIT(>1) ]
 }
 
 void VariableDeclaratorId() :
 {Token t1;}
 {
-  t1=<IDENTIFIER> ( "[" "]" {jjtThis.isArray();})*
+  t1=<IDENTIFIER> ( <LBRACKET> <RBRACKET> {jjtThis.isArray();})*
   {jjtThis.value = t1.image; jjtThis.line = t1.beginLine;}
 }
 
@@ -282,22 +282,22 @@ void VariableInitializer() #void:
 
 void MethodDeclaration() :{}
 {
-  ( "public"  | "static"   )*
+  ( <PUBLIC>  | <STATIC>   )*
   ResultType() MethodDeclarator()
-  ( Block() | ";" )
+  ( Block() | <SEMICOLON> )
 }
 
 void MethodDeclarator() :
 {Token t3;}
 {
-  t3=<IDENTIFIER> FormalParameters() ( "[" "]" )*
+  t3=<IDENTIFIER> FormalParameters() ( <LBRACKET> <RBRACKET> )*
   {jjtThis.value = t3.image; jjtThis.line = t3.beginLine;}
 }
 
 void FormalParameters() #void:
 {}
 {
-  "(" [ FormalParameter() ( "," FormalParameter() )* ] ")"
+  <LPAREN> [ FormalParameter() ( <COMMA> FormalParameter() )* ] <RPAREN>
 }
 
 void FormalParameter() #void:
@@ -309,25 +309,25 @@ void FormalParameter() #void:
 void ConstructorDeclaration():
 {Token t4;}
 {
-  [ "public"  ]
+  [ <PUBLIC>  ]
   t4=<IDENTIFIER> FormalParameters()
-  "{"
+  <LBRACE>
     [ LOOKAHEAD(ExplicitConstructorInvocation()) ExplicitConstructorInvocation() ]
     ( BlockStatement() )*
-  "}"
+  <RBRACE>
   {jjtThis.value = t4.image; jjtThis.line = t4.beginLine;}
 }
 
 void ExplicitConstructorInvocation() #void:
 {}
 {
-   "this" Arguments() ";"
+   <THIS> Arguments() <SEMICOLON>
 }
 
 void Initializer() #void:
 {}
 {
-  [ "static" ] Block()
+  [ <STATIC> ] Block()
 }
 
 
@@ -338,22 +338,22 @@ void Initializer() #void:
 void Type() :
 {}
 {
-  ( PrimitiveType() | Name() ) ( "[" "]" )*
+  ( PrimitiveType() | Name() ) ( <LBRACKET> <RBRACKET> )*
 }
 
 void PrimitiveType() :
 {Token t;}
 {
-  t="boolean" {jjtThis.value = t.image; jjtThis.line = t.beginLine;}
+  t=<BOOLEAN> {jjtThis.value = t.image; jjtThis.line = t.beginLine;}
 |
-  t="int" {jjtThis.value = t.image; jjtThis.line = t.beginLine;}
+  t=<INT> {jjtThis.value = t.image; jjtThis.line = t.beginLine;}
 
 }
 
 void ResultType():
 {Token t;}
 {
-  t="void" {jjtThis.value = t.image; jjtThis.line = t.beginLine;}
+  t=<VOID> {jjtThis.value = t.image; jjtThis.line = t.beginLine;}
 |
   Type()
 }
@@ -362,15 +362,15 @@ void Name() :
 {Token t,t1;}
 {
   t=<IDENTIFIER>  {jjtThis.value = t.image; jjtThis.line = t.beginLine;}
-   ( LOOKAHEAD(2) "." t1=<IDENTIFIER>   {jjtThis.value = t1.image; jjtThis.line = t1.beginLine;})*
+   ( LOOKAHEAD(2) <DOT> t1=<IDENTIFIER>   {jjtThis.value = t1.image; jjtThis.line = t1.beginLine;})*
 
 }
-
+/*
 void NameList() #void:{}
 {
-  Name() ( "," Name() )*
+  Name() ( <COMMA> Name() )*
 }
-
+*/
 
 /*
  * Expression syntax follows.
@@ -385,48 +385,41 @@ void Expression() #void:
 void AssignmentOperator() #void:
 {}
 {
-  "="
+  <ASSIGN>
 }
 
 void ConditionalAndExpression() #void:
 {}
 {
-  RelationalExpression() ( "&&"  RelationalExpression() )*
+  RelationalExpression() ( <SC_AND>  RelationalExpression() )*
 }
 
 
 void RelationalExpression() #void:
 {}
 {
-  AdditiveExpression() ( LOOKAHEAD(2) ( "<"  ) AdditiveExpression() #LESSTHEN(2) )*
+  AdditiveExpression() ( LOOKAHEAD(2) ( <LT>  ) AdditiveExpression() #LESSTHEN(2) )*
 }
 
 
-void AdditiveExpression() #void:
-{}
+void AdditiveExpression() :
+{Token t;}
 {
-  MultiplicativeExpression() ( ( "+" | "-" )  MultiplicativeExpression() #ADDSUB(2) )*
+  MultiplicativeExpression() ( ( t=<PLUS> | t=<MINUS> )  MultiplicativeExpression() {jjtThis.value = t.image; jjtThis.line = t.beginLine;}#ADDSUB(2) )*
 }
 
-void MultiplicativeExpression() #void:
-{}
+void MultiplicativeExpression():
+{Token t;}
 {
-  UnaryExpression() ( ( "*" | "/" )  UnaryExpression() #DIVMULT(2) )*
+  UnaryExpressionNotPlusMinus() ( ( t=<STAR> | t=<SLASH> ) UnaryExpressionNotPlusMinus() {jjtThis.value = t.image; jjtThis.line = t.beginLine; }#DIVMULT(2) )*
 }
 
-void UnaryExpression() #void:
-{}
-{
-  ( "+" | "-" ) UnaryExpression()
-|
-  UnaryExpressionNotPlusMinus()
-}
 
 
 void UnaryExpressionNotPlusMinus() #void:
 {}
 {
-  ( "!"  ) UnaryExpressionNotPlusMinus()
+  ( <BANG>  ) UnaryExpressionNotPlusMinus()
 |
   LOOKAHEAD( CastLookahead() )
   CastExpression()
@@ -438,12 +431,12 @@ void CastLookahead() :
 {}
 {
   LOOKAHEAD(2)
-  "(" PrimitiveType()
+  <LPAREN> PrimitiveType()
 |
-  LOOKAHEAD("(" Name() "[")
-  "(" Name() "[" "]"
+  LOOKAHEAD(<LPAREN> Name() <LBRACKET>)
+  <LPAREN> Name() <LBRACKET> <RBRACKET>
 |
-  "(" Name() ")" ( "!" | "(" | <IDENTIFIER> | "this" | "new" | Literal() )
+  <LPAREN> Name() <RPAREN> ( <BANG> | <LPAREN> | <IDENTIFIER> | <THIS> | <NEW> | Literal() )
 }
 
 
@@ -451,7 +444,7 @@ void CastExpression() #void:
 {}
 {
 
-  "(" Type() ")" UnaryExpressionNotPlusMinus()
+  <LPAREN> Type() <RPAREN> UnaryExpressionNotPlusMinus()
 }
 
 void PrimaryExpression() #void:
@@ -465,14 +458,14 @@ void PrimaryPrefix() #void:
 {
   Literal()
 |
-  "this"
+  <THIS>
 |
-  "(" Expression() ")"
+  <LPAREN> Expression() <RPAREN>
 |
   AllocationExpression()
 |
-  LOOKAHEAD( ResultType() "." "class" )
-  ResultType() "." "class"
+  LOOKAHEAD( ResultType() <DOT> <CLASS> )
+  ResultType() <DOT> <CLASS>
 |
   Name()
 }
@@ -481,17 +474,17 @@ void PrimarySuffix():
 {Token t10;}
 {
   LOOKAHEAD(2)
-  "." "this"
+  <DOT> <THIS>
 |
   LOOKAHEAD(2)
-  "." AllocationExpression()
+  <DOT> AllocationExpression()
 |
    LOOKAHEAD(2)
-   "." "length"
+   <DOT> <LENGTH>
 |
-  "[" Expression() "]"
+  <LBRACKET> Expression() <RBRACKET>
 |
-  "." t10=<IDENTIFIER> {jjtThis.value = t10.image; jjtThis.line = t10.beginLine;}
+  <DOT> t10=<IDENTIFIER> {jjtThis.value = t10.image; jjtThis.line = t10.beginLine;}
 |
   Arguments()
 
@@ -505,44 +498,44 @@ void Literal() :
   BooleanLiteral()
 
 }
-
+/*
 void IntegerLiteral() :
 {Token t12;}
 {
   t12=<INTEGER_LITERAL> {jjtThis.value = t12.image; jjtThis.line = t12.beginLine;}
 
-}
+}*/
 
 
 
 void BooleanLiteral():
 {Token t13;}
 {
-  t13="true" {jjtThis.value = t13.image; jjtThis.line = t13.beginLine;}
+  t13=<TRUE> {jjtThis.value = t13.image; jjtThis.line = t13.beginLine;}
 |
-  t13="false" {jjtThis.value = t13.image; jjtThis.line = t13.beginLine;}
+  t13=<FALSE> {jjtThis.value = t13.image; jjtThis.line = t13.beginLine;}
 
 }
 
 void Arguments() #void:
 {}
 {
-  "(" [ ArgumentList() ] ")"
+  <LPAREN> [ ArgumentList() ] <RPAREN>
 }
 
 void ArgumentList() #void:
 {}
 {
-  Expression() ( "," Expression() )*
+  Expression() ( <COMMA> Expression() )*
 }
 
 void AllocationExpression() #void:
 {}
 {
   LOOKAHEAD(2)
-  "new" PrimitiveType() ArrayDimsAndInits()
+  <NEW> PrimitiveType() ArrayDimsAndInits()
 |
-  "new" Name()
+  <NEW> Name()
     (
       ArrayDimsAndInits()
     |
@@ -553,9 +546,9 @@ void AllocationExpression() #void:
 void ArrayDimsAndInits() #void:
 {}
 {
-  ( LOOKAHEAD(2) "[" Expression() "]" )+ ( LOOKAHEAD(2) "[" "]" )*
+  ( LOOKAHEAD(2) <LBRACKET> Expression() <RBRACKET> )+ ( LOOKAHEAD(2) <LBRACKET> <RBRACKET> )*
 //|
-//  ( "[" "]" )+ ArrayInitializer()
+//  ( <LBRACKET> <RBRACKET> )+ ArrayInitializer()
 }
 
 
@@ -571,7 +564,7 @@ void Statement() #void :
 |
   EmptyStatement()
 |
-  StatementExpression() ";"
+  StatementExpression() <SEMICOLON>
 |
   IfStatement()
 |
@@ -584,14 +577,14 @@ void Statement() #void :
 void Block() #void:
 {}
 {
-  "{" ( BlockStatement() )* "}"
+  <LBRACE> ( BlockStatement() )* <RBRACE>
 }
 
 void BlockStatement() #void:
 {}
 {
   LOOKAHEAD( Type() <IDENTIFIER>)
-  LocalVariableDeclaration() ";"
+  LocalVariableDeclaration() <SEMICOLON>
 |
   Statement()
 |
@@ -602,13 +595,13 @@ void BlockStatement() #void:
 void LocalVariableDeclaration() #void:
 {}
 {
-   Type() VariableDeclarator() ( "," VariableDeclarator() )*
+   Type() VariableDeclarator() ( <COMMA> VariableDeclarator() )*
 }
 
 void EmptyStatement() #void:
 {}
 {
-  ";"
+  <SEMICOLON>
 }
 
 void StatementExpression() #void:
@@ -624,13 +617,13 @@ void StatementExpression() #void:
 void IfStatement() #IF :
 {}
 {
-  "if" "(" Expression() #CONDITION ")" Statement() #STATEMENT  [ LOOKAHEAD(1) "else" Statement() #ELSE ]
+  <IF> <LPAREN> Expression() #CONDITION <RPAREN> Statement() #STATEMENT  [ LOOKAHEAD(1) <ELSE> Statement() #ELSE ]
 }
 
 void WhileStatement() #WHILE :
 {}
 {
-    "while" "("
+    <WHILE> <LPAREN>
     try {
           Expression() #CONDITION
         }
@@ -641,19 +634,19 @@ void WhileStatement() #WHILE :
             t = getNextToken();
             } while (t.kind != RPAREN);
         }
-    ")" Statement() #BODY
+    <RPAREN> Statement() #BODY
 }
 
-
+/*
 void StatementExpressionList() #void:
 {}
 {
-  StatementExpression() ( "," StatementExpression() )*
+  StatementExpression() ( <COMMA> StatementExpression() )*
 }
-
+*/
 
 void ReturnStatement() #RETURN :
 {}
 {
-  "return" [ Expression() ] ";"
+  <RETURN> [ Expression() ] <SEMICOLON>
 }

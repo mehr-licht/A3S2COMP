@@ -2,6 +2,9 @@
 /* JavaCCOptions:MULTI=true,NODE_USES_PARSER=false,VISITOR=true,TRACK_TOKENS=false,NODE_PREFIX=AST,NODE_EXTENDS=,NODE_FACTORY=,SUPPORT_CLASS_VISIBILITY_PUBLIC=true */
 public
 class ASTADDSUB extends SimpleNode {
+  public int line;
+  public String value;
+
   public ASTADDSUB(int id) {
     super(id);
   }
@@ -10,7 +13,9 @@ class ASTADDSUB extends SimpleNode {
     super(p, id);
   }
 
-
+  public String toString(){
+    return value;
+  }
   /** Accept the visitor. **/
   public Object jjtAccept(JmmVisitor visitor, Object data) {
     return visitor.visit(this, data);

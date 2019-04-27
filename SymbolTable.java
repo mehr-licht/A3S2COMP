@@ -4,9 +4,6 @@ import java.util.Map;
 
 public class SymbolTable {
 
-
-
-
     private SymbolTableContextManager symbolTableContextManager = new SymbolTableContextManager(this);
     private SymbolTableVisitor symbolTableVisitor = new SymbolTableVisitor(this.symbolTableContextManager);
 //    private SemanticVisitor semanticVisitor = new SemanticVisitor(this.symbolTableContextManager);
@@ -28,10 +25,11 @@ public class SymbolTable {
     /**
      * Empty Constructor
      * */
-    public SymbolTable() {
+    public SymbolTable() {  System.out.println("construct10>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
     }
 
     public SymbolTable(String name, boolean isConditional) {
+        System.out.println("construct11>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
         this.name = name;
         this.isConditional = isConditional;
     }
@@ -43,6 +41,7 @@ public class SymbolTable {
      * @param elements
      * */
     public SymbolTable(String name, Element returnValue, LinkedList<Element> elements) {
+        System.out.println("construct12>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
         this.name = name;
         this.isFunction = true;
         this.isConditional = false;

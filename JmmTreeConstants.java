@@ -21,20 +21,21 @@ public interface JmmTreeConstants
   public int JJTNAME = 17;
   public int JJTASSIGNMENT = 18;
   public int JJTLESSTHEN = 19;
-  public int JJTADDSUB = 20;
-  public int JJTDIVMULT = 21;
-  public int JJTCASTLOOKAHEAD = 22;
-  public int JJTPRIMARYSUFFIX = 23;
-  public int JJTLITERAL = 24;
-  public int JJTINTEGERLITERAL = 25;
-  public int JJTBOOLEANLITERAL = 26;
-  public int JJTIF = 27;
-  public int JJTCONDITION = 28;
-  public int JJTSTATEMENT = 29;
-  public int JJTELSE = 30;
-  public int JJTWHILE = 31;
-  public int JJTBODY = 32;
-  public int JJTRETURN = 33;
+  public int JJTADDITIVEEXPRESSION = 20;
+  public int JJTADDSUB = 21;
+  public int JJTMULTIPLICATIVEEXPRESSION = 22;
+  public int JJTDIVMULT = 23;
+  public int JJTCASTLOOKAHEAD = 24;
+  public int JJTPRIMARYSUFFIX = 25;
+  public int JJTLITERAL = 26;
+  public int JJTBOOLEANLITERAL = 27;
+  public int JJTIF = 28;
+  public int JJTCONDITION = 29;
+  public int JJTSTATEMENT = 30;
+  public int JJTELSE = 31;
+  public int JJTWHILE = 32;
+  public int JJTBODY = 33;
+  public int JJTRETURN = 34;
 
 
   public String[] jjtNodeName = {
@@ -58,12 +59,13 @@ public interface JmmTreeConstants
     "Name",
     "ASSIGNMENT",
     "LESSTHEN",
+    "AdditiveExpression",
     "ADDSUB",
+    "MultiplicativeExpression",
     "DIVMULT",
     "CastLookahead",
     "PrimarySuffix",
     "Literal",
-    "IntegerLiteral",
     "BooleanLiteral",
     "IF",
     "CONDITION",
@@ -74,4 +76,4 @@ public interface JmmTreeConstants
     "RETURN",
   };
 }
-/* JavaCC - OriginalChecksum=133fbe6008cd32d2fd8fa3f161c6ebda (do not edit this line) */
+/* JavaCC - OriginalChecksum=1bc4a94a7df926bfa95c03d936ad229e (do not edit this line) */
