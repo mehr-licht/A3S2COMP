@@ -4,7 +4,7 @@ public class SymbolTableContextManager {
     private LinkedList<SymbolTable> contextSwitcher = new LinkedList<SymbolTable>();
 
     public SymbolTableContextManager(SymbolTable symbolTable) {
-        System.out.println("construct20>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+        System.out.println("construct20   - SymbolTableContextManager >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
         this.contextSwitcher.push(symbolTable);
     }
 

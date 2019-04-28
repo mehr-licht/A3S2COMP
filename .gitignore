@@ -60,3 +60,5 @@ jjtree/
 \.run\.sh\.swp
 
 production/
+
+src/

@@ -50,25 +50,15 @@ public class MainProject {
         try {
             SimpleNode root = jmm.Start();
 
-            System.out.println("Nokun 1");
             SymbolTable symbolTable = new SymbolTable();
-            System.out.println("Nokun 2");
             root.jjtAccept(symbolTable.getSymbolTableVisitor(),null);
             symbolTable.setLineNumbers();
-            root.dump("");
-            System.out.println("Nokun 3.0");
-            
-            System.out.println(symbolTable.getElements().isEmpty());
-           // System.out.println(symbolTable.getParameters().isEmpty());
-            
-            System.out.println("Nokun 3");
-            
-            
-            //construc_Symbol_Table(root);
+//            root.dump(""); //Imprime a árvore
+            System.out.println("Value Symbol table: " + symbolTable.getElements().isEmpty());            
+            System.out.println("Value After contruct: symbolTable: " + symbolTable.getElements().isEmpty());            
             //construct_Functiond_SymbolTable(root); //TODO
             //adicionar a funcao de leitura da arvore
             //adicioanr a funcao da tabela de simbolos
-
             System.out.println("Jmm Parser:  Java program parsed successfully.");
             
         } catch (ParseException e) {
@@ -82,14 +72,16 @@ public class MainProject {
         if(root!= null && root instanceof ASTStart){
             ASTStart start = (ASTStart) root;
         //    this.moduleName == "module - " + module.name;
-
-            System.out.println("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
-            /**Global one*/
+            
+        /**Global one*/
             SymbolTable globalSymbolTable = new SymbolTable();
             //start.
 
-
-            for(int i =0; i < start.jjtGetChild(0).jjtGetNumChildren(); i++){
+            for(int i =0; i < start.jjtGetNumChildren(); i++){
+                
+                System.out.println("Child: " + i );
+                System.out.println(start.jjtGetChild(i).toString());
+                System.out.println("Child: " + i );    
                 System.out.println(start.jjtGetChild(0).jjtGetChild(i)); //resulta 1 - porque temos uma funcao intermedia que nao faz nda
                 System.out.println(start.jjtGetChild(0).jjtGetChild(i).jjtGetNumChildren()); //resulta 1 - porque temos uma funcao intermedia que nao faz nda
 

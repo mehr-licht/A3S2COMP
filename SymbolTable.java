@@ -25,11 +25,11 @@ public class SymbolTable {
     /**
      * Empty Constructor
      * */
-    public SymbolTable() {  System.out.println("construct10>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+    public SymbolTable() {  System.out.println("construct1.0  SymbolTable >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
     }
 
     public SymbolTable(String name, boolean isConditional) {
-        System.out.println("construct11>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+        System.out.println("construct1.1 SymbolTable>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
         this.name = name;
         this.isConditional = isConditional;
     }

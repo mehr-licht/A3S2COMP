@@ -6,36 +6,30 @@ public class SymbolTableVisitor implements JmmVisitor {
 
 
 
-    public SymbolTableVisitor(){  System.out.println("construct00>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");}
+    public SymbolTableVisitor(){  System.out.println("constructor01 - SymbolTableVisitor  >>>>>>>>>>>>>>>>>>>>>>>>");}
     public SymbolTableVisitor(SymbolTableContextManager symbolTableContextManager) {
-        System.out.println("construct01>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+        System.out.println("construct02 - SymbolTableVisitor      >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
         this.symbolTableContextManager = symbolTableContextManager;
     }
 
-//    public Object visit(ASTerror_skipto node, Object data) {
-//        return null;
-//    }
-//
-//    public Object visit(ASTerror_skipto_andEat node, Object data) {
-//        return null;
-//    }
-
 
     public Object visit(SimpleNode node, Object data) {
-        System.out.println("simpleNode00>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+        System.out.println("simpleNode - visit funct>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
         return null;
     }
 
+    /**
+     * Etapa:1 
+    */
     public Object visit(ASTStart node, Object data) {
-        System.out.println("start00>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+        System.out.println("start - visit funct>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
         node.jjtGetChild(0).jjtAccept(this, data);
-
         return null;
     }
 
 
     public Object visit(ASTClassBodyDeclaration node, Object data) {
-        System.out.println("classBody>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+        System.out.println("classBody visit funct>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
         String module = (String) node.jjtGetValue();
         this.symbolTableContextManager.getCurrentSymbolTable().setName(module);
         for (int i = 0; i < node.jjtGetNumChildren(); i++) {
@@ -54,28 +48,28 @@ public class SymbolTableVisitor implements JmmVisitor {
         //this.symbolTableContextManager.getCurrentSymbolTable().setName(module);
         for (int i = 0; i < node.jjtGetNumChildren(); i++) {
          String module = (String) node.jjtGetValue();
-            System.out.println(module +":unmodified01>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+            System.out.println("Value :" + module + ": Unmodifed visit function 01>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
             node.jjtGetChild(i).jjtAccept(this, data);
         }
-        System.out.println("unmodified>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
-        return null;
+        System.out.println(" Unmodified visit function 02 >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+        return data;
     }
     /**
      * //TODO
      * */
     public Object visit(ASTBODY node, Object data) {
         node.jjtGetChild(0).jjtAccept(this, data);
-        System.out.println("Body>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+        System.out.println("Body visit function >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
         return null;
     }
 
 
+     //TODO
     /**
-     * //TODO
      * */
     public Object visit(ASTELSE node, Object data) {
         node.jjtGetChild(0).jjtAccept(this, data);
-        System.out.println("Else>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+        System.out.println("Else visit fuction >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
         return null;
     }
     /**
@@ -195,13 +189,21 @@ public class SymbolTableVisitor implements JmmVisitor {
     }
     public Object visit(ASTMethodDeclarator node, Object data) {
         node.jjtGetChild(0).jjtAccept(this, data);
+        
         System.out.println("MethodDeclarator>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
         return null;
     }
 
     public Object visit(ASTMethodDeclaration node, Object data) {
-            System.out.println("methodDecl>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
-         return null;
+            for (int i = 0; i < node.jjtGetNumChildren(); i++) {
+                String module = (String) node.jjtGetValue();
+
+                   System.out.println("Value : " );
+                   System.out.println( "##" +  node.jjtGetChild(i).toString());
+                   System.out.println( "##" + module + ": Unmodifed visit function >>>>>> AAA");
+               }
+         
+            return null;
     }
 
     public Object visit(ASTVariableDeclaratorId node, Object data) {
