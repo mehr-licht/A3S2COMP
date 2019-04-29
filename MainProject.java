@@ -52,11 +52,13 @@ public class MainProject {
 
             SymbolTable symbolTable = new SymbolTable();
             root.jjtAccept(symbolTable.getSymbolTableVisitor(),null);
-            symbolTable.setLineNumbers();
+          //  symbolTable.setLineNumbers();
 //            root.dump(""); //Imprime a árvore
-            System.out.println("Value Symbol table: " + symbolTable.getElements().isEmpty());            
-            System.out.println("Value After contruct: symbolTable: " + symbolTable.getElements().isEmpty());            
-            //construct_Functiond_SymbolTable(root); //TODO
+            System.out.println("Value elements list <string, elemente>: " + symbolTable.getElements().isEmpty());            
+            System.out.println("Table Context Manager list <string, elemente>:  TESTE 1" 
+                + symbolTable.getSymbolTableContextManager().getCurrentSymbolTable().toString() );            
+            
+            System.out.println("Final print: + TESTE 02 " + symbolTable.toString());            
             //adicionar a funcao de leitura da arvore
             //adicioanr a funcao da tabela de simbolos
             System.out.println("Jmm Parser:  Java program parsed successfully.");

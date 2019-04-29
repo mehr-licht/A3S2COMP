@@ -6,9 +6,14 @@ public class SymbolTableVisitor implements JmmVisitor {
 
 
 
-    public SymbolTableVisitor(){  System.out.println("constructor01 - SymbolTableVisitor  >>>>>>>>>>>>>>>>>>>>>>>>");}
+    public SymbolTableVisitor(){  
+        System.out.println("constructor01 - SymbolTableVisitor  >>>>>>>>>>>>>>>>>>>>>>>>");
+    }
+  
+    /**
+     * Usa este constructor
+     * */
     public SymbolTableVisitor(SymbolTableContextManager symbolTableContextManager) {
-        System.out.println("construct02 - SymbolTableVisitor      >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
         this.symbolTableContextManager = symbolTableContextManager;
     }
 
@@ -22,37 +27,46 @@ public class SymbolTableVisitor implements JmmVisitor {
      * Etapa:1 
     */
     public Object visit(ASTStart node, Object data) {
-        System.out.println("start - visit funct>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
         node.jjtGetChild(0).jjtAccept(this, data);
         return null;
     }
 
 
     public Object visit(ASTClassBodyDeclaration node, Object data) {
-        System.out.println("classBody visit funct>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
-        String module = (String) node.jjtGetValue();
-        this.symbolTableContextManager.getCurrentSymbolTable().setName(module);
-        for (int i = 0; i < node.jjtGetNumChildren(); i++) {
-            node.jjtGetChild(i).jjtAccept(this, data);
-        }
+        node.jjtGetChild(0).jjtAccept(this, data);
         return null;
     }
 
 
     /**
-     * //TODO
+     * Falta adicionar o extends Name()
+     * 
      * */
     public Object visit(ASTUnmodifiedClassDeclaration node, Object data) {
-        //String module = (String) node.jjtGetValue();
-       // System.out.println(module +":unmodified00>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
-        //this.symbolTableContextManager.getCurrentSymbolTable().setName(module);
+        SymbolTable currentSymbolTable = this.symbolTableContextManager.getCurrentSymbolTable();
+ 
+        String className = node.value;
+        
         for (int i = 0; i < node.jjtGetNumChildren(); i++) {
-         String module = (String) node.jjtGetValue();
-            System.out.println("Value :" + module + ": Unmodifed visit function 01>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+            System.out.println("Value :" + node.jjtGetChild(i).toString() + ": Unmodifed visit function 01>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");           
             node.jjtGetChild(i).jjtAccept(this, data);
         }
-        System.out.println(" Unmodified visit function 02 >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
-        return data;
+        
+       try {
+			if (className != null) {
+                System.out.println(" -- Numero de filhos: " + node.jjtGetNumChildren() );
+                //populateClassName(node, className);
+                //Element element = (Element) node.jjtAccept(this, data);  //provoca a recursividade
+			}
+		} catch (ClassNotFoundException e) {
+		//	LOG.log(Level.FINE, "Could not find class " + className + ", due to: " + e.getClass().getName() + ": " + e.getMessage());
+		} catch (LinkageError e) {
+		//	LOG.log(Level.WARNING, "Could not find class " + className + ", due to: " + e.getClass().getName() + ": " + e.getMessage());
+		} finally {
+		//	populateImports(node);
+		}
+		//return super.visit(node, data); new Element
+        return null;
     }
     /**
      * //TODO
@@ -60,6 +74,10 @@ public class SymbolTableVisitor implements JmmVisitor {
     public Object visit(ASTBODY node, Object data) {
         node.jjtGetChild(0).jjtAccept(this, data);
         System.out.println("Body visit function >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+        for (int i = 0; i < node.jjtGetNumChildren(); i++) {
+            System.out.println("Value :" + node.jjtGetChild(i).toString() + ": Unmodifed visit function 01>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");           
+            node.jjtGetChild(i).jjtAccept(this, data);
+        }
         return null;
     }
 
@@ -68,8 +86,11 @@ public class SymbolTableVisitor implements JmmVisitor {
     /**
      * */
     public Object visit(ASTELSE node, Object data) {
-        node.jjtGetChild(0).jjtAccept(this, data);
         System.out.println("Else visit fuction >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+        for (int i = 0; i < node.jjtGetNumChildren(); i++) {
+            System.out.println("Value :" + node.jjtGetChild(i).toString() + ": Unmodifed visit function 01>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");           
+            node.jjtGetChild(i).jjtAccept(this, data);
+        }
         return null;
     }
     /**
@@ -77,6 +98,10 @@ public class SymbolTableVisitor implements JmmVisitor {
      * */
     public Object visit(ASTSTATEMENT node, Object data) {
         node.jjtGetChild(0).jjtAccept(this, data);
+        for (int i = 0; i < node.jjtGetNumChildren(); i++) {
+            System.out.println("Value :" + node.jjtGetChild(i).toString() + ": Unmodifed visit function 01>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");           
+            node.jjtGetChild(i).jjtAccept(this, data);
+        }
         System.out.println("stmt>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
         return null;
     }
@@ -86,164 +111,296 @@ public class SymbolTableVisitor implements JmmVisitor {
     public Object visit(ASTCONDITION node, Object data) {
         node.jjtGetChild(0).jjtAccept(this, data);
         System.out.println("cond>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+        for (int i = 0; i < node.jjtGetNumChildren(); i++) {
+            System.out.println("Value :" + node.jjtGetChild(i).toString() + ": Unmodifed visit function 01>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");           
+            node.jjtGetChild(i).jjtAccept(this, data);
+        }
         return null;
     }
     /**
-     * //TODO
+     * Copy from the other branch
      */
     public Object visit(ASTIF node, Object data) {
-        node.jjtGetChild(0).jjtAccept(this, data);
         System.out.println("IF>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+     
+        SymbolTable currentSymbolTable = this.symbolTableContextManager.getCurrentSymbolTable();
+
+        node.jjtGetChild(0).jjtAccept(this, data); //if
+        currentSymbolTable.addChild(new SymbolTable("If", true));
+        this.symbolTableContextManager.pushFront(currentSymbolTable.popChild());
+
+        node.jjtGetChild(1).jjtAccept(this, data); //if
+
+        if (node.jjtGetNumChildren() == 3) //if else
+            node.jjtGetChild(2).jjtAccept(this, data);
+
+        this.symbolTableContextManager.popFront();
         return null;
+
     }
     /**
      * //TODO
      */
     public Object visit(ASTBooleanLiteral node, Object data) {
-        node.jjtGetChild(0).jjtAccept(this, data);
         System.out.println("bool>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+        for (int i = 0; i < node.jjtGetNumChildren(); i++) {
+            System.out.println("Value :" + node.jjtGetChild(i).toString() + ": Unmodifed visit function 01>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");           
+            node.jjtGetChild(i).jjtAccept(this, data);
+        }
         return null;
     }
     /**
      * //TODO
      */
     public Object visit(ASTIntegerLiteral node, Object data) {
-        node.jjtGetChild(0).jjtAccept(this, data);
         System.out.println("INItLit>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+        for (int i = 0; i < node.jjtGetNumChildren(); i++) {
+            System.out.println("Value :" + node.jjtGetChild(i).toString() + ": Unmodifed visit function 01>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");           
+            node.jjtGetChild(i).jjtAccept(this, data);
+        }
         return null;
     }
     /**
      * //TODO
      */
     public Object visit(ASTLiteral node, Object data) {
-        node.jjtGetChild(0).jjtAccept(this, data);
         System.out.println("lit>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+        for (int i = 0; i < node.jjtGetNumChildren(); i++) {
+            System.out.println("Value :" + node.jjtGetChild(i).toString() + ": Unmodifed visit function 01>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");           
+            node.jjtGetChild(i).jjtAccept(this, data);
+        }
         return null;
     }
     public Object visit(ASTPrimarySuffix node, Object data) {
-        node.jjtGetChild(0).jjtAccept(this, data);
         System.out.println("PrimSuff>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+        for (int i = 0; i < node.jjtGetNumChildren(); i++) {
+            System.out.println("Value :" + node.jjtGetChild(i).toString() + ": Unmodifed visit function 01>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");           
+            node.jjtGetChild(i).jjtAccept(this, data);
+        }
         return null;
     }
     public Object visit(ASTCastLookahead node, Object data) {
-        node.jjtGetChild(0).jjtAccept(this, data);
         System.out.println("CAStlook>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+        for (int i = 0; i < node.jjtGetNumChildren(); i++) {
+            System.out.println("Value :" + node.jjtGetChild(i).toString() + ": Unmodifed visit function 01>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");           
+            node.jjtGetChild(i).jjtAccept(this, data);
+        }
         return null;
     }
     public Object visit(ASTDIVMULT node, Object data) {
-        node.jjtGetChild(0).jjtAccept(this, data);
         System.out.println("DivMult>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+        for (int i = 0; i < node.jjtGetNumChildren(); i++) {
+            System.out.println("Value :" + node.jjtGetChild(i).toString() + ": Unmodifed visit function 01>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");           
+            node.jjtGetChild(i).jjtAccept(this, data);
+        }
         return null;
     }
 
     public Object visit(ASTADDSUB node, Object data) {
-        node.jjtGetChild(0).jjtAccept(this, data);
         System.out.println("AddSub>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+        for (int i = 0; i < node.jjtGetNumChildren(); i++) {
+            System.out.println("Value :" + node.jjtGetChild(i).toString() + ": Unmodifed visit function 01>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");           
+            node.jjtGetChild(i).jjtAccept(this, data);
+        }
         return null;
     }
 
     public Object visit(ASTMultiplicativeExpression node, Object data) {
-        node.jjtGetChild(0).jjtAccept(this, data);
         System.out.println("MultiplicativeExpr>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+        for (int i = 0; i < node.jjtGetNumChildren(); i++) {
+            System.out.println("Value :" + node.jjtGetChild(i).toString() + ": Unmodifed visit function 01>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");           
+            node.jjtGetChild(i).jjtAccept(this, data);
+        }
         return null;
     }
     public Object visit(ASTAdditiveExpression node, Object data) {
-        node.jjtGetChild(0).jjtAccept(this, data);
         System.out.println("MultiplicativeExpr>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+        for (int i = 0; i < node.jjtGetNumChildren(); i++) {
+            System.out.println("Value :" + node.jjtGetChild(i).toString() + ": Unmodifed visit function 01>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");           
+            node.jjtGetChild(i).jjtAccept(this, data);
+        }
         return null;
     }
     public Object visit(ASTLESSTHEN node, Object data) {
-        node.jjtGetChild(0).jjtAccept(this, data);
         System.out.println("LT>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+        for (int i = 0; i < node.jjtGetNumChildren(); i++) {
+            System.out.println("Value :" + node.jjtGetChild(i).toString() + ": Unmodifed visit function 01>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");           
+            node.jjtGetChild(i).jjtAccept(this, data);
+        }
         return null;
     }
     public Object visit(ASTASSIGNMENT node, Object data) {
-        node.jjtGetChild(0).jjtAccept(this, data);
+      
         System.out.println("Assign>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+        for (int i = 0; i < node.jjtGetNumChildren(); i++) {
+            System.out.println("Value :" + node.jjtGetChild(i).toString() + ": Unmodifed visit function 01>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");           
+            node.jjtGetChild(i).jjtAccept(this, data);
+        }
         return null;
     }
     public Object visit(ASTName node, Object data) {
-        node.jjtGetChild(0).jjtAccept(this, data);
-        System.out.println("Name>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+        
+        /*
+		 * Only doing this for nodes where getNameDeclaration is null this means
+		 * it's not a named node, i.e. Static reference or Annotation Doing this
+		 * for memory - TODO: Investigate if there is a valid memory concern or
+		 * not
+		 
+		if (node.getNameDeclaration() == null) {
+			// Skip these scenarios as there is no type to populate in these cases:
+			// 1) Parent is a PackageDeclaration, which is not a type
+			// 2) Parent is a ImportDeclaration, this is handled elsewhere.
+			if (!(node.jjtGetParent() instanceof ASTPackageDeclaration || node.jjtGetParent() instanceof ASTImportDeclaration)) {
+				String name = node.getImage();
+				if (name.indexOf('.') != -1) {
+					name = name.substring(0, name.indexOf('.'));
+				}
+				populateType(node, name);
+			}
+		} else {
+			// Carry over the type from the declaration
+			if (node.getNameDeclaration().getNode() instanceof TypeNode) {
+				node.setType(((TypeNode)node.getNameDeclaration().getNode()).getType());
+			}
+		}
+        return super.visit(node, data);
+        */
         return null;
     }
     public Object visit(ASTResultType node, Object data) {
-        node.jjtGetChild(0).jjtAccept(this, data);
         System.out.println("resultType>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+        for (int i = 0; i < node.jjtGetNumChildren(); i++) {
+            System.out.println("Value :" + node.jjtGetChild(i).toString() + ": Unmodifed visit function 01>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");           
+            node.jjtGetChild(i).jjtAccept(this, data);
+        }
         return null;
     }
     public Object visit(ASTPrimitiveType node, Object data) {
-        node.jjtGetChild(0).jjtAccept(this, data);
-        System.out.println("primType>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
-        return null;
+    /*
+        populateType(node, node.getImage());
+        return super.visit(node, data);
+    */
+    for (int i = 0; i < node.jjtGetNumChildren(); i++) {
+        System.out.println("Value :" + node.jjtGetChild(i).toString() + ": Unmodifed visit function 01>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");           
+        node.jjtGetChild(i).jjtAccept(this, data);
+    }
+    return null;
     }
     public Object visit(ASTType node, Object data) {
-        node.jjtGetChild(0).jjtAccept(this, data);
-        System.out.println("type>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+      /*  super.visit(node, data);
+		rollupTypeUnary(node);
+        return data;
+        */
+        for (int i = 0; i < node.jjtGetNumChildren(); i++) {
+            System.out.println("Value :" + node.jjtGetChild(i).toString() + ": Unmodifed visit function 01>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");           
+            node.jjtGetChild(i).jjtAccept(this, data);
+        }
         return null;
     }
     public Object visit(ASTConstructorDeclaration node, Object data) {
-        node.jjtGetChild(0).jjtAccept(this, data);
         System.out.println("constructorDecl>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+        for (int i = 0; i < node.jjtGetNumChildren(); i++) {
+            System.out.println("Value :" + node.jjtGetChild(i).toString() + ": Unmodifed visit function 01>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");           
+            node.jjtGetChild(i).jjtAccept(this, data);
+        }
         return null;
     }
     public Object visit(ASTMethodDeclarator node, Object data) {
-        node.jjtGetChild(0).jjtAccept(this, data);
-        
+        for (int i = 0; i < node.jjtGetNumChildren(); i++) {
+            String module = (String) node.jjtGetValue();
+      //        if()  
+               System.out.println("Value : " );
+               System.out.println( "##" +  node.jjtGetChild(i).toString());
+               System.out.println( "##" +  node.jjtGetChild(i).toString() + ": Unmodifed visit function >>>>>> AAA");
+           }
+     
         System.out.println("MethodDeclarator>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
         return null;
     }
 
     public Object visit(ASTMethodDeclaration node, Object data) {
-            for (int i = 0; i < node.jjtGetNumChildren(); i++) {
-                String module = (String) node.jjtGetValue();
-
-                   System.out.println("Value : " );
-                   System.out.println( "##" +  node.jjtGetChild(i).toString());
-                   System.out.println( "##" + module + ": Unmodifed visit function >>>>>> AAA");
-               }
-         
-            return null;
+        for (int i = 0; i < node.jjtGetNumChildren(); i++) {
+            System.out.println("Value :" + node.jjtGetChild(i).toString() + ": Unmodifed visit function 01>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");           
+            node.jjtGetChild(i).jjtAccept(this, data);
+        } 
+        return null;
     }
 
     public Object visit(ASTVariableDeclaratorId node, Object data) {
-        node.jjtGetChild(0).jjtAccept(this, data);
-        System.out.println("VarDeclID>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
-        return null;
+  
+        LinkedList<Element> elements = new LinkedList<Element>();
+
+        for (int i = 0; i < node.jjtGetNumChildren(); i++) {
+
+            Element element = (Element) node.jjtGetChild(i).jjtAccept(this, data);
+            element.setInitialized(true);
+
+            elements.add(element);
+        }
+        return elements;
     }
+
     public Object visit(ASTINIT node, Object data) {
         node.jjtGetChild(0).jjtAccept(this, data);
+        for (int i = 0; i < node.jjtGetNumChildren(); i++) {
+            System.out.println("Value :" + node.jjtGetChild(i).toString() + ": Unmodifed visit function 01>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");           
+            node.jjtGetChild(i).jjtAccept(this, data);
+        }
         System.out.println("INIT>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
         return null;
     }
     public Object visit(ASTMethodDeclarationLookahead node, Object data) {
         node.jjtGetChild(0).jjtAccept(this, data);
+        for (int i = 0; i < node.jjtGetNumChildren(); i++) {
+            System.out.println("Value :" + node.jjtGetChild(i).toString() + ": Unmodifed visit function 01>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");           
+            node.jjtGetChild(i).jjtAccept(this, data);
+        }
         System.out.println("MethoddeclLook>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
         return null;
     }
     public Object visit(ASTFD node, Object data) {
         node.jjtGetChild(0).jjtAccept(this, data);
+        for (int i = 0; i < node.jjtGetNumChildren(); i++) {
+            System.out.println("Value :" + node.jjtGetChild(i).toString() + ": Unmodifed visit function 01>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");           
+            node.jjtGetChild(i).jjtAccept(this, data);
+        }
         System.out.println("TFD>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
         return null;
     }
     public Object visit(ASTMETODO node, Object data) {
         node.jjtGetChild(0).jjtAccept(this, data);
+        for (int i = 0; i < node.jjtGetNumChildren(); i++) {
+            System.out.println("Value :" + node.jjtGetChild(i).toString() + ": Unmodifed visit function 01>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");           
+            node.jjtGetChild(i).jjtAccept(this, data);
+        }
         System.out.println("METODO>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
         return null;
     }
     public Object visit(ASTCONSTRUCTOR node, Object data) {
         node.jjtGetChild(0).jjtAccept(this, data);
+        for (int i = 0; i < node.jjtGetNumChildren(); i++) {
+            System.out.println("Value :" + node.jjtGetChild(i).toString() + ": Unmodifed visit function 01>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");           
+            node.jjtGetChild(i).jjtAccept(this, data);
+        }
         System.out.println("CONSTRUCTOR>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
         return null;
     }
     public Object visit(ASTNCD node, Object data) {
         node.jjtGetChild(0).jjtAccept(this, data);
+        for (int i = 0; i < node.jjtGetNumChildren(); i++) {
+            System.out.println("Value :" + node.jjtGetChild(i).toString() + ": Unmodifed visit function 01>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");           
+            node.jjtGetChild(i).jjtAccept(this, data);
+        }
         System.out.println("NCD>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
         return null;
     }
     public Object visit(ASTINICIALIZACAO node, Object data) {
         node.jjtGetChild(0).jjtAccept(this, data);
-            System.out.println("INICIALIZA>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+        for (int i = 0; i < node.jjtGetNumChildren(); i++) {
+            System.out.println("Value :" + node.jjtGetChild(i).toString() + ": Unmodifed visit function 01>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");           
+            node.jjtGetChild(i).jjtAccept(this, data);
+        }
+        System.out.println("INICIALIZA>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
         return null;
     }
     //    public Object visit(ASTDeclaration node, Object data) {
@@ -251,7 +408,7 @@ public class SymbolTableVisitor implements JmmVisitor {
 //
 //        boolean initialized = false;
 //        Type variableType = Type.UNDEFINED;
-//
+//  
 //        Element leftType = (Element) node.jjtGetChild(0).jjtAccept(this, data);
 //        Element rightType = null;
 //        if (node.jjtGetNumChildren() == 2) {
@@ -359,18 +516,25 @@ public class SymbolTableVisitor implements JmmVisitor {
     public Object visit(ASTRETURN node, Object data) {
         node.jjtGetChild(0).jjtAccept(this, data);
         System.out.println("return>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
-//        String nodeName = (String) node.value;
-//
-//        if (node.jjtGetNumChildren() == 1) {
-//            return new Element(nodeName, Type.ARRAY);
-//        } else {
-//            if (nodeName == null) {
-//                return new Element(nodeName, Type.UNDEFINED);
-//            } else {
-//                return new Element(nodeName, Type.INTEGER);
-//            }
-//        }
-        return null; //to delete
+        String nodeName = (String) node.value;
+        for (int i = 0; i < node.jjtGetNumChildren(); i++) {
+            String module = (String) node.jjtGetValue();
+
+               System.out.println("1Value : " );
+               System.out.println( "1##" +  node.jjtGetChild(i).toString());
+               System.out.println( "1##" + module + ": Unmodifed visit function >>>>>> AAA");
+           }
+     
+
+        if (node.jjtGetNumChildren() == 1) { //ultimo nó
+            return new Element(nodeName, Type.ARRAY);
+        } else {
+            if (nodeName == null) {
+                return new Element(nodeName, Type.UNDEFINED);
+            } else {
+                return new Element(nodeName, Type.INTEGER);
+            }
+        }
     }
 
 //    public Object visit(ASTParameters node, Object data) {
@@ -616,24 +780,6 @@ public class SymbolTableVisitor implements JmmVisitor {
         return null;
     }
 
-//    public Object visit(ASTIf node, Object data) {
-//
-//        SymbolTable currentSymbolTable = this.symbolTableContextManager.getCurrentSymbolTable();
-//
-//        node.jjtGetChild(0).jjtAccept(this, data);
-//
-//        currentSymbolTable.addChild(new SymbolTable("If", true));
-//        this.symbolTableContextManager.pushFront(currentSymbolTable.popChild());
-//
-//        node.jjtGetChild(1).jjtAccept(this, data);
-//
-//        if (node.jjtGetNumChildren() == 3)
-//            node.jjtGetChild(2).jjtAccept(this, data);
-//
-//        this.symbolTableContextManager.popFront();
-//
-//        return null;
-//    }
 
 //    public Object visit(ASTCall node, Object data) {
 //        return new Element("", Type.UNDEFINED, true);

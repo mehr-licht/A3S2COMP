@@ -3,7 +3,7 @@
 
 public
 class ASTVariableDeclaratorId extends SimpleNode {
-  public String value;
+  public String value = null;
   public int line;
   public boolean isArray = false;
 
