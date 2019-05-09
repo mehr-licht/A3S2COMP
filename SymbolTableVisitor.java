@@ -114,7 +114,6 @@ public class SymbolTableVisitor implements JmmVisitor {
 
   public Object visit(ASTMultiplicativeExpression node, Object data) {
     System.out.println(16);
-
     for (int i = 0; i < node.jjtGetNumChildren(); i++) {
       node.jjtGetChild(i).jjtAccept(this, data);
     }
@@ -122,11 +121,10 @@ public class SymbolTableVisitor implements JmmVisitor {
   }
 
   public Object visit(ASTAdditiveExpression node, Object data) {
-    System.out.println(17);
     for (int i = 0; i < node.jjtGetNumChildren(); i++) {
       node.jjtGetChild(i).jjtAccept(this, data);
     }
-    return null;
+      return null;
   }
 
   public Object visit(ASTLESSTHEN node, Object data) {
@@ -146,12 +144,12 @@ public class SymbolTableVisitor implements JmmVisitor {
   }
 
   public Object visit(ASTName node, Object data) {
-    for (int i = 0; i < node.jjtGetNumChildren(); i++) {
-      node.jjtGetChild(i).jjtAccept(this, data);
-    }
-      System.out.println(20);
-    Element element = new Element(node.value, Type.UNDEFINED);
-    return element;
+//    for (int i = 0; i < node.jjtGetNumChildren(); i++) {
+//      node.jjtGetChild(i).jjtAccept(this, data);
+//    }
+//      System.out.println(20);
+//    Element element = new Element(node.value, Type.UNDEFINED);
+    return null;
   }
 
   public Object visit(ASTResultType node, Object data) {
@@ -311,7 +309,9 @@ public class SymbolTableVisitor implements JmmVisitor {
   }
   /***/
   public Object visit(ASTPrimarySuffix node, Object data) {
-    node.jjtGetChild(0).jjtAccept(this, data);
+    for (int i = 0; i < node.jjtGetNumChildren(); i++) {
+      node.jjtGetChild(i).jjtAccept(this, data);
+    }
     return null;
   }
   /***/
