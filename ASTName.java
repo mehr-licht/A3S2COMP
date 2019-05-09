@@ -4,7 +4,9 @@
 public
 class ASTName extends SimpleNode {
   public int line;
+  public int line2;
   public String value;
+  public String value2;
 
   public ASTName(int id) {
     super(id);
@@ -15,7 +17,7 @@ class ASTName extends SimpleNode {
   }
 
 public String toString(){
-    return value;
+    return value + value2;
 }
   /** Accept the visitor. **/
   public Object jjtAccept(JmmVisitor visitor, Object data) {

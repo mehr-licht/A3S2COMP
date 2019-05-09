@@ -19,16 +19,22 @@ public class SymbolTable {
 
   private HashMap<String, Element> variables = new HashMap<String, Element>();
   private HashMap<String, Element> parameters = null;
+  private String return_type= null;
   private Element returnValue = null;
   private SymbolTable parent_symbol_table = null;
 
+
+  private LinkedList<Element> variablesv2;
   private LinkedList<SymbolTable> children_list_of_symbol_tables = new LinkedList<SymbolTable>();
 
 
   /** Constructores ********************************************* */
-  public SymbolTable() {}
+  public SymbolTable() {
+    this.variablesv2 = new LinkedList<Element>();
+  }
 
   public SymbolTable(String name, boolean isConditional) {
+    this.variablesv2 = new LinkedList<Element>();
     this.name = name;
     this.isConditional = isConditional;
   }
@@ -42,7 +48,21 @@ public class SymbolTable {
     addParameters(variables);
   }
 
+
   /** GETS **** */
+
+  public LinkedList<Element> getVariablesv2() {
+    return variablesv2;
+  }
+
+  public void setVariablesv2(LinkedList<Element> variablesv2) {
+    this.variablesv2 = variablesv2;
+  }
+
+
+  public String getReturn_type() {
+    return return_type;
+  }
   public SymbolTable getParent_symbol_table() {
     return parent_symbol_table;
   }
@@ -125,6 +145,9 @@ public class SymbolTable {
     variables.put(element.getName(), element);
   }
 
+  public void addVariablesV2(Element element) {
+    variablesv2.push(element);
+  }
   private void addParameters(LinkedList<Element> elements) {
     if (elements != null) {
       for (Element element : elements) parameters.put(element.getName(), element);
@@ -174,7 +197,9 @@ public class SymbolTable {
   public void setName(String name) {
     this.name = name;
   }
-
+  public void setReturn_type(String return_type) {
+    this.return_type = return_type;
+  }
   public void setLineNumbers() {
     for (SymbolTable symbolTable : children_list_of_symbol_tables) {
       symbolTable.setLineNumbers(0);

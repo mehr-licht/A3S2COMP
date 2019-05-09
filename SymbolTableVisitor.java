@@ -3,11 +3,7 @@ import java.util.LinkedList;
 
 public class SymbolTableVisitor implements JmmVisitor {
 
-
   public LinkedList<SymbolTable> list_symbol_tables;
-
-
-
 
   public SymbolTableVisitor() {
     this.list_symbol_tables = new LinkedList<SymbolTable>();
@@ -26,11 +22,12 @@ public class SymbolTableVisitor implements JmmVisitor {
 
   /**
    * Visita este nó, e faz o print de tudo
+   *
    * @param
    * @param
    */
   public Object visit(ASTStart node, Object data) {
-      node.jjtGetChild(0).jjtAccept(this, data);
+    node.jjtGetChild(0).jjtAccept(this, data);
     return null;
   }
 
@@ -64,8 +61,7 @@ public class SymbolTableVisitor implements JmmVisitor {
     return null;
   }
 
-
-  /***/
+  /** */
   public Object visit(ASTELSE node, Object data) {
     System.out.println(5);
     return null;
@@ -107,7 +103,7 @@ public class SymbolTableVisitor implements JmmVisitor {
     System.out.println(11);
 
     for (int i = 0; i < node.jjtGetNumChildren(); i++) {
-       node.jjtGetChild(i).jjtAccept(this, data);
+      node.jjtGetChild(i).jjtAccept(this, data);
     }
     return null;
   }
@@ -121,10 +117,11 @@ public class SymbolTableVisitor implements JmmVisitor {
   }
 
   public Object visit(ASTAdditiveExpression node, Object data) {
+    System.out.println(17);
     for (int i = 0; i < node.jjtGetNumChildren(); i++) {
       node.jjtGetChild(i).jjtAccept(this, data);
     }
-      return null;
+    return null;
   }
 
   public Object visit(ASTLESSTHEN node, Object data) {
@@ -144,11 +141,12 @@ public class SymbolTableVisitor implements JmmVisitor {
   }
 
   public Object visit(ASTName node, Object data) {
-//    for (int i = 0; i < node.jjtGetNumChildren(); i++) {
-//      node.jjtGetChild(i).jjtAccept(this, data);
-//    }
-//      System.out.println(20);
-//    Element element = new Element(node.value, Type.UNDEFINED);
+    System.out.println(20);
+    //    for (int i = 0; i < node.jjtGetNumChildren(); i++) {
+    //      node.jjtGetChild(i).jjtAccept(this, data);
+    //    }
+    //      System.out.println(20);
+    //    Element element = new Element(node.value, Type.UNDEFINED);
     return null;
   }
 
@@ -159,21 +157,32 @@ public class SymbolTableVisitor implements JmmVisitor {
     }
     return null;
   }
-  /***/
+  /** */
   public Object visit(ASTPrimitiveType node, Object data) {
     System.out.println(22 + " " + node.value);
     return null;
   }
 
-  /***/
+  /** */
   public Object visit(ASTType node, Object data) {
-    node.jjtGetChild(0).jjtAccept(this, data);
+    System.out.println(23);
+
+    if (node.parent instanceof ASTMethodDeclaration) {
+      Element element = new Element();
+      element.setType(node.jjtGetChild(0).toString());
+      this.list_symbol_tables.getFirst().addVariablesV2(element);
+
+    } else if (node.parent instanceof ASTResultType) {
+      this.list_symbol_tables.getFirst().setReturn_type(node.jjtGetChild(0).toString());
+      System.out.println("WARNING: Esta no elese do ASTTYPE");
+    }
+    //    node.jjtGetChild(0).jjtAccept(this, data);
+    //
     return null;
   }
 
-  /***/
-  public Object visit(ASTConstructorDeclaration node, Object data)
-  {
+  /** */
+  public Object visit(ASTConstructorDeclaration node, Object data) {
     for (int i = 0; i < node.jjtGetNumChildren(); i++) {
       node.jjtGetChild(i).jjtAccept(this, data);
     }
@@ -181,68 +190,97 @@ public class SymbolTableVisitor implements JmmVisitor {
     return null;
   }
 
-  /***/
+  /** */
   public Object visit(ASTMethodDeclarator node, Object data) {
-    System.out.println(25 + " " + node.value);
-
+    System.out.println(25);
+    SymbolTable st = this.list_symbol_tables.getFirst();
     String methodoName = node.value;
-
     if (methodoName != null) {
-      SymbolTable st = new SymbolTable();
       st.setName(methodoName);
-      st.setParent_symbol_table(this.list_symbol_tables.getFirst());
-      this.list_symbol_tables.push(st);
     }
-
-  for (int i = 0; i < node.jjtGetNumChildren(); i++) {
+    for (int i = 0; i < node.jjtGetNumChildren(); i++) {
       node.jjtGetChild(i).jjtAccept(this, data);
-  }
+    }
     return null;
   }
 
-  /**
-   * Tratamento das inicializações
-   * */
+  /** Tratamento das inicializações */
   public Object visit(ASTMethodDeclaration node, Object data) {
     System.out.println(26);
+    SymbolTable temp_st = new SymbolTable();
+    Element temp_element = new Element();
 
-    HashMap<String, Element> variablesTemp = new HashMap<>();
-    String tipoVariavel = new String();
-    String methodName = new String();
-    boolean um = false;
-    Element futureElement;
+    this.list_symbol_tables.push(temp_st);
 
     for (int i = 0; i < node.jjtGetNumChildren(); i++) {
 
-      // Tratamento das inicializacoes
-      if (node.jjtGetChild(i) instanceof ASTType) {
-        tipoVariavel = node.jjtGetChild(i).jjtGetChild(0).toString();
-      }
-      if (node.jjtGetChild(i) instanceof ASTVariableDeclaratorId) {
-        methodName = ((ASTVariableDeclaratorId) node.jjtGetChild(i)).value;
-        futureElement = new Element(methodName, Type.INTEGER, true);
-        variablesTemp.put(tipoVariavel, futureElement);
-      }
+      // Tratamento do caso especial Main
+      //      if (node.jjtGetChild(1).toString() == "main") {
+      //
+      //          if (node.jjtGetChild(i) instanceof ASTResultType) {
+      //            temp_st.setName( node.jjtGetChild(i).toString() );
+      //          }
+      //          if (node.jjtGetChild(i) instanceof ASTMethodDeclarator) {
+      //            temp_st.setName( node.jjtGetChild(i).toString() );
+      //          }
+      //          if (node.jjtGetChild(i) instanceof ASTType) {
+      //            temp_st.setReturn_type( node.jjtGetChild(i).toString() );
+      //          }
+      //          if (node.jjtGetChild(i) instanceof ASTVariableDeclaratorId) {
+      //
+      //         //   st__name = ((ASTVariableDeclaratorId) node.jjtGetChild(i)).value;
+      ////            futureElement = new Element(st__name, Type.INTEGER, true);
+      ////            future_variables_st.put(tipo_variavel, futureElement);
+      //          }
+      //
+      //
+      //      } else {
+      //
+      //          // Tratamento dos outros metodos
+      //          if (node.jjtGetChild(i) instanceof ASTResultType) {
+      //            temp_st.setReturn_type(
+      // node.jjtGetChild(i).jjtGetChild(0).jjtGetChild(0).toString() );
+      //          }
+      //
+      //          if (node.jjtGetChild(i) instanceof ASTType) {
+      //            temp_element.setType( node.jjtGetChild(i).jjtGetChild(0).toString()  );
+      //          }
+      //          if (node.jjtGetChild(i) instanceof ASTVariableDeclaratorId) {
+      //            temp_element.setName( ((ASTVariableDeclaratorId) node.jjtGetChild(i)).value );
+      //           //   future_variables_st.put(tipo_variavel, futureElement);
+      //          }
+      //
+      //
+      //      }
       node.jjtGetChild(i).jjtAccept(this, data);
     }
+    // this.list_symbol_tables.getFirst().setReturnValue(new Element(methodName,
+    // Type.valueOf(return_value_st)));
+
     return null;
   }
 
   public Object visit(ASTVariableDeclaratorId node, Object data) {
-    System.out.println(27);
 
-    LinkedList<Element> elements = new LinkedList<Element>();
+    if (node.parent instanceof ASTMethodDeclaration) {
 
-    for (int i = 0; i < node.jjtGetNumChildren(); i++) {
+      this.list_symbol_tables.getFirst().getVariablesv2().getFirst().setName(node.value);
 
-      Element element = (Element) node.jjtGetChild(i).jjtAccept(this, data);
-      element.setInitialized(true);
-
-      elements.add(element);
+      if (node.isArray) {
+          this.list_symbol_tables.getFirst().getVariablesv2().getFirst().setArray(true);
+      }
     }
-    return elements;
-  }
 
+
+    if (node.parent instanceof ASTUnmodifiedClassDeclaration) {
+      System.out.println("Warning not sure why this");
+      //TODO DISCUSS
+    }
+    //    Element var = new Element(node.value);
+    //    this.list_symbol_tables.getFirst().addVariables();
+
+    return null;
+  }
 
   @Override
   public Object visit(ASTMethodDeclarationLookahead node, Object data) {
@@ -256,8 +294,7 @@ public class SymbolTableVisitor implements JmmVisitor {
   }
 
   /** */
-  public Object visit(ASTINIT node, Object data)
-  {
+  public Object visit(ASTINIT node, Object data) {
     System.out.println(29);
 
     return null;
@@ -268,8 +305,7 @@ public class SymbolTableVisitor implements JmmVisitor {
     return null;
   }
   /** */
-  public Object visit(ASTMETODO node, Object data)
-  {
+  public Object visit(ASTMETODO node, Object data) {
     System.out.println(31);
 
     return null;
@@ -289,78 +325,79 @@ public class SymbolTableVisitor implements JmmVisitor {
     //           }
     //
 
-    if (node.jjtGetNumChildren() == 1) { // ultimo nó
-      return new Element(nodeName, Type.ARRAY);
-    } else {
-      if (nodeName == null) {
-        return new Element(nodeName, Type.UNDEFINED);
-      } else {
-        return new Element(nodeName, Type.INTEGER);
-      }
-    }
+    //    if (node.jjtGetNumChildren() == 1) { // ultimo nó
+    //      return new Element(nodeName, Type.ARRAY);
+    //    } else {
+    //      if (nodeName == null) {
+    //        return new Element(nodeName, Type.UNDEFINED);
+    //      } else {
+    //        return new Element(nodeName, Type.INTEGER);
+    //      }
+    //    }
+    return null;
   }
   /**
    * only for overidding
+   *
    * @param
    * @param
    */
   public Object visit(ASTClassBodyDeclaration node, Object data) {
     return null;
   }
-  /***/
+
+  /** */
   public Object visit(ASTPrimarySuffix node, Object data) {
     for (int i = 0; i < node.jjtGetNumChildren(); i++) {
       node.jjtGetChild(i).jjtAccept(this, data);
     }
     return null;
   }
-  /***/
+  /** */
   public Object visit(ASTCastLookahead node, Object data) {
     return null;
   }
 
-  /***/
+  /** */
   public Object visit(ASTDIVMULT node, Object data) {
     return null;
   }
 
-  /***/
+  /** */
   public Object visit(ASTADDSUB node, Object data) {
     return null;
   }
-  /***/
+  /** */
   public Object visit(ASTBooleanLiteral node, Object data) {
     return null;
   }
-  /***/
+  /** */
   public Object visit(ASTIntegerLiteral node, Object data) {
     return null;
   }
-  /***/
+  /** */
   public Object visit(ASTWHILE node, Object data) {
     return null;
   }
-  /***/
+  /** */
   public Object visit(ASTCONSTRUCTOR node, Object data) {
     return null;
   }
-  /***/
+  /** */
   public Object visit(ASTNCD node, Object data) {
     return null;
   }
-  /***/
+  /** */
   public Object visit(ASTINICIALIZACAO node, Object data) {
     return null;
   }
-  /***/
+  /** */
   public Object visit(ASTBODY node, Object data) {
     return null;
   }
 }
 
-
-/**      NOTES           ********/
-
+/** NOTES ******* */
 
   //    public Object visit(ASTDeclaration node, Object data) {
   //        SymbolTable currentSymbolTable = this.symbolTableContextManager.getCurrentSymbolTable();
@@ -721,4 +758,3 @@ public class SymbolTableVisitor implements JmmVisitor {
   //
   //        return null;
   //    }
-

@@ -347,7 +347,6 @@ void PrimitiveType() :
   t=<BOOLEAN> {jjtThis.value = t.image; jjtThis.line = t.beginLine;}
 |
   t=<INT> {jjtThis.value = t.image; jjtThis.line = t.beginLine;}
-
 }
 
 void ResultType():
@@ -362,7 +361,7 @@ void Name() :
 {Token t,t1;}
 {
   t=<IDENTIFIER>  {jjtThis.value = t.image; jjtThis.line = t.beginLine;}
-   ( LOOKAHEAD(2) <DOT> t1=<IDENTIFIER>   {jjtThis.value = t1.image; jjtThis.line = t1.beginLine;})*
+   ( LOOKAHEAD(2) <DOT> t1=<IDENTIFIER>   {jjtThis.value2 = t1.image; jjtThis.line   = t1.beginLine;})*
 
 }
 /*
