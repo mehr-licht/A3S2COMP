@@ -12,6 +12,8 @@ public class Element {
     private Element returnValue;
     private int varnum = -1;
 
+
+    /**Constructores*/
     public Element(String name, Type type) {
         this.name = name;
         this.type = type;
@@ -44,20 +46,39 @@ public class Element {
         this.arguments = arguments;
     }
 
-
+    /****         SETS  *******/
+    public void setVarnum(int varnum) {
+        this.varnum = varnum;
+    }
+    public void setValue(Object value) {
+        this.value = value;
+    }
+    public void setName(String name) {
+        this.name = name;
+    }
+    public void setArguments(LinkedList<Element> arguments) {
+        this.arguments = arguments;
+    }
+    public void setReturnValue(Element returnValue) {
+        this.returnValue = returnValue;
+    }
+    public void setReturn(Element e) {
+        returnValue = e;
+    }
+    /***/
     public String getName() {
         return name;
     }
-
+    public Element getReturnValue() {
+        return returnValue;
+    }
     public Type getType() {
         return type;
     }
 
-
     public String getTypeStr() {
         return Type.getTypeStr(type);
     }
-
     public boolean isInitialized() {
         return isInitialized;
     }
@@ -69,7 +90,6 @@ public class Element {
         }
         return stringBuilder.toString();
     }
-
 
     public String getJasminType() {
         if (type == Type.ARRAY) {
@@ -90,15 +110,6 @@ public class Element {
         return varnum;
     }
 
-    public void setVarnum(int varnum) {
-        this.varnum = varnum;
-    }
-
-
-    public void setValue(Object value) {
-        this.value = value;
-    }
-
     public String getJasminReturnValueType(){
         if(returnValue == null || returnValue.name == null){
             return "V";
@@ -108,10 +119,6 @@ public class Element {
 
     public Element getReturn() {
         return returnValue;
-    }
-
-    public void setReturn(Element e) {
-        returnValue = e;
     }
 
     public void addArgument(Element e) {

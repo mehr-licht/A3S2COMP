@@ -18,7 +18,8 @@ class ASTADDSUB extends SimpleNode {
   }
   /** Accept the visitor. **/
   public Object jjtAccept(JmmVisitor visitor, Object data) {
-    return visitor.visit(this, data);
+
+      return visitor.visit(this, data);
   }
 }
 /* JavaCC - OriginalChecksum=d697e6fe9b484f3f6af7114a454fc884 (do not edit this line) */

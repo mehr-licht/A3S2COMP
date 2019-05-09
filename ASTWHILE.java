@@ -13,7 +13,6 @@ class ASTWHILE extends SimpleNode {
 
   /** Accept the visitor. **/
   public Object jjtAccept(JmmVisitor visitor, Object data) {
-    System.out.println("While_accept>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
     return visitor.visit(this, data);
 
   }

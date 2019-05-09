@@ -1,25 +1,45 @@
 import java.util.LinkedList;
 
 public class SymbolTableContextManager {
-    private LinkedList<SymbolTable> contextSwitcher = new LinkedList<SymbolTable>();
 
+    private LinkedList<SymbolTable> global_symbol_table = new LinkedList<SymbolTable>();
+
+    /**
+     * CONSTRUCTOR
+     * @param
+     * */
     public SymbolTableContextManager(SymbolTable symbolTable) {
-        System.out.println("construct20   - SymbolTableContextManager >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
-        this.contextSwitcher.push(symbolTable);
+        this.global_symbol_table.push(symbolTable);
     }
 
+    /**
+     * Returns the first element in this list. READ ONLY
+     * @return SymbolTable the first ST from the list
+     * */
     public SymbolTable getCurrentSymbolTable(){
-        return this.contextSwitcher.getFirst();
+        return this.global_symbol_table.getFirst();
     }
 
+    /**
+     * Pushes an element onto the stack represented by this list. javaDocs
+     * Inserts in the begging
+     * @param
+     * */
     public void pushFront(SymbolTable symbolTable){
-        this.contextSwitcher.push(symbolTable);
+        this.global_symbol_table.push(symbolTable);
     }
 
-    public SymbolTable popFront(){ return this.contextSwitcher.removeFirst();   }
+    /**
+     * Removes and returns the first element from this list. READ & DELETE
+     * @return ST
+     * */
+    public SymbolTable popFront(){
+        return this.global_symbol_table.removeFirst();
+    }
 
-    public SymbolTable getRootSymbolTable(){
-        return this.contextSwitcher.getLast();
+  /** Returns the last element in this list. */
+  public SymbolTable getRootSymbolTable() {
+        return this.global_symbol_table.getLast();
     }
 
 }

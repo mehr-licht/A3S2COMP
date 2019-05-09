@@ -12,9 +12,10 @@ public enum Type {
         typeHashMap.put(INTEGER, "Integer");
         typeHashMap.put(ARRAY, "Array");
         typeHashMap.put(FUNCTION, "Function");
-        typeHashMap.put(FUNCTION, "Class");
+        typeHashMap.put(CLASS, "Class");
         
     }
+
     public static String getTypeStr(Type type){
         return typeHashMap.get(type);
     }
