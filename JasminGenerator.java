@@ -1,3 +1,5 @@
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.PrintWriter;
 import java.util.LinkedList;
 
@@ -20,19 +22,31 @@ public class JasminGenerator extends Global_Symbol_Table_List{
      * */
     public JasminGenerator(LinkedList<SymbolTable> list_symbol_tables){
         this.list_symbol_tables =  list_symbol_tables;
+
+        this.filepath = "_jasmim_generated.j";
+
+        try {
+            writer = new PrintWriter(new FileOutputStream("_jasmim_generated.j"),true);
+            writer.println(".class public ");
+            writer.println(".invoke");
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        System.out.println("JasmimGenerator ON ");
     }
 
-    public JasminGenerator(String fileName, SymbolTable symbolTable) {
-//        this.globalSymbolTableList = symbolTable.getSymbolTableContextManager();
-//        this.filepath = fileName.replace(".yal", "_generated.j");
+//    public JasminGenerator(String fileName, SymbolTable symbolTable) {
+////        this.globalSymbolTableList = symbolTable.getSymbolTableContextManager();
+//        this.filepath = "_Jasmim_generated.j";
+//
 //        try {
 //            writer = new PrintWriter(this.filepath);
 //        } catch (FileNotFoundException e) {
 //            e.printStackTrace();
 //        }
 //
-//        this.jasminVisitor = new JasminVisitor(this);
-    }
+////        this.jasminVisitor = new JasminVisitor(this);
+//    }
 
     public String getFilepath() {
         return filepath;

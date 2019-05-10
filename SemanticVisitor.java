@@ -2,7 +2,9 @@ import java.util.LinkedList;
 
 public class SemanticVisitor extends SemanticManager implements JmmVisitor {
 
-
+/***
+ * Semantic rules for expressions, invocation of functions
+ * */
 
     public SemanticVisitor(LinkedList<SymbolTable> list_symbol_tables ) {
         this.list_symbol_tables = list_symbol_tables;
@@ -10,6 +12,7 @@ public class SemanticVisitor extends SemanticManager implements JmmVisitor {
 
     public Object visit(ASTStart node, Object data) {
         System.out.println("HElllo WORLD from Smenantic");
+        System.out.println(this.list_symbol_tables.getFirst().getName());
         node.jjtGetChild(0).jjtAccept(this, data);
         return null;
     }

@@ -7,8 +7,6 @@ public class JasminVisitor extends JasminGenerator implements JmmVisitor {
 
     public JasminVisitor(LinkedList<SymbolTable> list_symbol_tables) {
         super(list_symbol_tables);
-
-
     }
 
     @Override
@@ -19,7 +17,7 @@ public class JasminVisitor extends JasminGenerator implements JmmVisitor {
 
     @Override
     public Object visit(ASTStart node, Object data) {
-        System.out.println("HElllo WORLD");
+        System.out.println("HElllo WORLD - Jasmim");
         node.jjtGetChild(0).jjtAccept(this, null);
         return null;
     }
