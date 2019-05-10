@@ -1,23 +1,15 @@
 import java.util.LinkedList;
 
-public class SemanticVisitor implements JmmVisitor {
+public class SemanticVisitor extends SemanticManager implements JmmVisitor {
 
-    SymbolTableContextManager symbolTableContextManager;
 
-    public SemanticVisitor(SymbolTableContextManager symbolTableContextManager) {
-        this.symbolTableContextManager = symbolTableContextManager;
 
+    public SemanticVisitor(LinkedList<SymbolTable> list_symbol_tables ) {
+        this.list_symbol_tables = list_symbol_tables;
     }
 
-//    public Object visit(ASTerror_skipto node, Object data) {
-//        return null;
-//    }
-//
-//    public Object visit(ASTerror_skipto_andEat node, Object data) {
-//        return null;
-//    }
-
     public Object visit(ASTStart node, Object data) {
+        System.out.println("HElllo WORLD from Smenantic");
         node.jjtGetChild(0).jjtAccept(this, data);
         return null;
     }
@@ -37,9 +29,6 @@ public class SemanticVisitor implements JmmVisitor {
         //return super.visit(node, data); new Element
         return null;
     }
-    /**
-     * //TODO
-     * */
     public Object visit(ASTBODY node, Object data) {
         return null;
     }
@@ -50,9 +39,6 @@ public class SemanticVisitor implements JmmVisitor {
     }
 
 
-    //TODO
-    /**
-     * */
     public Object visit(ASTELSE node, Object data) {
         return null;
     }
@@ -62,40 +48,20 @@ public class SemanticVisitor implements JmmVisitor {
         return null;
     }
 
-    /**
-     * //TODO
-     * */
     public Object visit(ASTSTATEMENT node, Object data) {
         return null;
     }
-    /**
-     * //TODO
-     */
     public Object visit(ASTCONDITION node, Object data) {
         return null;
     }
-    /**
-     * Copy from the other branch
-     */
     public Object visit(ASTIF node, Object data) {
         return null;
     }
-    /**
-     * //TODO
-     */
     public Object visit(ASTIntegerLiteral node, Object data) {
         return null;
     }
-    /**
-     * //TODO
-     */
 
     public Object visit(ASTLiteral node, Object data) {
-        return null;
-    }
-
-    @Override
-    public Object visit(ASTBooleanLiteral node, Object data) {
         return null;
     }
 
@@ -122,10 +88,43 @@ public class SemanticVisitor implements JmmVisitor {
     public Object visit(ASTLESSTHEN node, Object data) {
         return null;
     }
-    public Object visit(ASTASSIGNMENT node, Object data) {
+    /**
+     * Exemplo dos acetatos on comments
+     * */
+    public Object visit(ASTBooleanLiteral node, Object data) {
+    //return DataType.Boolean;
         return null;
     }
+
+    /**
+     * Exemplo do acetates em comments caso Assignment
+     * */
+    public Object visit(ASTASSIGNMENT node, Object data) {
+        // Check identifier
+        // DataType identType = node.jjtGetChild(0).visit(this,data);
+        // if(identType == DataType.Error)
+        //  return DataType.Error;
+        //check expression
+        //DataType exprType = node.jjtGetChild(1).visit(this,data);
+        //if(identType != exprType)
+        //{println("Error ASTAssignement");
+        //    return DataType.Error;
+        // }
+        // return DataType.SKIP;
+        return null;
+    }
+    /**
+     * Exemplo dos acetatos em comments Casos do Identifier()
+     * */
     public Object visit(ASTName node, Object data) {
+        //String name = (String)node.jjtGetValue();
+        //Consult SymbolTable
+        //if(nameExists()){
+        //  return DataTye
+        // }else{
+        // println("Error ASTIdentifier:  " +  name); )
+        // return DataType.Error;
+        // }
         return null;
     }
     public Object visit(ASTResultType node, Object data) {
@@ -173,7 +172,6 @@ public class SemanticVisitor implements JmmVisitor {
     public Object visit(ASTINICIALIZACAO node, Object data) {
         return null;
     }
-
     public Object visit(SimpleNode node, Object data) {
         return null;
     }
@@ -209,12 +207,12 @@ public class SemanticVisitor implements JmmVisitor {
 //    }
 //
 //    public Object visit(ASTFunction node, Object data) {
-//        SymbolTable currenSymbolTable = this.symbolTableContextManager.getCurrentSymbolTable();
-//        this.symbolTableContextManager.pushFront(currenSymbolTable.popChild());
+//        SymbolTable currenSymbolTable = this.globalSymbolTableList.get_Top_Stack();
+//        this.globalSymbolTableList.insert_Top_Stack_push(currenSymbolTable.popChild());
 //
 //        node.jjtGetChild(2).jjtAccept(this, data);
 //
-//        this.symbolTableContextManager.popFront();
+//        this.globalSymbolTableList.popFront();
 //
 //        return null;
 //
@@ -230,7 +228,7 @@ public class SemanticVisitor implements JmmVisitor {
 //
 //    public Object visit(ASTVariable node, Object data) {
 //
-//        return (Element) this.symbolTableContextManager.getCurrentSymbolTable().getElement((String) node.jjtGetValue());
+//        return (Element) this.globalSymbolTableList.get_Top_Stack().getElement((String) node.jjtGetValue());
 //    }
 //
 //    public Object visit(ASTArrayElement node, Object data) {
@@ -279,7 +277,7 @@ public class SemanticVisitor implements JmmVisitor {
 //    }
 //
 //    public Object visit(ASTAccess node, Object data) {
-//        return this.symbolTableContextManager.getCurrentSymbolTable().getElement((String) node.value);
+//        return this.globalSymbolTableList.get_Top_Stack().getElement((String) node.value);
 //    }
 //
 //    public Object visit(ASTTerm node, Object data) {
@@ -306,15 +304,15 @@ public class SemanticVisitor implements JmmVisitor {
 //
 //
 //
-//        SymbolTable currenSymbolTable = this.symbolTableContextManager.getCurrentSymbolTable();
+//        SymbolTable currenSymbolTable = this.globalSymbolTableList.get_Top_Stack();
 //
 //        node.jjtGetChild(0).jjtAccept(this, data);
 //
-//        this.symbolTableContextManager.pushFront(currenSymbolTable.popChild());
+//        this.globalSymbolTableList.insert_Top_Stack_push(currenSymbolTable.popChild());
 //
 //        node.jjtGetChild(1).jjtAccept(this, data);
 //
-//        this.symbolTableContextManager.popFront();
+//        this.globalSymbolTableList.popFront();
 //
 //        return null;
 //    }
@@ -322,22 +320,22 @@ public class SemanticVisitor implements JmmVisitor {
 //    public Object visit(ASTIf node, Object data) {
 //
 //
-//        SymbolTable currenSymbolTable = this.symbolTableContextManager.getCurrentSymbolTable();
+//        SymbolTable currenSymbolTable = this.globalSymbolTableList.get_Top_Stack();
 //        node.jjtGetChild(0).jjtAccept(this, data);
 //
-//        this.symbolTableContextManager.pushFront(currenSymbolTable.popChild());
+//        this.globalSymbolTableList.insert_Top_Stack_push(currenSymbolTable.popChild());
 //
 //        node.jjtGetChild(1).jjtAccept(this, data);
 //
-//        this.symbolTableContextManager.popFront();
+//        this.globalSymbolTableList.popFront();
 //
 //        if(node.jjtGetNumChildren() == 3){
 //
-//            this.symbolTableContextManager.pushFront(currenSymbolTable.popChild());
+//            this.globalSymbolTableList.insert_Top_Stack_push(currenSymbolTable.popChild());
 //
 //            node.jjtGetChild(2).jjtAccept(this, data);
 //
-//            this.symbolTableContextManager.popFront();
+//            this.globalSymbolTableList.popFront();
 //        }
 //        return null;
 //    }
@@ -346,7 +344,7 @@ public class SemanticVisitor implements JmmVisitor {
 //
 //        if (node.jjtGetNumChildren() == 1) {
 //
-//            Element function = this.symbolTableContextManager.getRootSymbolTable().getElement((String) node.jjtGetValue());
+//            Element function = this.globalSymbolTableList.getRootSymbolTable().getElement((String) node.jjtGetValue());
 //
 //            if(function == null){
 //                SemanticManager.addError(node.line,

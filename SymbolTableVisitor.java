@@ -1,21 +1,20 @@
-import java.util.HashMap;
 import java.util.LinkedList;
-import java.util.ListIterator;
 
-public class SymbolTableVisitor implements JmmVisitor {
+public class SymbolTableVisitor extends Global_Symbol_Table_List implements JmmVisitor {
 
-  public LinkedList<SymbolTable> list_symbol_tables;
+
 
   public SymbolTableVisitor() {
     this.list_symbol_tables = new LinkedList<SymbolTable>();
   }
 
   /** Usa este constructor */
-  public SymbolTableVisitor(SymbolTableContextManager symbolTableContextManager) {
+  public SymbolTableVisitor(Global_Symbol_Table_List globalSymbolTableList) {
     this.list_symbol_tables = new LinkedList<SymbolTable>();
   }
 
-  /** */
+  /***/
+  @Override
   public Object visit(SimpleNode node, Object data) {
     System.out.println(1);
     return null;
@@ -27,6 +26,7 @@ public class SymbolTableVisitor implements JmmVisitor {
    * @param
    * @param
    */
+  @Override
   public Object visit(ASTStart node, Object data) {
     node.jjtGetChild(0).jjtAccept(this, data);
     return null;
@@ -38,6 +38,7 @@ public class SymbolTableVisitor implements JmmVisitor {
    * @param
    * @param
    */
+  @Override
   public Object visit(ASTUnmodifiedClassDeclaration node, Object data) {
     System.out.println(4 + " " + node.value);
     SymbolTable st = new SymbolTable();
@@ -52,7 +53,7 @@ public class SymbolTableVisitor implements JmmVisitor {
           "Could not find class "
               + st.getName()
               + ", due to: "
-              + e.getClass().getName()
+               + e.getClass().getName()
               + ": "
               + e.getMessage());
     }
@@ -62,12 +63,14 @@ public class SymbolTableVisitor implements JmmVisitor {
     return null;
   }
 
-  /** */
+  /***/
+  @Override
   public Object visit(ASTELSE node, Object data) {
     System.out.println(5);
     return null;
   }
   /** //TODO */
+  @Override
   public Object visit(ASTSTATEMENT node, Object data) {
     System.out.println(6);
     node.jjtGetChild(0).jjtAccept(this, data);
@@ -77,6 +80,7 @@ public class SymbolTableVisitor implements JmmVisitor {
     return null;
   }
   /** //TODO */
+  @Override
   public Object visit(ASTCONDITION node, Object data) {
     System.out.println(7);
     node.jjtGetChild(0).jjtAccept(this, data);
@@ -86,6 +90,7 @@ public class SymbolTableVisitor implements JmmVisitor {
     return null;
   }
   /** Copy from the other branch */
+  @Override
   public Object visit(ASTIF node, Object data) {
     System.out.println(8);
 
@@ -100,6 +105,7 @@ public class SymbolTableVisitor implements JmmVisitor {
   }
 
   /** //TODO */
+  @Override
   public Object visit(ASTLiteral node, Object data) {
     System.out.println(11);
 
@@ -108,7 +114,7 @@ public class SymbolTableVisitor implements JmmVisitor {
     }
     return null;
   }
-
+  @Override
   public Object visit(ASTMultiplicativeExpression node, Object data) {
     System.out.println(16);
     for (int i = 0; i < node.jjtGetNumChildren(); i++) {
@@ -117,6 +123,7 @@ public class SymbolTableVisitor implements JmmVisitor {
     return null;
   }
 
+  @Override
   public Object visit(ASTAdditiveExpression node, Object data) {
     System.out.println(17);
     for (int i = 0; i < node.jjtGetNumChildren(); i++) {
@@ -124,7 +131,7 @@ public class SymbolTableVisitor implements JmmVisitor {
     }
     return null;
   }
-
+  @Override
   public Object visit(ASTLESSTHEN node, Object data) {
     System.out.println(18);
     for (int i = 0; i < node.jjtGetNumChildren(); i++) {
@@ -178,6 +185,7 @@ public class SymbolTableVisitor implements JmmVisitor {
   }
 
   /** */
+  @Override
   public Object visit(ASTType node, Object data) {
     System.out.println(23);
 
@@ -196,6 +204,7 @@ public class SymbolTableVisitor implements JmmVisitor {
   }
 
   /** */
+  @Override
   public Object visit(ASTConstructorDeclaration node, Object data) {
     for (int i = 0; i < node.jjtGetNumChildren(); i++) {
       node.jjtGetChild(i).jjtAccept(this, data);
@@ -205,6 +214,7 @@ public class SymbolTableVisitor implements JmmVisitor {
   }
 
   /** */
+  @Override
   public Object visit(ASTMethodDeclarator node, Object data) {
     System.out.println(25);
     SymbolTable st = this.list_symbol_tables.getFirst();
@@ -219,6 +229,7 @@ public class SymbolTableVisitor implements JmmVisitor {
   }
 
   /** Tratamento das inicializações */
+  @Override
   public Object visit(ASTMethodDeclaration node, Object data) {
     System.out.println(26);
     SymbolTable temp_st = new SymbolTable();
@@ -274,6 +285,7 @@ public class SymbolTableVisitor implements JmmVisitor {
     return null;
   }
 
+  @Override
   public Object visit(ASTVariableDeclaratorId node, Object data) {
 
     if (node.parent instanceof ASTMethodDeclaration) {
@@ -308,23 +320,28 @@ public class SymbolTableVisitor implements JmmVisitor {
   }
 
   /** */
+  @Override
   public Object visit(ASTINIT node, Object data) {
     System.out.println(29);
 
     return null;
   }
+
   /** */
+  @Override
   public Object visit(ASTFD node, Object data) {
     System.out.println(30);
     return null;
   }
   /** */
+  @Override
   public Object visit(ASTMETODO node, Object data) {
     System.out.println(31);
 
     return null;
   }
 
+  @Override
   public Object visit(ASTRETURN node, Object data) {
     System.out.println(36);
 
@@ -352,7 +369,6 @@ public class SymbolTableVisitor implements JmmVisitor {
   }
   /**
    * only for overidding
-   *
    * @param
    * @param
    */
@@ -361,6 +377,7 @@ public class SymbolTableVisitor implements JmmVisitor {
   }
 
   /** */
+  @Override
   public Object visit(ASTPrimarySuffix node, Object data) {
     for (int i = 0; i < node.jjtGetNumChildren(); i++) {
       node.jjtGetChild(i).jjtAccept(this, data);
@@ -368,20 +385,24 @@ public class SymbolTableVisitor implements JmmVisitor {
     return null;
   }
   /** */
+  @Override
   public Object visit(ASTCastLookahead node, Object data) {
     return null;
   }
 
   /** */
+  @Override
   public Object visit(ASTDIVMULT node, Object data) {
     return null;
   }
 
   /** */
+  @Override
   public Object visit(ASTADDSUB node, Object data) {
     return null;
   }
   /** */
+  @Override
   public Object visit(ASTBooleanLiteral node, Object data) {
     return null;
   }
@@ -390,22 +411,27 @@ public class SymbolTableVisitor implements JmmVisitor {
     return null;
   }
   /** */
+  @Override
   public Object visit(ASTWHILE node, Object data) {
     return null;
   }
   /** */
+  @Override
   public Object visit(ASTCONSTRUCTOR node, Object data) {
     return null;
   }
   /** */
+  @Override
   public Object visit(ASTNCD node, Object data) {
     return null;
   }
   /** */
+  @Override
   public Object visit(ASTINICIALIZACAO node, Object data) {
     return null;
   }
   /** */
+  @Override
   public Object visit(ASTBODY node, Object data) {
     return null;
   }
@@ -414,7 +440,7 @@ public class SymbolTableVisitor implements JmmVisitor {
 /** NOTES ******* */
 
   //    public Object visit(ASTDeclaration node, Object data) {
-  //        SymbolTable currentSymbolTable = this.symbolTableContextManager.getCurrentSymbolTable();
+  //        SymbolTable currentSymbolTable = this.globalSymbolTableList.get_Top_Stack();
   //
   //        boolean initialized = false;
   //        Type variableType = Type.UNDEFINED;
@@ -511,12 +537,12 @@ public class SymbolTableVisitor implements JmmVisitor {
   //                }
   //            }
   //        }
-  //        SymbolTable currentST = this.symbolTableContextManager.getCurrentSymbolTable();
+  //        SymbolTable currentST = this.globalSymbolTableList.get_Top_Stack();
   //
   //        currentST.addVariables(function);
   //        currentST.addChild(new SymbolTable(functionName, returnValue, parameters));
   //
-  //        this.symbolTableContextManager.pushFront(currentST.popChild());
+  //        this.globalSymbolTableList.insert_Top_Stack_push(currentST.popChild());
   //        node.jjtGetChild(2).jjtAccept(this, data);
   //
   //
@@ -525,7 +551,7 @@ public class SymbolTableVisitor implements JmmVisitor {
   // return a value!");
   //        }*/
   //
-  //        this.symbolTableContextManager.popFront();
+  //        this.globalSymbolTableList.popFront();
   //        return null;
   //    }
   //    public Object visit(ASTParameters node, Object data) {
@@ -586,12 +612,12 @@ public class SymbolTableVisitor implements JmmVisitor {
   //
   //        if (leftElement.getType() == Type.UNDEFINED && !leftElement.isInitialized()) {
   //            leftElement.setType(rightElement.getType());
-  //            this.symbolTableContextManager.getCurrentSymbolTable().addVariables(leftElement);
+  //            this.globalSymbolTableList.get_Top_Stack().addVariables(leftElement);
   //
   //        } else if (leftElement.getType() == Type.FUNCTION) {
   //
   //            leftElement = new Element(leftElement.getName(), rightElement.getType());
-  //            this.symbolTableContextManager.getCurrentSymbolTable().addVariables(leftElement);
+  //            this.globalSymbolTableList.get_Top_Stack().addVariables(leftElement);
   //        }
   //
   //        if (!rightElement.isInitialized()) {
@@ -628,7 +654,7 @@ public class SymbolTableVisitor implements JmmVisitor {
   //        if (!leftElement.isInitialized()) {
   //
   //            if
-  // (this.symbolTableContextManager.getCurrentSymbolTable().getElement(leftElement.getName()) ==
+  // (this.globalSymbolTableList.get_Top_Stack().getElement(leftElement.getName()) ==
   // null) {
   ////                SemanticManager.addError(node.line,
   ////                        "Error: Left side variable: " + leftElement.getName() + " is
@@ -645,7 +671,7 @@ public class SymbolTableVisitor implements JmmVisitor {
   //        if (!rightElement.isInitialized()) {
   //
   //            if
-  // (this.symbolTableContextManager.getCurrentSymbolTable().getElement(rightElement.getName()) ==
+  // (this.globalSymbolTableList.get_Top_Stack().getElement(rightElement.getName()) ==
   // null) {
   ////                SemanticManager.addError(node.line,
   ////                        "Error: Right side variable: " + rightElement.getName() + " is
@@ -680,7 +706,7 @@ public class SymbolTableVisitor implements JmmVisitor {
   //    }
 
   //    public Object visit(ASTAccess node, Object data) {
-  //        SymbolTable currentSymbolTable = this.symbolTableContextManager.getCurrentSymbolTable();
+  //        SymbolTable currentSymbolTable = this.globalSymbolTableList.get_Top_Stack();
   //        Element element = currentSymbolTable.getElement((String) node.jjtGetValue());
   //
   //        if (element == null) {

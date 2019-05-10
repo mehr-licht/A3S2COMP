@@ -2,7 +2,10 @@ import java.util.LinkedList;
 
 public class SemanticManager {
 
+	public LinkedList<SymbolTable> list_symbol_tables;
 	public static LinkedList<String> errors = new LinkedList<>();
+
+
 
 	public static void addError(String error){
 		errors.add(error);

@@ -4,14 +4,14 @@ import java.util.Map;
 
 public class SymbolTable {
 
-  //    private SymbolTableContextManager symbolTableContextManager = new
-  // SymbolTableContextManager(this);
+  //    private Global_Symbol_Table_List globalSymbolTableList = new
+  // Global_Symbol_Table_List(this);
   //    private SymbolTableVisitor symbolTableVisitor = new
-  // SymbolTableVisitor(this.symbolTableContextManager);
+  // SymbolTableVisitor(this.globalSymbolTableList);
   //    private SemanticVisitor semanticVisitor = new
-  // SemanticVisitor(this.symbolTableContextManager);
+  // SemanticVisitor(this.globalSymbolTableList);
   //    private SemanticVisitorAssigns semanticVisitorAssigns = new
-  // SemanticVisitorAssigns(this.symbolTableContextManager);
+  // SemanticVisitorAssigns(this.globalSymbolTableList);
 
   private String name;
   private boolean isFunction = false;
@@ -209,7 +209,7 @@ public class SymbolTable {
   private int setLineNumbers(int line) {
     //        if (getDepth() == 1) {
     //            LinkedList<Element> arguments =
-    // symbolTableContextManager.getRootSymbolTable().getElement(name).getArguments();
+    // globalSymbolTableList.getRootSymbolTable().getElement(name).getArguments();
     //            if (arguments != null) {
     //
     //                for (Element element : arguments) {

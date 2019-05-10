@@ -9,10 +9,9 @@ public enum Type {
     {
         typeHashMap = new HashMap<>();
         typeHashMap.put(UNDEFINED, "undefined");
-        typeHashMap.put(INTEGER, "integer");
         typeHashMap.put(INTEGER, "int");
         typeHashMap.put(ARRAY, "int[]");
-        typeHashMap.put(FUNCTION, "Function");
+        typeHashMap.put(FUNCTION, "function");
         typeHashMap.put(CLASS, "class");
         typeHashMap.put(BOOLEAN, "boolean");
         typeHashMap.put(VOID, "void");
@@ -20,7 +19,6 @@ public enum Type {
 
     }
     public static String getTypeStr(Type type){
-
         return typeHashMap.get(type);
     }
 

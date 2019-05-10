@@ -44,8 +44,11 @@ public class MainProject {
             SimpleNode root = jmm.Start();
 
             SymbolTableVisitor visitante = new SymbolTableVisitor();
-
             root.jjtAccept(visitante,null);
+            SemanticVisitor semanticVisitor = new SemanticVisitor(visitante.list_symbol_tables);
+            root.jjtAccept(semanticVisitor,null);
+            JasminVisitor jasminVisitor = new JasminVisitor(semanticVisitor.list_symbol_tables);
+            root.jjtAccept(jasminVisitor,null);
 
 //            symbolTable.setLineNumbers();
 //            root.dump(""); //Imprime a árvore

@@ -1,11 +1,9 @@
-import java.util.LinkedList;
-
 public class SemanticVisitorAssigns implements JmmVisitor {
 
-    SymbolTableContextManager symbolTableContextManager;
+    Global_Symbol_Table_List globalSymbolTableList;
 
-    public SemanticVisitorAssigns(SymbolTableContextManager symbolTableContextManager) {
-        this.symbolTableContextManager = symbolTableContextManager;
+    public SemanticVisitorAssigns(Global_Symbol_Table_List globalSymbolTableList) {
+        this.globalSymbolTableList = globalSymbolTableList;
 
     }
 
@@ -231,12 +229,12 @@ public class SemanticVisitorAssigns implements JmmVisitor {
 //        return new Element("", Type.ARRAY);    }
 //
 //    public Object visit(ASTFunction node, Object data) {
-//        SymbolTable currenSymbolTable = this.symbolTableContextManager.getCurrentSymbolTable();
-//        this.symbolTableContextManager.pushFront(currenSymbolTable.popChild());
+//        SymbolTable currenSymbolTable = this.globalSymbolTableList.get_Top_Stack();
+//        this.globalSymbolTableList.insert_Top_Stack_push(currenSymbolTable.popChild());
 //
 //        node.jjtGetChild(2).jjtAccept(this, data);
 //
-//        this.symbolTableContextManager.popFront();
+//        this.globalSymbolTableList.popFront();
 //
 //        return null;
 //
@@ -333,7 +331,7 @@ public class SemanticVisitorAssigns implements JmmVisitor {
 //
 //    public Object visit(ASTAccess node, Object data) {
 //        if(node.jjtGetNumChildren() == 0){
-//            return this.symbolTableContextManager.getCurrentSymbolTable().getElement((String)node.jjtGetValue());
+//            return this.globalSymbolTableList.get_Top_Stack().getElement((String)node.jjtGetValue());
 //        }else{
 //
 //            return node.jjtGetChild(0).jjtAccept(this, data);
@@ -360,15 +358,15 @@ public class SemanticVisitorAssigns implements JmmVisitor {
 //
 //    public Object visit(ASTWhile node, Object data) {
 //
-//        SymbolTable currenSymbolTable = this.symbolTableContextManager.getCurrentSymbolTable();
+//        SymbolTable currenSymbolTable = this.globalSymbolTableList.get_Top_Stack();
 //
 //        node.jjtGetChild(0).jjtAccept(this, data);
 //
-//        this.symbolTableContextManager.pushFront(currenSymbolTable.popChild());
+//        this.globalSymbolTableList.insert_Top_Stack_push(currenSymbolTable.popChild());
 //
 //        node.jjtGetChild(1).jjtAccept(this, data);
 //
-//        this.symbolTableContextManager.popFront();
+//        this.globalSymbolTableList.popFront();
 //
 //        return null;
 //    }
@@ -376,22 +374,22 @@ public class SemanticVisitorAssigns implements JmmVisitor {
 //    public Object visit(ASTIf node, Object data) {
 //
 //
-//        SymbolTable currenSymbolTable = this.symbolTableContextManager.getCurrentSymbolTable();
+//        SymbolTable currenSymbolTable = this.globalSymbolTableList.get_Top_Stack();
 //        node.jjtGetChild(0).jjtAccept(this, data);
 //
-//        this.symbolTableContextManager.pushFront(currenSymbolTable.popChild());
+//        this.globalSymbolTableList.insert_Top_Stack_push(currenSymbolTable.popChild());
 //
 //        node.jjtGetChild(1).jjtAccept(this, data);
 //
-//        this.symbolTableContextManager.popFront();
+//        this.globalSymbolTableList.popFront();
 //
 //        if(node.jjtGetNumChildren() == 3){
 //
-//            this.symbolTableContextManager.pushFront(currenSymbolTable.popChild());
+//            this.globalSymbolTableList.insert_Top_Stack_push(currenSymbolTable.popChild());
 //
 //            node.jjtGetChild(2).jjtAccept(this, data);
 //
-//            this.symbolTableContextManager.popFront();
+//            this.globalSymbolTableList.popFront();
 //        }
 //        return null;
 //    }
@@ -400,7 +398,7 @@ public class SemanticVisitorAssigns implements JmmVisitor {
 //
 //        if (node.jjtGetNumChildren() == 1) {
 //
-//            Element function = this.symbolTableContextManager.getRootSymbolTable().getElement((String) node.jjtGetValue());
+//            Element function = this.globalSymbolTableList.getRootSymbolTable().getElement((String) node.jjtGetValue());
 //            return function.getReturn();
 //
 //        }
