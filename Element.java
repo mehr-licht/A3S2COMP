@@ -16,6 +16,11 @@ public class Element {
 
     /**Constructores*/
     public Element(){
+        this.name = null;
+        this.type = null;
+        this.isInitialized = false;
+        this.arguments = new LinkedList<Element>();
+
     }
     public Element(String name, String type) {
         this.name = name;

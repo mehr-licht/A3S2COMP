@@ -1,5 +1,6 @@
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.ListIterator;
 
 public class SymbolTableVisitor implements JmmVisitor {
 
@@ -134,6 +135,14 @@ public class SymbolTableVisitor implements JmmVisitor {
 
   public Object visit(ASTASSIGNMENT node, Object data) {
     System.out.println(19);
+
+    Element element = new Element();
+    element.setName(node.jjtGetChild(0).toString());
+    element.setInitialized(true);
+
+    this.list_symbol_tables.getFirst().getVariablesv2().push(element);
+
+    System.out.println(1);
     for (int i = 0; i < node.jjtGetNumChildren(); i++) {
       node.jjtGetChild(i).jjtAccept(this, data);
     }
@@ -142,9 +151,14 @@ public class SymbolTableVisitor implements JmmVisitor {
 
   public Object visit(ASTName node, Object data) {
     System.out.println(20);
-    //    for (int i = 0; i < node.jjtGetNumChildren(); i++) {
-    //      node.jjtGetChild(i).jjtAccept(this, data);
-    //    }
+    if(node.parent instanceof ASTASSIGNMENT){
+      //this.list_symbol_tables.getFirst().getChildren_list_of_symbol_tables().getFirst().isConditional();
+
+    }
+
+    for (int i = 0; i < node.jjtGetNumChildren(); i++) {
+      node.jjtGetChild(i).jjtAccept(this, data);
+    }
     //      System.out.println(20);
     //    Element element = new Element(node.value, Type.UNDEFINED);
     return null;

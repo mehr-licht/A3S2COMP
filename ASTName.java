@@ -17,7 +17,7 @@ class ASTName extends SimpleNode {
   }
 
 public String toString(){
-    return value + value2;
+    return value;
 }
   /** Accept the visitor. **/
   public Object jjtAccept(JmmVisitor visitor, Object data) {
