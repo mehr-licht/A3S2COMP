@@ -6,8 +6,7 @@ import java.util.LinkedList;
 public class JasminGenerator extends Global_Symbol_Table_List{
 
 
-    private PrintWriter writer;
-    private JasminVisitor jasminVisitor;
+    public PrintWriter writer;
     private String filepath;
     private Integer lineNumber = 1;
     private String moduleName;
@@ -27,14 +26,19 @@ public class JasminGenerator extends Global_Symbol_Table_List{
 
         try {
             writer = new PrintWriter(new FileOutputStream("_jasmim_generated.j"),true);
-            writer.println(".class public ");
-            writer.println(".invoke");
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
         System.out.println("JasmimGenerator ON ");
     }
 
+    public PrintWriter getWriter() {
+        return writer;
+    }
+
+    public void setWriter(PrintWriter writer) {
+        this.writer = writer;
+    }
 //    public JasminGenerator(String fileName, SymbolTable symbolTable) {
 ////        this.globalSymbolTableList = symbolTable.getSymbolTableContextManager();
 //        this.filepath = "_Jasmim_generated.j";
@@ -52,10 +56,6 @@ public class JasminGenerator extends Global_Symbol_Table_List{
         return filepath;
     }
 
-    public JasminVisitor getJasminVisitor() {
-
-        return jasminVisitor;
-    }
     public void close() {
         writer.close();
     }
@@ -97,10 +97,6 @@ public class JasminGenerator extends Global_Symbol_Table_List{
 //        }
     }
 
-
-    public void writeInitMethod() {
-        println(".method static public <clinit>()V");
-    }
 
     public void writeBeginMethod(SymbolTable symbolTable) {
 //        String methodName = symbolTable.getName();

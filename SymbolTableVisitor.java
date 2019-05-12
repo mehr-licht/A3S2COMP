@@ -219,9 +219,11 @@ public class SymbolTableVisitor extends Global_Symbol_Table_List implements JmmV
     System.out.println(25);
     SymbolTable st = this.list_symbol_tables.getFirst();
     String methodoName = node.value;
+    //Aqui eé que se distingue o main;
     if (methodoName != null) {
       st.setName(methodoName);
     }
+
     for (int i = 0; i < node.jjtGetNumChildren(); i++) {
       node.jjtGetChild(i).jjtAccept(this, data);
     }
