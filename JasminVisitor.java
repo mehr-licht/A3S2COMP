@@ -96,8 +96,6 @@ public class JasminVisitor extends JasminGenerator implements JmmVisitor {
           node.jjtGetChild(i).jjtAccept(this, data);
       }
 
-      this.getWriter().println("return");
-      this.getWriter().println(".end method");
       return null;
   }
 
@@ -208,7 +206,9 @@ public class JasminVisitor extends JasminGenerator implements JmmVisitor {
 
   @Override
   public Object visit(ASTRETURN node, Object data) {
-    return null;
+
+
+      return null;
   }
 
   //    public Object visit(ASTModule node, Object data) {
