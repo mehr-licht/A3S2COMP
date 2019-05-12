@@ -8,109 +8,144 @@ public class JasminVisitor extends JasminGenerator implements JmmVisitor {
     super(list_symbol_tables);
   }
 
-  /** */
+  /** ******* */
   @Override
   public Object visit(SimpleNode node, Object data) {
 
     return null;
   }
 
-  /** */
+  /** ******* */
   @Override
   public Object visit(ASTStart node, Object data) {
     node.jjtGetChild(0).jjtAccept(this, null);
     return null;
   }
-
+  /** **** */
   @Override
   public Object visit(ASTUnmodifiedClassDeclaration node, Object data) {
-      System.out.println(node.value);
-      this.getWriter().print(".class public ");
-      this.getWriter().println(node.value);
-      for (int i = 0; i < node.jjtGetNumChildren(); i++) {
-          node.jjtGetChild(i).jjtAccept(this, data);
-      }
-      return null;
+    System.out.println(node.value);
+    this.getWriter().print(".class public ");
+    this.getWriter().println(node.value);
+    for (int i = 0; i < node.jjtGetNumChildren(); i++) {
+      node.jjtGetChild(i).jjtAccept(this, data);
+    }
+    return null;
   }
 
   @Override
   public Object visit(ASTINICIALIZACAO node, Object data) {
+    for (int i = 0; i < node.jjtGetNumChildren(); i++) {
+      node.jjtGetChild(i).jjtAccept(this, data);
+    }
     return null;
   }
 
   @Override
   public Object visit(ASTNCD node, Object data) {
+    for (int i = 0; i < node.jjtGetNumChildren(); i++) {
+      node.jjtGetChild(i).jjtAccept(this, data);
+    }
     return null;
   }
 
   @Override
   public Object visit(ASTCONSTRUCTOR node, Object data) {
+    for (int i = 0; i < node.jjtGetNumChildren(); i++) {
+      node.jjtGetChild(i).jjtAccept(this, data);
+    }
     return null;
   }
 
   @Override
   public Object visit(ASTMETODO node, Object data) {
+    for (int i = 0; i < node.jjtGetNumChildren(); i++) {
+      node.jjtGetChild(i).jjtAccept(this, data);
+    }
     return null;
   }
 
   @Override
   public Object visit(ASTFD node, Object data) {
+    for (int i = 0; i < node.jjtGetNumChildren(); i++) {
+      node.jjtGetChild(i).jjtAccept(this, data);
+    }
     return null;
   }
 
   @Override
   public Object visit(ASTMethodDeclarationLookahead node, Object data) {
+    for (int i = 0; i < node.jjtGetNumChildren(); i++) {
+      node.jjtGetChild(i).jjtAccept(this, data);
+    }
     return null;
   }
 
   @Override
   public Object visit(ASTINIT node, Object data) {
+    for (int i = 0; i < node.jjtGetNumChildren(); i++) {
+      node.jjtGetChild(i).jjtAccept(this, data);
+    }
     return null;
   }
 
   @Override
   public Object visit(ASTVariableDeclaratorId node, Object data) {
+    for (int i = 0; i < node.jjtGetNumChildren(); i++) {
+      node.jjtGetChild(i).jjtAccept(this, data);
+    }
+
     return null;
   }
 
   @Override
   public Object visit(ASTMethodDeclaration node, Object data) {
-      for (int i = 0; i < node.jjtGetNumChildren(); i++) {
-          node.jjtGetChild(i).jjtAccept(this, data);
-      }
-      return null;
+    for (int i = 0; i < node.jjtGetNumChildren(); i++) {
+      node.jjtGetChild(i).jjtAccept(this, data);
+    }
+    return null;
   }
 
-  /***/
+  /** */
   @Override
   public Object visit(ASTMethodDeclarator node, Object data) {
-        System.out.println("100   »»»»");
-        String str_main = "main";
+    String str_main = "main";
 
-      if(str_main.equals(node.value) ){
-          this.getWriter().println(".method public static main([Ljava/lang/String;)V");
-      }else{
-          this.getWriter().println(".method static public <clinit>()V");
-      }
-      for (int i = 0; i < node.jjtGetNumChildren(); i++) {
-          node.jjtGetChild(i).jjtAccept(this, data);
-      }
-
-      return null;
-  }
-
-  @Override
-  public Object visit(ASTConstructorDeclaration node, Object data) {
+    if (str_main.equals(node.value)) {
+      this.getWriter().println(".method public static main([Ljava/lang/String;)V");
+    } else {
+      this.getWriter().print(".method public ");
+      this.getWriter().print(node.value);
+      this.getWriter().print("(");
+      this.getWriter().print(")");
+      this.getWriter().print("V");
+    }
+    for (int i = 0; i < node.jjtGetNumChildren(); i++) {
+      node.jjtGetChild(i).jjtAccept(this, data);
+    }
     return null;
   }
 
   @Override
+  public Object visit(ASTConstructorDeclaration node, Object data) {
+    for (int i = 0; i < node.jjtGetNumChildren(); i++) {
+      node.jjtGetChild(i).jjtAccept(this, data);
+    }
+    return null;
+  }
+
+  /** */
+  @Override
   public Object visit(ASTType node, Object data) {
+    node.jjtGetChild(0).jjtAccept(this, data);
     return null;
   }
 
   @Override
   public Object visit(ASTPrimitiveType node, Object data) {
+    for (int i = 0; i < node.jjtGetNumChildren(); i++) {
+      node.jjtGetChild(i).jjtAccept(this, data);
+    }
     return null;
   }
 
@@ -119,13 +154,23 @@ public class JasminVisitor extends JasminGenerator implements JmmVisitor {
     return null;
   }
 
+  /** */
+  // TODO acabar if deve haver o caso das classes (+testes)
   @Override
   public Object visit(ASTName node, Object data) {
+    if (node.jjtGetParent().jjtGetParent() instanceof ASTMethodDeclarator) {
+      // caso da String do main
+    } else {
+      this.getWriter().print("ldc ");
+      this.getWriter().println(node.value);
+    }
     return null;
   }
 
   @Override
   public Object visit(ASTASSIGNMENT node, Object data) {
+    node.jjtGetChild(0).jjtAccept(this, data);
+    node.jjtGetChild(1).jjtAccept(this, data);
     return null;
   }
 
@@ -134,81 +179,159 @@ public class JasminVisitor extends JasminGenerator implements JmmVisitor {
     return null;
   }
 
+  /** ******* */
   @Override
   public Object visit(ASTAdditiveExpression node, Object data) {
+    node.jjtGetChild(0).jjtAccept(this, data);
     return null;
   }
-
+  /** ******* */
   @Override
   public Object visit(ASTADDSUB node, Object data) {
+    String str_add = "+";
+    String str_sub = "-";
+    node.jjtGetChild(0).jjtAccept(this, data);
+    node.jjtGetChild(1).jjtAccept(this, data);
+
+    if (str_add.equals(node.value)) {
+      this.getWriter().println("iadd");
+    } else if (str_sub.equals(node.value)) {
+      this.getWriter().println("isub");
+    }
+
     return null;
   }
-
+  /** ******* */
   @Override
   public Object visit(ASTMultiplicativeExpression node, Object data) {
+    node.jjtGetChild(0).jjtAccept(this, data);
     return null;
   }
-
+  /** ******* */
   @Override
   public Object visit(ASTDIVMULT node, Object data) {
+    String str_div = "/";
+    String str_mul = "*";
+
+    node.jjtGetChild(0).jjtAccept(this, data);
+    node.jjtGetChild(1).jjtAccept(this, data);
+
+    if (str_div.equals(node.value)) {
+      this.getWriter().println("idiv");
+    } else if (str_mul.equals(node.value)) {
+      this.getWriter().println("imul");
+    }
+
     return null;
   }
 
   @Override
   public Object visit(ASTCastLookahead node, Object data) {
-    return null;
+      for (int i = 0; i < node.jjtGetNumChildren(); i++) {
+          node.jjtGetChild(i).jjtAccept(this, data);
+      }
+      return null;
   }
 
   @Override
   public Object visit(ASTPrimarySuffix node, Object data) {
-    return null;
+      for (int i = 0; i < node.jjtGetNumChildren(); i++) {
+          node.jjtGetChild(i).jjtAccept(this, data);
+      }
+      return null;
   }
 
   @Override
   public Object visit(ASTLiteral node, Object data) {
+    // onde entram os numeros de facto
+    this.getWriter().print("bipush ");
+    this.getWriter().println(node.value);
+
     return null;
   }
 
   @Override
   public Object visit(ASTBooleanLiteral node, Object data) {
-    return null;
+      for (int i = 0; i < node.jjtGetNumChildren(); i++) {
+          node.jjtGetChild(i).jjtAccept(this, data);
+      }
+      return null;
   }
 
   @Override
   public Object visit(ASTIF node, Object data) {
-    return null;
+      for (int i = 0; i < node.jjtGetNumChildren(); i++) {
+          node.jjtGetChild(i).jjtAccept(this, data);
+      }
+      return null;
   }
 
   @Override
   public Object visit(ASTCONDITION node, Object data) {
-    return null;
+      for (int i = 0; i < node.jjtGetNumChildren(); i++) {
+          node.jjtGetChild(i).jjtAccept(this, data);
+      }
+      return null;
   }
 
   @Override
   public Object visit(ASTSTATEMENT node, Object data) {
-    return null;
+      for (int i = 0; i < node.jjtGetNumChildren(); i++) {
+          node.jjtGetChild(i).jjtAccept(this, data);
+      }
+      return null;
   }
 
   @Override
   public Object visit(ASTELSE node, Object data) {
-    return null;
+      for (int i = 0; i < node.jjtGetNumChildren(); i++) {
+          node.jjtGetChild(i).jjtAccept(this, data);
+      }
+      return null;
   }
 
   @Override
   public Object visit(ASTWHILE node, Object data) {
-    return null;
+      for (int i = 0; i < node.jjtGetNumChildren(); i++) {
+          node.jjtGetChild(i).jjtAccept(this, data);
+      }
+      return null;
   }
 
   @Override
   public Object visit(ASTBODY node, Object data) {
-    return null;
+      for (int i = 0; i < node.jjtGetNumChildren(); i++) {
+          node.jjtGetChild(i).jjtAccept(this, data);
+      }
+      return null;
   }
 
+  // TODO
   @Override
   public Object visit(ASTRETURN node, Object data) {
+      //caso em que  return; case void
+      if(node.jjtGetNumChildren() == 0){
+        this.getWriter().println("return");
+        this.getWriter().println(".end method");
+        return null;
+      }else{ //caso em que efectivamente retorna algo
 
+          //caso de inteiros
+         if( node.jjtGetChild(0).jjtGetChild(0).jjtGetChild(0) instanceof ASTLiteral){
+             node.jjtGetChild(0).jjtAccept(this,data);
+             this.getWriter().println("ireturn");
+         }else if ( false){ //caso arays //TODO
+             this.getWriter().println("areturn");
+         }else if (false){ //caso de variables
+             //ret 2 return ti the address held in local variablw 2
+             //JVM return from subroutine
+         }
 
-      return null;
+          this.getWriter().println(".end method");
+
+      }
+
+    return null;
   }
 
   //    public Object visit(ASTModule node, Object data) {

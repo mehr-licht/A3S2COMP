@@ -178,13 +178,15 @@ public class SymbolTableVisitor extends Global_Symbol_Table_List implements JmmV
     }
     return null;
   }
-  /** */
+
+  /************/
   public Object visit(ASTPrimitiveType node, Object data) {
-    System.out.println(22 + " " + node.value);
+    // A diferenciação ocorre no nó superior ASTType
+    // para boolean ou int
     return null;
   }
 
-  /** */
+  /***/
   @Override
   public Object visit(ASTType node, Object data) {
     System.out.println(23);
@@ -219,7 +221,7 @@ public class SymbolTableVisitor extends Global_Symbol_Table_List implements JmmV
     System.out.println(25);
     SymbolTable st = this.list_symbol_tables.getFirst();
     String methodoName = node.value;
-    //Aqui eé que se distingue o main;
+    //Aqui eé que se distingue o main
     if (methodoName != null) {
       st.setName(methodoName);
     }
@@ -312,8 +314,6 @@ public class SymbolTableVisitor extends Global_Symbol_Table_List implements JmmV
 
   @Override
   public Object visit(ASTMethodDeclarationLookahead node, Object data) {
-    System.out.println(28);
-
     node.jjtGetChild(0).jjtAccept(this, data);
     for (int i = 0; i < node.jjtGetNumChildren(); i++) {
       node.jjtGetChild(i).jjtAccept(this, data);
@@ -343,11 +343,13 @@ public class SymbolTableVisitor extends Global_Symbol_Table_List implements JmmV
     return null;
   }
 
+  /***/ //TODO needs working on the symbol table
   @Override
   public Object visit(ASTRETURN node, Object data) {
-    System.out.println(36);
+    for (int i = 0; i < node.jjtGetNumChildren(); i++) {
+      node.jjtGetChild(i).jjtAccept(this, data);
+    }
 
-    node.jjtGetChild(0).jjtAccept(this, data);
     String nodeName = (String) node.value;
     //        for (int i = 0; i < node.jjtGetNumChildren(); i++) {
     //            String module = (String) node.jjtGetValue();

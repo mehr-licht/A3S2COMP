@@ -13,7 +13,7 @@ class MonteCarloPi {
         pi_estimate_times_100 = 3 * 4;
         testeVar = 10 / 5;
         testeVar2 = 1 - 2;
-
+        return 4;
 	}
 	public int estimate_pi(int i, int j){
 	    int mal;

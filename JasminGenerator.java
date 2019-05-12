@@ -113,34 +113,7 @@ public class JasminGenerator extends Global_Symbol_Table_List{
 //        println(symbolTable.getJasminReturnType());
     }
 
-    public void writeMainMethod() {
-        println(".method public static main([Ljava/lang/String;)V");
-    }
 
-    public void writeEndMethod() {
-
-        println("return");
-        println(".end method");
-    }
-
-    public void writeEndMethod(Element element) {
-
-//        if(element!=null && element.getName()!=null && element.getType() != Type.UNDEFINED){
-//            writeLoadElement(element);
-//        }
-//        else {
-//            writeEndMethod();
-//            return;
-//        }
-//        if(Type.INTEGER == element.getType()){
-//            println("ireturn");
-//        }
-//        else if(element.getType() == Type.ARRAY){
-//            println("areturn");
-//        }
-
-        println(".end method");
-    }
 
 //    public void writeWhile(ASTConditionalOperation conditionNode, ASTStatements statementNode, ParserVisitor visitor) {
 //        String beginLoopLabel = "loop" + lineNumber;
