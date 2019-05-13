@@ -76,6 +76,8 @@ public class JasminVisitor extends JasminGenerator implements JmmVisitor {
   @Override
   public Object visit(ASTMethodDeclarationLookahead node, Object data) {
     for (int i = 0; i < node.jjtGetNumChildren(); i++) {
+      this.getWriter().print(node.value);
+
       node.jjtGetChild(i).jjtAccept(this, data);
     }
     return null;
@@ -100,7 +102,22 @@ public class JasminVisitor extends JasminGenerator implements JmmVisitor {
 
   @Override
   public Object visit(ASTMethodDeclaration node, Object data) {
+    String str_main = "main";
+
     for (int i = 0; i < node.jjtGetNumChildren(); i++) {
+
+      if (node.jjtGetChild(i) instanceof ASTMethodDeclarator) {
+        if (str_main.equals(((ASTMethodDeclarator) node.jjtGetChild(i)).value)) {
+          this.getWriter().println(".method public static main([Ljava/lang/String;)V");
+        } else {
+          this.getWriter().print(".method public ");
+          this.getWriter().print(((ASTMethodDeclarator) node.jjtGetChild(i)).value);
+          this.getWriter().print("(");
+          this.getWriter().print(")");
+          this.getWriter().println("V");
+        }
+      }
+
       node.jjtGetChild(i).jjtAccept(this, data);
     }
     return null;
@@ -109,20 +126,11 @@ public class JasminVisitor extends JasminGenerator implements JmmVisitor {
   /** */
   @Override
   public Object visit(ASTMethodDeclarator node, Object data) {
-    String str_main = "main";
 
-    if (str_main.equals(node.value)) {
-      this.getWriter().println(".method public static main([Ljava/lang/String;)V");
-    } else {
-      this.getWriter().print(".method public ");
-      this.getWriter().print(node.value);
-      this.getWriter().print("(");
-      this.getWriter().print(")");
-      this.getWriter().print("V");
-    }
     for (int i = 0; i < node.jjtGetNumChildren(); i++) {
       node.jjtGetChild(i).jjtAccept(this, data);
     }
+
     return null;
   }
 
@@ -151,6 +159,9 @@ public class JasminVisitor extends JasminGenerator implements JmmVisitor {
 
   @Override
   public Object visit(ASTResultType node, Object data) {
+    for (int i = 0; i < node.jjtGetNumChildren(); i++) {
+      node.jjtGetChild(i).jjtAccept(this, data);
+    }
     return null;
   }
 
@@ -227,20 +238,21 @@ public class JasminVisitor extends JasminGenerator implements JmmVisitor {
 
   @Override
   public Object visit(ASTCastLookahead node, Object data) {
-      for (int i = 0; i < node.jjtGetNumChildren(); i++) {
-          node.jjtGetChild(i).jjtAccept(this, data);
-      }
-      return null;
+    for (int i = 0; i < node.jjtGetNumChildren(); i++) {
+      node.jjtGetChild(i).jjtAccept(this, data);
+    }
+    return null;
   }
 
   @Override
   public Object visit(ASTPrimarySuffix node, Object data) {
-      for (int i = 0; i < node.jjtGetNumChildren(); i++) {
-          node.jjtGetChild(i).jjtAccept(this, data);
-      }
-      return null;
+    for (int i = 0; i < node.jjtGetNumChildren(); i++) {
+      node.jjtGetChild(i).jjtAccept(this, data);
+    }
+    return null;
   }
 
+  /** **** */
   @Override
   public Object visit(ASTLiteral node, Object data) {
     // onde entram os numeros de facto
@@ -252,84 +264,82 @@ public class JasminVisitor extends JasminGenerator implements JmmVisitor {
 
   @Override
   public Object visit(ASTBooleanLiteral node, Object data) {
-      for (int i = 0; i < node.jjtGetNumChildren(); i++) {
-          node.jjtGetChild(i).jjtAccept(this, data);
-      }
-      return null;
+    for (int i = 0; i < node.jjtGetNumChildren(); i++) {
+      node.jjtGetChild(i).jjtAccept(this, data);
+    }
+    return null;
   }
 
   @Override
   public Object visit(ASTIF node, Object data) {
-      for (int i = 0; i < node.jjtGetNumChildren(); i++) {
-          node.jjtGetChild(i).jjtAccept(this, data);
-      }
-      return null;
+    for (int i = 0; i < node.jjtGetNumChildren(); i++) {
+      node.jjtGetChild(i).jjtAccept(this, data);
+    }
+    return null;
   }
 
   @Override
   public Object visit(ASTCONDITION node, Object data) {
-      for (int i = 0; i < node.jjtGetNumChildren(); i++) {
-          node.jjtGetChild(i).jjtAccept(this, data);
-      }
-      return null;
+    for (int i = 0; i < node.jjtGetNumChildren(); i++) {
+      node.jjtGetChild(i).jjtAccept(this, data);
+    }
+    return null;
   }
 
   @Override
   public Object visit(ASTSTATEMENT node, Object data) {
-      for (int i = 0; i < node.jjtGetNumChildren(); i++) {
-          node.jjtGetChild(i).jjtAccept(this, data);
-      }
-      return null;
+    for (int i = 0; i < node.jjtGetNumChildren(); i++) {
+      node.jjtGetChild(i).jjtAccept(this, data);
+    }
+    return null;
   }
 
   @Override
   public Object visit(ASTELSE node, Object data) {
-      for (int i = 0; i < node.jjtGetNumChildren(); i++) {
-          node.jjtGetChild(i).jjtAccept(this, data);
-      }
-      return null;
+    for (int i = 0; i < node.jjtGetNumChildren(); i++) {
+      node.jjtGetChild(i).jjtAccept(this, data);
+    }
+    return null;
   }
 
   @Override
   public Object visit(ASTWHILE node, Object data) {
-      for (int i = 0; i < node.jjtGetNumChildren(); i++) {
-          node.jjtGetChild(i).jjtAccept(this, data);
-      }
-      return null;
+    for (int i = 0; i < node.jjtGetNumChildren(); i++) {
+      node.jjtGetChild(i).jjtAccept(this, data);
+    }
+    return null;
   }
 
   @Override
   public Object visit(ASTBODY node, Object data) {
-      for (int i = 0; i < node.jjtGetNumChildren(); i++) {
-          node.jjtGetChild(i).jjtAccept(this, data);
-      }
-      return null;
+    for (int i = 0; i < node.jjtGetNumChildren(); i++) {
+      node.jjtGetChild(i).jjtAccept(this, data);
+    }
+    return null;
   }
 
   // TODO
   @Override
   public Object visit(ASTRETURN node, Object data) {
-      //caso em que  return; case void
-      if(node.jjtGetNumChildren() == 0){
-        this.getWriter().println("return");
-        this.getWriter().println(".end method");
-        return null;
-      }else{ //caso em que efectivamente retorna algo
+    // caso em que  return; case void
+    if (node.jjtGetNumChildren() == 0) {
+      this.getWriter().println("return");
+      this.getWriter().println(".end method");
+      return null;
+    } else { // caso em que efectivamente retorna algo
 
-          //caso de inteiros
-         if( node.jjtGetChild(0).jjtGetChild(0).jjtGetChild(0) instanceof ASTLiteral){
-             node.jjtGetChild(0).jjtAccept(this,data);
-             this.getWriter().println("ireturn");
-         }else if ( false){ //caso arays //TODO
-             this.getWriter().println("areturn");
-         }else if (false){ //caso de variables
-             //ret 2 return ti the address held in local variablw 2
-             //JVM return from subroutine
-         }
-
-          this.getWriter().println(".end method");
-
+      // caso de inteiros
+      if (node.jjtGetChild(0).jjtGetChild(0).jjtGetChild(0) instanceof ASTLiteral) {
+        node.jjtGetChild(0).jjtAccept(this, data);
+        this.getWriter().println("ireturn");
+      } else if (false) { // caso arays //TODO
+        this.getWriter().println("areturn");
+      } else if (false) { // caso de variables
+        // ret 2 return ti the address held in local variablw 2
+        // JVM return from subroutine
       }
+      this.getWriter().println(".end method");
+    }
 
     return null;
   }

@@ -36,21 +36,6 @@ public class JasminGenerator extends Global_Symbol_Table_List{
         return writer;
     }
 
-    public void setWriter(PrintWriter writer) {
-        this.writer = writer;
-    }
-//    public JasminGenerator(String fileName, SymbolTable symbolTable) {
-////        this.globalSymbolTableList = symbolTable.getSymbolTableContextManager();
-//        this.filepath = "_Jasmim_generated.j";
-//
-//        try {
-//            writer = new PrintWriter(this.filepath);
-//        } catch (FileNotFoundException e) {
-//            e.printStackTrace();
-//        }
-//
-////        this.jasminVisitor = new JasminVisitor(this);
-//    }
 
     public String getFilepath() {
         return filepath;
@@ -300,22 +285,6 @@ public class JasminGenerator extends Global_Symbol_Table_List{
     private void println(Object object) {
         println(object.toString());
     }
-
-//    public SymbolTable getCurrentSymbolTable() {
-//        return this.list_symbol_tables.get_Top_Stack();
-//    }
-//
-//    public SymbolTable getRootSymbolTable() {
-//        return this.globalSymbolTableList.getRootSymbolTable();
-//    }
-//
-//    public void pushFront(SymbolTable symbolTable) {
-//        this.globalSymbolTableList.insert_Top_Stack_push(symbolTable);
-//    }
-//
-//    public void popFront() {
-//        this.globalSymbolTableList.popFront();
-//    }
 
 
 }
