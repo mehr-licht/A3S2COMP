@@ -4,26 +4,18 @@ import java.util.Map;
 
 public class SymbolTable {
 
-  //    private Global_Symbol_Table_List globalSymbolTableList = new
-  // Global_Symbol_Table_List(this);
-  //    private SymbolTableVisitor symbolTableVisitor = new
-  // SymbolTableVisitor(this.globalSymbolTableList);
-  //    private SemanticVisitor semanticVisitor = new
-  // SemanticVisitor(this.globalSymbolTableList);
-  //    private SemanticVisitorAssigns semanticVisitorAssigns = new
-  // SemanticVisitorAssigns(this.globalSymbolTableList);
 
   private String name;
   private boolean isFunction = false;
   private boolean isConditional = false;
 
-  private HashMap<String, Element> variables = new HashMap<String, Element>();
-  private HashMap<String, Element> parameters = null;
-  private String return_type= null;
-  private Element returnValue = null;
-  private SymbolTable parent_symbol_table = null;
+  private String end_def_return_name = null;
+  private Element end_return_element = null;
 
 
+  private SymbolTable parent_symbol_table;
+  private HashMap<String, Element> variables = new HashMap<String, Element>();;
+  private HashMap<String, Element> parameters = new HashMap<String, Element>();
   private LinkedList<Element> variablesv2;
   private LinkedList<SymbolTable> children_list_of_symbol_tables = new LinkedList<SymbolTable>();
 
@@ -39,11 +31,11 @@ public class SymbolTable {
     this.isConditional = isConditional;
   }
 
-  public SymbolTable(String name, Element returnValue, LinkedList<Element> variables) {
+  public SymbolTable(String name, Element end_return_element, LinkedList<Element> variables) {
     this.name = name;
     this.isFunction = true;
     this.isConditional = false;
-    this.returnValue = returnValue;
+    this.end_return_element = end_return_element;
     this.parameters = new HashMap<String, Element>();
     addParameters(variables);
   }
@@ -51,17 +43,30 @@ public class SymbolTable {
 
   /** GETS **** */
 
+  /**
+   * Lista 1 de 2 lista de variaveis tipo linked list
+   * */
   public LinkedList<Element> getVariablesv2() {
     return variablesv2;
   }
+
+  /**
+   * Devolve a lista de parametros
+   * */
+  public HashMap<String, Element> getParameters() {
+    return this.parameters;
+  }
+
+
+
 
   public void setVariablesv2(LinkedList<Element> variablesv2) {
     this.variablesv2 = variablesv2;
   }
 
 
-  public String getReturn_type() {
-    return return_type;
+  public String getEnd_def_return_name() {
+    return end_def_return_name;
   }
   public SymbolTable getParent_symbol_table() {
     return parent_symbol_table;
@@ -79,20 +84,17 @@ public class SymbolTable {
     return isConditional;
   }
 
-  public HashMap<String, Element> getParameters() {
-    return this.parameters;
-  }
 
   public HashMap<String, Element> getVariables() {
     return this.variables;
   }
 
-  public Element getReturnValue() {
-    return returnValue;
+  public Element getEnd_return_element() {
+    return end_return_element;
   }
   /** TODO -> needs checking */
   public Element getElement(String name) {
-    if (returnValue != null) if (returnValue.equals(name)) return returnValue;
+    if (end_return_element != null) if (end_return_element.equals(name)) return end_return_element;
     if (variables.containsKey(name)) {
       return variables.get(name);
     }
@@ -112,10 +114,10 @@ public class SymbolTable {
   }
 
   //    public String getJasminReturnType() {
-  //        if (returnValue == null || returnValue.getName() == null)
+  //        if (end_return_element == null || end_return_element.getName() == null)
   //            return "V";
   //        else
-  //            return returnValue.getJasminType();
+  //            return end_return_element.getJasminType();
   //    }
 
   //    public int getLocals() {
@@ -182,8 +184,8 @@ public class SymbolTable {
     this.parameters = parameters;
   }
 
-  public void setReturnValue(Element returnValue) {
-    this.returnValue = returnValue;
+  public void setEnd_return_element(Element end_return_element) {
+    this.end_return_element = end_return_element;
   }
 
   public void setChildren_list_of_symbol_tables(LinkedList<SymbolTable> children_list_of_symbol_tables) {
@@ -197,8 +199,8 @@ public class SymbolTable {
   public void setName(String name) {
     this.name = name;
   }
-  public void setReturn_type(String return_type) {
-    this.return_type = return_type;
+  public void setEnd_def_return_name(String end_def_return_name) {
+    this.end_def_return_name = end_def_return_name;
   }
   public void setLineNumbers() {
     for (SymbolTable symbolTable : children_list_of_symbol_tables) {
@@ -216,7 +218,7 @@ public class SymbolTable {
     //                    element.setVarnum(line++);
     //                }
     //            }
-    //            returnValue.setVarnum(line++);
+    //            end_return_element.setVarnum(line++);
     //        }
     //        for (Element element : variables.values()) {
     //            element.setVarnum(line++);
@@ -257,7 +259,7 @@ public class SymbolTable {
   //
   //        if (isFunction) {
   //            stringBuilder.append("\tReturn: ");
-  //            stringBuilder.append((returnValue == null) ? "void" : returnValue.toString());
+  //            stringBuilder.append((end_return_element == null) ? "void" : end_return_element.toString());
   //            stringBuilder.append("\n");
   //            stringBuilder.append(MapToString("Parameters", parameters));
   //        } else

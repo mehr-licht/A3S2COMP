@@ -113,6 +113,9 @@ public class JasminVisitor extends JasminGenerator implements JmmVisitor {
           this.getWriter().print(".method public ");
           this.getWriter().print(((ASTMethodDeclarator) node.jjtGetChild(i)).value);
           this.getWriter().print("(");
+
+
+
           this.getWriter().print(")");
           this.getWriter().println("V");
         }
@@ -321,7 +324,7 @@ public class JasminVisitor extends JasminGenerator implements JmmVisitor {
   // TODO
   @Override
   public Object visit(ASTRETURN node, Object data) {
-    // caso em que  return; case void
+    // caso em que  return; case voild
     if (node.jjtGetNumChildren() == 0) {
       this.getWriter().println("return");
       this.getWriter().println(".end method");
@@ -404,7 +407,7 @@ public class JasminVisitor extends JasminGenerator implements JmmVisitor {
   //        this.jasminGenerator.writeStackAndLocals(20,
   // this.jasminGenerator.get_Top_Stack().getLocals());
   //
-  //        Element returnElement = this.jasminGenerator.get_Top_Stack().getReturnValue();
+  //        Element returnElement = this.jasminGenerator.get_Top_Stack().getEnd_return_element();
   //        if(returnElement.getType() != Type.UNDEFINED){
   //            this.jasminGenerator.writeLoadScalar(0);
   //            if(returnElement.getType() == Type.ARRAY){
@@ -416,7 +419,7 @@ public class JasminVisitor extends JasminGenerator implements JmmVisitor {
   //            node.jjtGetChild(i).jjtAccept(this, data);
   //        }
   //
-  // this.jasminGenerator.writeEndMethod(this.jasminGenerator.get_Top_Stack().getReturnValue());
+  // this.jasminGenerator.writeEndMethod(this.jasminGenerator.get_Top_Stack().getEnd_return_element());
   //        this.jasminGenerator.popFront();
   //        return null;
   //    }
@@ -461,14 +464,6 @@ public class JasminVisitor extends JasminGenerator implements JmmVisitor {
   //        return null;
   //    }
   //
-  //    public Object visit(ASTOperation node, Object data) {
-  //        node.jjtGetChild(0).jjtAccept(this, false);
-  //        node.jjtGetChild(1).jjtAccept(this, false);
-  //
-  //        this.jasminGenerator.writeSign((String) node.value);
-  //
-  //        return null;
-  //    }
   //
   //    public Object visit(ASTAccess node, Object data) {
   //        SymbolTable currentSymbolTable = this.jasminGenerator.get_Top_Stack();
@@ -607,8 +602,5 @@ public class JasminVisitor extends JasminGenerator implements JmmVisitor {
   //        return stringBuilder.toString();
   //        }
   //
-  //    public Object visit(ASTString node, Object data) {
-  //        this.jasminGenerator.writeSingleWord((String)node.value);
-  //        return "Ljava/lang/String;";
-  //    }
+
 }

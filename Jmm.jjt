@@ -338,7 +338,7 @@ void Initializer() #void:
 void Type() :
 {}
 {
-  ( PrimitiveType() | Name() ) ( <LBRACKET> <RBRACKET> )*
+  ( PrimitiveType() | Name() ) ( <LBRACKET> <RBRACKET> {jjtThis.isArray = true;})*
 }
 
 void PrimitiveType() :

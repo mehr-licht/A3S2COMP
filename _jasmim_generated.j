@@ -1,5 +1,13 @@
 .class public MonteCarloPi
+.method public estimate_pi()V
+bipush 10
+ireturn
+.end method
 .method public static main([Ljava/lang/String;)V
+ldc num
+bipush 0
+ldc num
+bipush 1
 ldc num_samples
 bipush 1
 bipush 1
@@ -29,9 +37,5 @@ bipush 2
 ldc gerado
 bipush 3
 bipush 4
-ireturn
-.end method
-.method public estimate_pi()V
-bipush 10
 ireturn
 .end method

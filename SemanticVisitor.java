@@ -143,6 +143,9 @@ public class SemanticVisitor extends SemanticManager implements JmmVisitor {
         return null;
     }
     public Object visit(ASTMethodDeclarator node, Object data) {
+        //TODO nos argumentos só aceita null ou seguidos de
+        //de dois nos AST Type e VaraiableId
+        //ver symol table
         return null;
     }
 
