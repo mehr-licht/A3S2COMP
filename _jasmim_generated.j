@@ -1,5 +1,5 @@
 .class public MonteCarloPi
-.method public estimate_pi()V
+.method public estimate_pi(int variavelTeste; int var_TESTE2; )V
 bipush 10
 ireturn
 .end method
@@ -31,7 +31,7 @@ iadd
 bipush 4
 ireturn
 .end method
-.method public function_def()V
+.method public function_def(boolean gaia; int var1; int var2; )V
 ldc randou
 bipush 2
 ldc gerado

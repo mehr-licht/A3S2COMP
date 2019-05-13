@@ -24,7 +24,7 @@ class MonteCarloPi {
         return 4;
 	}
 
-	public int function_def(){
+	public int function_def(boolean gaia, int var1, int var2){
 	    int randou;
 	    int gerado;
 	    randou = 2;

@@ -100,6 +100,10 @@ public class JasminVisitor extends JasminGenerator implements JmmVisitor {
     return null;
   }
 
+  /**
+   * Impressao dos metodos e argumentos
+   *
+   * */
   @Override
   public Object visit(ASTMethodDeclaration node, Object data) {
     String str_main = "main";
@@ -107,20 +111,43 @@ public class JasminVisitor extends JasminGenerator implements JmmVisitor {
     for (int i = 0; i < node.jjtGetNumChildren(); i++) {
 
       if (node.jjtGetChild(i) instanceof ASTMethodDeclarator) {
+
+        // caso main metodo
         if (str_main.equals(((ASTMethodDeclarator) node.jjtGetChild(i)).value)) {
           this.getWriter().println(".method public static main([Ljava/lang/String;)V");
+
+        //caso outros metodos
         } else {
+
           this.getWriter().print(".method public ");
           this.getWriter().print(((ASTMethodDeclarator) node.jjtGetChild(i)).value);
           this.getWriter().print("(");
 
+          if (node.jjtGetChild(i).jjtGetNumChildren() > 0) {
+            // impressão dos argumentos do meétodos
+            for (int j = 0; j < node.jjtGetChild(i).jjtGetNumChildren(); j++) {
 
+              if(node.jjtGetChild(i).jjtGetChild(j) instanceof  ASTType){
+                String  tmp = node.jjtGetChild(i).jjtGetChild(j).jjtGetChild(0).toString();
+                this.getWriter().print(tmp);
+                this.getWriter().print(" ");
 
+              } else {
+                String  tmp = node.jjtGetChild(i).jjtGetChild(j).toString();
+                this.getWriter().print(tmp);
+              }
+
+              if (j % 2 == 1) {
+                this.getWriter().print("; ");
+              }
+
+            }
+
+          }
           this.getWriter().print(")");
           this.getWriter().println("V");
         }
       }
-
       node.jjtGetChild(i).jjtAccept(this, data);
     }
     return null;

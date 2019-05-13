@@ -11,27 +11,20 @@ public class SymbolTableVisitor extends Global_Symbol_Table_List implements JmmV
     this.list_symbol_tables = new LinkedList<SymbolTable>();
   }
 
-  /***/
+  /** */
   @Override
   public Object visit(SimpleNode node, Object data) {
-    System.out.println(1);
     return null;
   }
 
-  /**
-   * Visita este nó, e faz o print de tudo
-   *
-   */
+  /** Visita este nó, e faz o print de tudo */
   @Override
   public Object visit(ASTStart node, Object data) {
     node.jjtGetChild(0).jjtAccept(this, data);
     return null;
   }
 
-  /**
-   * Processa os nomes das classes e adiciona uma symbol
-   * table à lista global das symbol tables
-   */
+  /** Processa os nomes das classes e adiciona uma symbol table à lista global das symbol tables */
   @Override
   public Object visit(ASTUnmodifiedClassDeclaration node, Object data) {
     SymbolTable st = new SymbolTable();
@@ -55,22 +48,20 @@ public class SymbolTableVisitor extends Global_Symbol_Table_List implements JmmV
       node.jjtGetChild(i).jjtAccept(this, data);
     }
 
-    //TODO
-    //Only for debugging reasons
+    // TODO
+    // Only for debugging reasons
     System.out.println("last and the");
     return null;
   }
 
-  /****/
+  /** * */
   @Override
   public Object visit(ASTELSE node, Object data) {
-    System.out.println(5);
     return null;
   }
   /** //TODO */
   @Override
   public Object visit(ASTSTATEMENT node, Object data) {
-    System.out.println(6);
     node.jjtGetChild(0).jjtAccept(this, data);
     for (int i = 0; i < node.jjtGetNumChildren(); i++) {
       node.jjtGetChild(i).jjtAccept(this, data);
@@ -80,7 +71,6 @@ public class SymbolTableVisitor extends Global_Symbol_Table_List implements JmmV
   /** //TODO */
   @Override
   public Object visit(ASTCONDITION node, Object data) {
-    System.out.println(7);
     node.jjtGetChild(0).jjtAccept(this, data);
     for (int i = 0; i < node.jjtGetNumChildren(); i++) {
       node.jjtGetChild(i).jjtAccept(this, data);
@@ -90,7 +80,6 @@ public class SymbolTableVisitor extends Global_Symbol_Table_List implements JmmV
   /** Copy from the other branch */
   @Override
   public Object visit(ASTIF node, Object data) {
-    System.out.println(8);
 
     node.jjtGetChild(0).jjtAccept(this, data); // if
 
@@ -105,7 +94,6 @@ public class SymbolTableVisitor extends Global_Symbol_Table_List implements JmmV
   /** //TODO */
   @Override
   public Object visit(ASTLiteral node, Object data) {
-    System.out.println(11);
 
     for (int i = 0; i < node.jjtGetNumChildren(); i++) {
       node.jjtGetChild(i).jjtAccept(this, data);
@@ -115,7 +103,6 @@ public class SymbolTableVisitor extends Global_Symbol_Table_List implements JmmV
 
   @Override
   public Object visit(ASTMultiplicativeExpression node, Object data) {
-    System.out.println(16);
     for (int i = 0; i < node.jjtGetNumChildren(); i++) {
       node.jjtGetChild(i).jjtAccept(this, data);
     }
@@ -124,7 +111,6 @@ public class SymbolTableVisitor extends Global_Symbol_Table_List implements JmmV
 
   @Override
   public Object visit(ASTAdditiveExpression node, Object data) {
-    System.out.println(17);
     for (int i = 0; i < node.jjtGetNumChildren(); i++) {
       node.jjtGetChild(i).jjtAccept(this, data);
     }
@@ -133,7 +119,6 @@ public class SymbolTableVisitor extends Global_Symbol_Table_List implements JmmV
 
   @Override
   public Object visit(ASTLESSTHEN node, Object data) {
-    System.out.println(18);
     for (int i = 0; i < node.jjtGetNumChildren(); i++) {
       node.jjtGetChild(i).jjtAccept(this, data);
     }
@@ -141,7 +126,6 @@ public class SymbolTableVisitor extends Global_Symbol_Table_List implements JmmV
   }
 
   public Object visit(ASTASSIGNMENT node, Object data) {
-    System.out.println(19);
 
     Element element = new Element();
     element.setName(node.jjtGetChild(0).toString());
@@ -149,7 +133,6 @@ public class SymbolTableVisitor extends Global_Symbol_Table_List implements JmmV
 
     this.list_symbol_tables.getFirst().getVariablesv2().push(element);
 
-    System.out.println(1);
     for (int i = 0; i < node.jjtGetNumChildren(); i++) {
       node.jjtGetChild(i).jjtAccept(this, data);
     }
@@ -157,7 +140,6 @@ public class SymbolTableVisitor extends Global_Symbol_Table_List implements JmmV
   }
 
   public Object visit(ASTName node, Object data) {
-    System.out.println(20);
     if (node.parent instanceof ASTASSIGNMENT) {
       // this.list_symbol_tables.getFirst().getChildren_list_of_symbol_tables().getFirst().isConditional();
 
@@ -170,7 +152,6 @@ public class SymbolTableVisitor extends Global_Symbol_Table_List implements JmmV
   }
 
   public Object visit(ASTResultType node, Object data) {
-    System.out.println(21);
     for (int i = 0; i < node.jjtGetNumChildren(); i++) {
       node.jjtGetChild(i).jjtAccept(this, data);
     }
@@ -184,13 +165,9 @@ public class SymbolTableVisitor extends Global_Symbol_Table_List implements JmmV
     return null;
   }
 
-  /**
-   * Adiciona as variáveis ao método especificado
-   * Inserção na primeira st da lista global
-   * */
+  /** Adiciona as variáveis ao método especificado Inserção na primeira st da lista global */
   @Override
   public Object visit(ASTType node, Object data) {
-    System.out.println(23);
 
     if (node.parent instanceof ASTMethodDeclaration) {
       Element element = new Element();
@@ -199,7 +176,6 @@ public class SymbolTableVisitor extends Global_Symbol_Table_List implements JmmV
 
     } else if (node.parent instanceof ASTResultType) {
       this.list_symbol_tables.getFirst().setEnd_def_return_name(node.jjtGetChild(0).toString());
-
     }
     return null;
   }
@@ -210,25 +186,20 @@ public class SymbolTableVisitor extends Global_Symbol_Table_List implements JmmV
     for (int i = 0; i < node.jjtGetNumChildren(); i++) {
       node.jjtGetChild(i).jjtAccept(this, data);
     }
-    System.out.println(24);
     return null;
   }
 
-  /**
-   * Constrói os elementos dos argumentos e adciona à ultima
-   * st inserida
-   * */
+  /** Constrói os elementos dos argumentos e adciona à ultima st inserida */
   @Override
   public Object visit(ASTMethodDeclarator node, Object data) {
 
     SymbolTable st = this.list_symbol_tables.getFirst();
 
-
     String methodoName = node.value;
     String tipo_variavel = new String();
-    String  nome_do_argumento = new String();
+    String nome_do_argumento = new String();
 
-    boolean flag_type =false;
+    boolean flag_type = false;
     boolean flag_var = false;
     boolean is_array = false;
 
@@ -238,35 +209,34 @@ public class SymbolTableVisitor extends Global_Symbol_Table_List implements JmmV
     }
 
     for (int i = 0; i < node.jjtGetNumChildren(); i++) {
-        Element element = new Element();
+      Element element = new Element();
 
       // argumentos de uma funcao type e nome da variavels
       if (node.jjtGetChild(i) instanceof ASTType) {
 
         tipo_variavel = node.jjtGetChild(i).jjtGetChild(0).toString();
         is_array = ((ASTType) node.jjtGetChild(i)).isArray;
-        flag_type =true;
+        flag_type = true;
 
-      }else if (node.jjtGetChild(i) instanceof ASTVariableDeclaratorId){
+      } else if (node.jjtGetChild(i) instanceof ASTVariableDeclaratorId) {
         nome_do_argumento = ((ASTVariableDeclaratorId) node.jjtGetChild(i)).value;
-        flag_var =true;
+        flag_var = true;
 
-      }else if(node.jjtGetChild(i) instanceof ASTRETURN){
-          //acho que nao e aqui
+      } else if (node.jjtGetChild(i) instanceof ASTRETURN) {
+        // acho que nao e aqui
       }
 
-      if(flag_type && flag_var){
+      if (flag_type && flag_var) {
         element.setType(tipo_variavel);
         element.setName(nome_do_argumento);
         element.setInitialized(true);
         element.setArray(is_array);
         st.getParameters().put(element.getName(), element);
         flag_type = false;
-        flag_var  =false;
+        flag_var = false;
       }
 
-        node.jjtGetChild(i).jjtAccept(this, data);
-
+      node.jjtGetChild(i).jjtAccept(this, data);
     }
     return null;
   }
@@ -274,56 +244,14 @@ public class SymbolTableVisitor extends Global_Symbol_Table_List implements JmmV
   /** Tratamento das inicializações */
   @Override
   public Object visit(ASTMethodDeclaration node, Object data) {
-    System.out.println(26);
     SymbolTable temp_st = new SymbolTable();
     Element temp_element = new Element();
 
     this.list_symbol_tables.push(temp_st);
 
     for (int i = 0; i < node.jjtGetNumChildren(); i++) {
-
-      // Tratamento do caso especial Main
-      //      if (node.jjtGetChild(1).toString() == "main") {
-      //
-      //          if (node.jjtGetChild(i) instanceof ASTResultType) {
-      //            temp_st.setName( node.jjtGetChild(i).toString() );
-      //          }
-      //          if (node.jjtGetChild(i) instanceof ASTMethodDeclarator) {
-      //            temp_st.setName( node.jjtGetChild(i).toString() );
-      //          }
-      //          if (node.jjtGetChild(i) instanceof ASTType) {
-      //            temp_st.setEnd_def_return_name( node.jjtGetChild(i).toString() );
-      //          }
-      //          if (node.jjtGetChild(i) instanceof ASTVariableDeclaratorId) {
-      //
-      //         //   st__name = ((ASTVariableDeclaratorId) node.jjtGetChild(i)).value;
-      ////            futureElement = new Element(st__name, Type.INTEGER, true);
-      ////            future_variables_st.put(tipo_variavel, futureElement);
-      //          }
-      //
-      //
-      //      } else {
-      //
-      //          // Tratamento dos outros metodos
-      //          if (node.jjtGetChild(i) instanceof ASTResultType) {
-      //            temp_st.setEnd_def_return_name(
-      // node.jjtGetChild(i).jjtGetChild(0).jjtGetChild(0).toString() );
-      //          }
-      //
-      //          if (node.jjtGetChild(i) instanceof ASTType) {
-      //            temp_element.setType( node.jjtGetChild(i).jjtGetChild(0).toString()  );
-      //          }
-      //          if (node.jjtGetChild(i) instanceof ASTVariableDeclaratorId) {
-      //            temp_element.setName( ((ASTVariableDeclaratorId) node.jjtGetChild(i)).value );
-      //           //   future_variables_st.put(tipo_variavel, futureElement);
-      //          }
-      //
-      //
-      //      }
       node.jjtGetChild(i).jjtAccept(this, data);
     }
-    // this.list_symbol_tables.getFirst().setEnd_return_element(new Element(methodName,
-    // Type.valueOf(return_value_st)));
 
     return null;
   }
@@ -361,7 +289,6 @@ public class SymbolTableVisitor extends Global_Symbol_Table_List implements JmmV
   /** */
   @Override
   public Object visit(ASTINIT node, Object data) {
-    System.out.println(29);
 
     return null;
   }
@@ -369,13 +296,11 @@ public class SymbolTableVisitor extends Global_Symbol_Table_List implements JmmV
   /** */
   @Override
   public Object visit(ASTFD node, Object data) {
-    System.out.println(30);
     return null;
   }
   /** */
   @Override
   public Object visit(ASTMETODO node, Object data) {
-    System.out.println(31);
 
     return null;
   }
