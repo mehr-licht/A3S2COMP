@@ -20,10 +20,6 @@ ldc testeVar
 bipush 10
 bipush 5
 idiv
-ldc testeVar2
-bipush 1
-bipush 2
-isub
 ldc testeVar3
 bipush 4
 bipush 5
@@ -32,10 +28,8 @@ bipush 4
 ireturn
 .end method
 .method public function_def(boolean gaia; int var1; int var2; )V
-ldc randou
+ldc andou
 bipush 2
-ldc gerado
-bipush 3
 bipush 4
 ireturn
 .end method

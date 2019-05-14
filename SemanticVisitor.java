@@ -11,11 +11,15 @@ public class SemanticVisitor extends SemanticManager implements JmmVisitor {
   /***/
   public Object visit(ASTStart node, Object data) {
     node.jjtGetChild(0).jjtAccept(this, data);
-    //verificar se  os vlaores retornados estao de acordo
-    //Verificar se existem metodos com o mesmo nome
-      // symbolTables com o mesmo numero
-      //variavel ja foi inicializada
-      //variavel ja foi declarada
+    //TODO verificar se  os vlaores retornados estao de acordo
+    //TODO Verificar se existem metodos com o mesmo nome, com o mesmo
+    //TODO numero de argumentos e mesmo tipo e return
+    //TODO symbolTables com o mesmo numero
+    //TODO variavel ja foi inicializada
+    //TODO variavel ja foi declarada
+    //TODO casos de atribuicao de int a boolean
+    //TODO metdoso existirem antes de serem chamados
+    //TODO multiplicação entre tipos de dados diferentes,
     return null;
   }
     /***/
@@ -254,8 +258,6 @@ public class SemanticVisitor extends SemanticManager implements JmmVisitor {
       for (int i = 0; i < node.jjtGetNumChildren(); i++) {
 
           node.jjtGetChild(i).jjtAccept(this, data);
-
-
       }
 
 //      if(node.jjtGetChild(0).jjtGetChild(0).jjtGetChild(0).toString() instanceof  ASTPrimitiveType
@@ -267,10 +269,6 @@ public class SemanticVisitor extends SemanticManager implements JmmVisitor {
 //      }
 //
 //          if( ){
-//
-//
-//
-//
 //      }
 
 

@@ -19,17 +19,15 @@ class MonteCarloPi {
         numsamples = naoestaInit  + naoestaInit2;
         pi_estimate_times_100 = 3 * 4;
         testeVar = 10 / 5;
-        testeVar2 = 1 - 2;
         testeVar3 =  4+5 ;
         return 4;
 	}
 
 	public int function_def(boolean gaia, int var1, int var2){
 	    int randou;
-	    int gerado;
-	    randou = 2;
-	    gerado =3;
-	    return 4;
+	    andou = 2;
+
+	   return 4;
 	}
 
 
