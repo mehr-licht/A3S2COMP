@@ -1,6 +1,6 @@
 class MonteCarloPi {
 
-    public int estimate_pi(int variavelTeste, int var_TESTE2){
+    public int estimate_pi( int variavelTeste, int var_TESTE2){
             int mal;
             return 10;
         }
@@ -16,7 +16,7 @@ class MonteCarloPi {
 
 
 
-        num_samples = 1  + 1;
+        numsamples = naoestaInit  + naoestaInit2;
         pi_estimate_times_100 = 3 * 4;
         testeVar = 10 / 5;
         testeVar2 = 1 - 2;

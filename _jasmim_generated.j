@@ -8,9 +8,9 @@ ldc num
 bipush 0
 ldc num
 bipush 1
-ldc num_samples
-bipush 1
-bipush 1
+ldc numsamples
+ldc naoestaInit
+ldc naoestaInit2
 iadd
 ldc pi_estimate_times_100
 bipush 3

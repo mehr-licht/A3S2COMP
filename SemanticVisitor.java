@@ -7,13 +7,18 @@ public class SemanticVisitor extends SemanticManager implements JmmVisitor {
     this.list_symbol_tables = list_symbol_tables;
   }
 
+
+  /***/
   public Object visit(ASTStart node, Object data) {
-    System.out.println("HElllo WORLD from Smenantic");
-    System.out.println(this.list_symbol_tables.getFirst().getName());
     node.jjtGetChild(0).jjtAccept(this, data);
+    //verificar se  os vlaores retornados estao de acordo
+    //Verificar se existem metodos com o mesmo nome
+      // symbolTables com o mesmo numero
+      //variavel ja foi inicializada
+      //variavel ja foi declarada
     return null;
   }
-
+    /***/
   public Object visit(ASTClassBodyDeclaration node, Object data) {
     node.jjtGetChild(0).jjtAccept(this, data);
     return null;
@@ -213,21 +218,62 @@ public class SemanticVisitor extends SemanticManager implements JmmVisitor {
       }
       return null;
   }
-
+    /**
+     * COnfirmação se a um int ou boolean vem um nome de variavel
+     *
+     * */
   public Object visit(ASTMethodDeclarator node, Object data) {
-      for (int i = 0; i < node.jjtGetNumChildren(); i++) {
-          node.jjtGetChild(i).jjtAccept(this, data);
+
+
+      if( !(node.jjtGetNumChildren() % 2 == 0) ){
+          SemanticManager.addError(node.line,
+              "Error: Definition of arguments: In fuction " +
+                node.value);
       }
-      // TODO nos argumentos só aceita null ou seguidos de
-    // de dois nos AST Type e VaraiableId
-    // ver symol table
+
+      for (int i = 0; i < node.jjtGetNumChildren()-1; i++) {
+
+           if(node.jjtGetChild(i) instanceof  ASTType
+                   && node.jjtGetChild(i+1) instanceof  ASTVariableDeclaratorId){
+
+               node.jjtGetChild(i).jjtAccept(this, data);
+           }else{
+               SemanticManager.addError(node.line,
+                       "Error: Definition of arguments: In fuction " +
+                               node.value);
+           }
+          System.out.println(0%2 == 0);
+      System.out.println("Hello");
+
+      }
     return null;
   }
 
   public Object visit(ASTMethodDeclaration node, Object data) {
+
       for (int i = 0; i < node.jjtGetNumChildren(); i++) {
+
           node.jjtGetChild(i).jjtAccept(this, data);
+
+
       }
+
+//      if(node.jjtGetChild(0).jjtGetChild(0).jjtGetChild(0).toString() instanceof  ASTPrimitiveType
+//            &&
+//              node.jjtGetChild(node.jjtGetNumChildren() - 1 ).jjtGetChild(0).jjtGetChild(0).jjtGetChild(0) instanceof ASTLiteral)
+//          (node.jjtGetChild(node.jjtGetNumChildren() - 1 ) instanceof ASTRETURN)
+//      ){
+//
+//      }
+//
+//          if( ){
+//
+//
+//
+//
+//      }
+
+
       return null;
   }
 
@@ -392,29 +438,6 @@ public class SemanticVisitor extends SemanticManager implements JmmVisitor {
   //        return null;
   //    }
   //
-  //    public Object visit(ASTAccess node, Object data) {
-  //        return this.globalSymbolTableList.get_Top_Stack().getElement((String) node.value);
-  //    }
-  //
-  //    public Object visit(ASTTerm node, Object data) {
-  //
-  //        return node.jjtGetChild(node.jjtGetNumChildren() - 1).jjtAccept(this, data);
-  //    }
-  //
-  //    public Object visit(ASTFunctionName node, Object data) {
-  //        return null;
-  //    }
-  //
-  //    public Object visit(ASTSize node, Object data) {
-  //        return null;
-  //    }
-  //
-  //    public Object visit(ASTConditionalOperation node, Object data) {
-  //
-  //        node.jjtGetChild(1).jjtAccept(this, data);
-  //
-  //        return null;
-  //    }
   //
   //    public Object visit(ASTWhile node, Object data) {
   //
@@ -539,8 +562,5 @@ public class SemanticVisitor extends SemanticManager implements JmmVisitor {
   //
   //        return vars;
   //    }
-  //
-  //    public Object visit(ASTString node, Object data) {
-  //        return null;
-  //    }
+
 }

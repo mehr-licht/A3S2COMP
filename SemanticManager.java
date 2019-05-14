@@ -6,7 +6,6 @@ public class SemanticManager {
 	public static LinkedList<String> errors = new LinkedList<>();
 
 
-
 	public static void addError(String error){
 		errors.add(error);
 	}
