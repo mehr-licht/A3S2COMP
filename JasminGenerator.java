@@ -29,12 +29,34 @@ public class JasminGenerator extends Global_Symbol_Table_List{
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
-        System.out.println("JasmimGenerator ON ");
     }
 
     public PrintWriter getWriter() {
         return writer;
     }
+
+
+    public static String conversitonTypesArguments(String string, boolean isArray){
+        String codeJasmin = null;
+
+
+        if(string.equals("int")){
+            codeJasmin = "I";
+        }else if(string.equals("boolean")){
+            codeJasmin = "Z";
+        }else if(string.equals("void")){
+            codeJasmin = "V";
+        }
+
+        if(isArray){
+            codeJasmin ="[I";
+        }
+
+        return codeJasmin;
+    }
+
+
+
 
 
     public String getFilepath() {

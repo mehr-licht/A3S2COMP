@@ -255,7 +255,7 @@ public class SemanticVisitor extends SemanticManager implements JmmVisitor {
 
   public Object visit(ASTMethodDeclaration node, Object data) {
 
-      for (int i = 0; i < node.jjtGetNumChildren(); i++) {
+          for (int i = 0; i < node.jjtGetNumChildren(); i++) {
 
           node.jjtGetChild(i).jjtAccept(this, data);
       }

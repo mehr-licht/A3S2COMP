@@ -1,34 +1,22 @@
-class MonteCarloPi {
+class MonteCarloPi extends FileOutOutStream {
 
-    public int estimate_pi( int variavelTeste, int var_TESTE2){
-            int mal;
-            return 10;
-        }
+public int[] matubias(int iinteiro, int[] aarray, boolean bbool){
+                    return 4;
+                }
+
+
 
 	public static void main(String[] args) {
 		int pi_estimate_times_100;
 		int num_samples;
-        int testeVar;
-        int testeVar2;
         int num;
         num=0;
         num=1;
-
-
-
-        numsamples = naoestaInit  + naoestaInit2;
-        pi_estimate_times_100 = 3 * 4;
         testeVar = 10 / 5;
         testeVar3 =  4+5 ;
-        return 4;
+
 	}
 
-	public int function_def(boolean gaia, int var1, int var2){
-	    int randou;
-	    andou = 2;
-
-	   return 4;
-	}
 
 
 

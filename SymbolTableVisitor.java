@@ -28,6 +28,7 @@ public class SymbolTableVisitor extends Global_Symbol_Table_List implements JmmV
   @Override
   public Object visit(ASTUnmodifiedClassDeclaration node, Object data) {
     SymbolTable st = new SymbolTable();
+    String extends_class  = null;
 
     st.setName(node.value);
     try {
@@ -45,6 +46,16 @@ public class SymbolTableVisitor extends Global_Symbol_Table_List implements JmmV
               + e.getMessage());
     }
     for (int i = 0; i < node.jjtGetNumChildren(); i++) {
+
+      //case extends adiciona os filhos da classe
+      if(node.jjtGetChild(i) instanceof ASTName){
+        extends_class = ((ASTName) node.jjtGetChild(i)).value;
+        SymbolTable st_extended = new SymbolTable(extends_class,false);
+        this.list_symbol_tables.getFirst().addChild(st_extended);
+      }
+
+
+
       node.jjtGetChild(i).jjtAccept(this, data);
     }
 

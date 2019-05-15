@@ -1,5 +1,28 @@
 
 
+.class public MonteCarloPi
+.super java/lang/Object
+
+.method public <init>()V
+   aload_0 ; push this
+   invokespecial java/lang/Object/<init>()V ; call super
+   return
+.end method
+
+.method public static main([Ljava/lang/String;)V
+bipush 2
+invokestatic io/println(I)V
+return
+.end method
+
+
+
+
+
+
+
+
+
 
 #Código-Teste
 

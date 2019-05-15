@@ -24,10 +24,36 @@ public class JasminVisitor extends JasminGenerator implements JmmVisitor {
   /** **** */
   @Override
   public Object visit(ASTUnmodifiedClassDeclaration node, Object data) {
-    System.out.println(node.value);
+    String extends_class = null;
+    boolean case_no_extends = true;
+
     this.getWriter().print(".class public ");
     this.getWriter().println(node.value);
+
     for (int i = 0; i < node.jjtGetNumChildren(); i++) {
+
+      if (node.jjtGetChild(i) instanceof ASTName) {
+        extends_class = ((ASTName) node.jjtGetChild(i)).value;
+        this.getWriter().println(".super java/lang/" + extends_class);
+        case_no_extends = false;
+        this.getWriter().println("");
+        this.getWriter().println(".method public <init>()V");
+        this.getWriter().println("aload_0");
+        this.getWriter().println("invokespecial java/lang/Object/<init>()V");
+        this.getWriter().println(".end method");
+        this.getWriter().println("");
+      }
+      // caso nao haja extendeds faz este print
+      if (case_no_extends) {
+        this.getWriter().println(".super java/lang/Object");
+        this.getWriter().println("");
+        this.getWriter().println(".method public <init>()V");
+        this.getWriter().println("aload_0");
+        this.getWriter().println("invokespecial java/lang/Object/<init>()V");
+        this.getWriter().println(".end method");
+        this.getWriter().println("");
+      }
+
       node.jjtGetChild(i).jjtAccept(this, data);
     }
     return null;
@@ -100,23 +126,37 @@ public class JasminVisitor extends JasminGenerator implements JmmVisitor {
     return null;
   }
 
-  /**
-   * Impressao dos metodos e argumentos
-   *
-   * */
+  /** Impressao dos metodos e argumentos */
   @Override
   public Object visit(ASTMethodDeclaration node, Object data) {
     String str_main = "main";
+    String resulting_type = null;
+    boolean check_method_return = false;
+
+    //leitura do valor de retorno
+    if (node.jjtGetChild(0) instanceof ASTResultType){
+      if( node.jjtGetChild(0).jjtGetNumChildren() > 0) {
+        resulting_type = ((ASTPrimitiveType) node.jjtGetChild(0).jjtGetChild(0).jjtGetChild(0)).toString();
+        check_method_return = ((ASTType) node.jjtGetChild(0).jjtGetChild(0)).isArray;
+      }else{
+        resulting_type =  ((ASTResultType) node.jjtGetChild(0)).value;
+      }
+
+
+    }
+
 
     for (int i = 0; i < node.jjtGetNumChildren(); i++) {
 
+
+      //leitura dos metodos e impressao
       if (node.jjtGetChild(i) instanceof ASTMethodDeclarator) {
 
         // caso main metodo
         if (str_main.equals(((ASTMethodDeclarator) node.jjtGetChild(i)).value)) {
           this.getWriter().println(".method public static main([Ljava/lang/String;)V");
 
-        //caso outros metodos
+          // caso outros metodos
         } else {
 
           this.getWriter().print(".method public ");
@@ -127,27 +167,38 @@ public class JasminVisitor extends JasminGenerator implements JmmVisitor {
             // impressão dos argumentos do meétodos
             for (int j = 0; j < node.jjtGetChild(i).jjtGetNumChildren(); j++) {
 
-              if(node.jjtGetChild(i).jjtGetChild(j) instanceof  ASTType){
-                String  tmp = node.jjtGetChild(i).jjtGetChild(j).jjtGetChild(0).toString();
-                this.getWriter().print(tmp);
-                this.getWriter().print(" ");
+              if (node.jjtGetChild(i).jjtGetChild(j) instanceof ASTType) {
+
+                String tmp = node.jjtGetChild(i).jjtGetChild(j).jjtGetChild(0).toString();
+                boolean checkisArray = ((ASTType) node.jjtGetChild(i).jjtGetChild(j)).isArray;
+                String conversion_types = JasminGenerator.conversitonTypesArguments(tmp, checkisArray);
+                this.getWriter().print(conversion_types);
 
               } else {
-                String  tmp = node.jjtGetChild(i).jjtGetChild(j).toString();
-                this.getWriter().print(tmp);
+                //TODO faz o push das variaveis
+                //prints de istore  iload ??
+//                Imprime os nomes dos argumentos (ja nao é necessario)
+//                String tmp = node.jjtGetChild(i).jjtGetChild(j).toString();
+//                this.getWriter().print(tmp);
               }
 
+              //Impressao da virgula
               if (j % 2 == 1) {
                 this.getWriter().print("; ");
               }
 
-            }
+            } //end ciclo de leitura dos argumentos
 
-          }
+          } //end if quando há filhos/ ou seja quando nao ha argumentos
           this.getWriter().print(")");
-          this.getWriter().println("V");
+          String conversion_types = JasminGenerator.conversitonTypesArguments(resulting_type, check_method_return);
+          this.getWriter().println("" + conversion_types);
+
+
         }
       }
+
+
       node.jjtGetChild(i).jjtAccept(this, data);
     }
     return null;
@@ -181,9 +232,6 @@ public class JasminVisitor extends JasminGenerator implements JmmVisitor {
 
   @Override
   public Object visit(ASTPrimitiveType node, Object data) {
-    for (int i = 0; i < node.jjtGetNumChildren(); i++) {
-      node.jjtGetChild(i).jjtAccept(this, data);
-    }
     return null;
   }
 
@@ -195,12 +243,15 @@ public class JasminVisitor extends JasminGenerator implements JmmVisitor {
     return null;
   }
 
-  /** */
-  // TODO acabar if deve haver o caso das classes (+testes)
+  /** Processa o caso do extends Processa o caso do main que afinal não é necessario */
   @Override
   public Object visit(ASTName node, Object data) {
+
     if (node.jjtGetParent().jjtGetParent() instanceof ASTMethodDeclarator) {
       // caso da String do main
+    } else if (node.jjtGetParent() instanceof ASTUnmodifiedClassDeclaration) {
+      // caso do extends
+      return null;
     } else {
       this.getWriter().print("ldc ");
       this.getWriter().println(node.value);
