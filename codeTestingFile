@@ -1,20 +1,12 @@
-class MonteCarloPi extends FileOutOutStream {
-
-public int[] matubias(int iinteiro, int[] aarray, boolean bbool){
-                    return 4;
-                }
-
-
+class MonteCarloPi {
 
 	public static void main(String[] args) {
-		int pi_estimate_times_100;
-		int num_samples;
-        int num;
-        num=0;
-        num=1;
-        testeVar = 10 / 5;
-        testeVar3 =  4+5 ;
+		int teste1;
+		int teste2;
 
+        teste1=0;
+        teste2=1;
+        ioPlus.println(teste2);
 	}
 
 

@@ -16,6 +16,14 @@ public class Global_Symbol_Table_List {
         this.list_symbol_tables.push(symbolTable);
     }
 
+    public LinkedList<SymbolTable> getList_symbol_tables() {
+        return list_symbol_tables;
+    }
+
+    public void setList_symbol_tables(LinkedList<SymbolTable> list_symbol_tables) {
+        this.list_symbol_tables = list_symbol_tables;
+    }
+
     /**
      * Returns the first element in this list. READ ONLY
      * @return SymbolTable the first ST from the list

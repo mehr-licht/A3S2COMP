@@ -57,6 +57,29 @@ public class JasminGenerator extends Global_Symbol_Table_List{
 
 
 
+    public static String find_type_element(LinkedList<SymbolTable> listaIterar, String nomeVariavel, String nomeFuncao){
+
+        //percorre a lista à procura do nome do metodo
+        while(!listaIterar.isEmpty()){
+            SymbolTable symbolTable = listaIterar.pop();
+
+            if(symbolTable.getName().equals(nomeFuncao)){
+                LinkedList<Element> listaVariaveis = symbolTable.getVariablesv2();
+                while(!listaVariaveis.isEmpty()){
+                    Element testeElement = listaVariaveis.pop();
+                    if(testeElement.getName().equals(nomeVariavel) && testeElement.getType() != null){
+                           return  testeElement.getType();
+                    }
+                }
+            }
+        }
+
+        return null;
+    }
+
+
+
+
 
 
     public String getFilepath() {
@@ -67,19 +90,6 @@ public class JasminGenerator extends Global_Symbol_Table_List{
         writer.close();
     }
 
-    public void writeModule(String name) {
-        this.moduleName = name;
-        writer.print(".class public ");
-        println(name);
-        println(".super java/lang/Object");
-    }
-
-    public void writeStackAndLocals(int stack, int locals) {
-        writer.print(".limit locals ");
-        println(Integer.toString(locals));
-        writer.print(".limit stack ");
-        println(Integer.toString(stack));
-    }
 
     public int writeFields(LinkedList<Element> fields) {
         int fieldsCounter = 0;

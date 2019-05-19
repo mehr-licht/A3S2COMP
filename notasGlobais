@@ -1,5 +1,23 @@
 
 
+###### Code printing 0
+
+
+.class public MonteCarloPi
+.super java/lang/Object
+
+
+.method public static main([Ljava/lang/String;)V
+    bipush 0
+    invokestatic io/println(I)V
+    return
+.end method
+
+
+
+
+
+##########################  WORKING CODE
 .class public MonteCarloPi
 .super java/lang/Object
 
@@ -12,8 +30,30 @@
 .method public static main([Ljava/lang/String;)V
 bipush 2
 invokestatic io/println(I)V
-return
 .end method
+return
+######################### WORKING CODE
+
+
+
+
+Comandos in Dowloads:
+javap -c io.class
+
+
+/A3S2COMP/
+javap -v MonteCarloPi.class
+javap -c MonteCarloPi.class
+java MonteCarloPi
+java -jar jasmin.jar _jasmim_generated.j
+
+       1: invokespecial #1                  // Method java/lang/Object."<init>":()V
+
+
+
+
+
+
 
 
 
