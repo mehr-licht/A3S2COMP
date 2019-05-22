@@ -9,6 +9,7 @@ public class JasminGenerator extends Global_Symbol_Table_List{
     public PrintWriter writer;
     private String filepath;
     private Integer lineNumber = 1;
+
     private String moduleName;
 
     /**
@@ -57,7 +58,7 @@ public class JasminGenerator extends Global_Symbol_Table_List{
 
 
 
-    public static String find_type_element(LinkedList<SymbolTable> listaIterar, String nomeVariavel, String nomeFuncao){
+    public static Element find_type_element(LinkedList<SymbolTable> listaIterar, String nomeVariavel, String nomeFuncao){
 
         //percorre a lista à procura do nome do metodo
         while(!listaIterar.isEmpty()){
@@ -68,7 +69,7 @@ public class JasminGenerator extends Global_Symbol_Table_List{
                 while(!listaVariaveis.isEmpty()){
                     Element testeElement = listaVariaveis.pop();
                     if(testeElement.getName().equals(nomeVariavel) && testeElement.getType() != null){
-                           return  testeElement.getType();
+                           return  testeElement;
                     }
                 }
             }

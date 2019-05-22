@@ -3,6 +3,7 @@ import java.util.LinkedList;
 public class JasminVisitor extends JasminGenerator implements JmmVisitor {
 
   private Type storeType = Type.UNDEFINED;
+  static  int counter = -1;
 
   public JasminVisitor(LinkedList<SymbolTable> list_symbol_tables) {
     super(list_symbol_tables);
@@ -61,6 +62,8 @@ public class JasminVisitor extends JasminGenerator implements JmmVisitor {
 
   @Override
   public Object visit(ASTINICIALIZACAO node, Object data) {
+
+
     for (int i = 0; i < node.jjtGetNumChildren(); i++) {
       node.jjtGetChild(i).jjtAccept(this, data);
     }
@@ -229,7 +232,7 @@ public class JasminVisitor extends JasminGenerator implements JmmVisitor {
   /** */
   @Override
   public Object visit(ASTMethodDeclarator node, Object data) {
-
+     counter = node.jjtGetNumChildren()/2;
     for (int i = 0; i < node.jjtGetNumChildren(); i++) {
       node.jjtGetChild(i).jjtAccept(this, data);
     }
@@ -285,8 +288,12 @@ public class JasminVisitor extends JasminGenerator implements JmmVisitor {
           String init_type = JasminGenerator.conversitonTypesArguments(datatype,false);
           if(init_type == null){
             //procura o tipo de eleemnto. //tipo de no
-            String newDataType = JasminGenerator.find_type_element(this.list_symbol_tables, datatype, ((ASTMethodDeclarator) node.jjtGetParent().jjtGetChild(1)).value);
-            type_to_print = JasminGenerator.conversitonTypesArguments(newDataType,false);
+            Element newDataType = JasminGenerator.find_type_element(this.list_symbol_tables, datatype, ((ASTMethodDeclarator) node.jjtGetParent().jjtGetChild(1)).value);
+            type_to_print = JasminGenerator.conversitonTypesArguments(newDataType.getType(),false);
+
+              this.getWriter().print("iload ");
+              this.getWriter().println(newDataType.getVarnum());
+            //SE O VARNUM VAI PARA O ILOAD
           }
           this.getWriter().println("invokestatic io/" + node.value2 +"("+ type_to_print + ")V");
 
@@ -306,13 +313,41 @@ public class JasminVisitor extends JasminGenerator implements JmmVisitor {
 
   @Override
   public Object visit(ASTASSIGNMENT node, Object data) {
-    node.jjtGetChild(0).jjtAccept(this, data);
-    node.jjtGetChild(1).jjtAccept(this, data);
+
+
+    String teste = node.jjtGetChild(1).jjtGetChild(0).jjtGetChild(0).toString();
+
+    if(node.jjtGetChild(1).jjtGetChild(0).jjtGetChild(0) instanceof ASTLiteral){
+      int result = Integer.parseInt(teste);
+      this.getWriter().print("bipush ");
+      this.getWriter().println(result);
+      this.getWriter().print("istore_");
+      this.getWriter().println(counter);
+      counter++;
+    }else{
+      node.jjtGetChild(1).jjtAccept(this,data);
+    }
+
     return null;
   }
 
   @Override
   public Object visit(ASTLESSTHEN node, Object data) {
+
+    if(node.jjtGetChild(0).jjtGetChild(0).jjtGetChild(0) instanceof  ASTLiteral){
+      int result = Integer.parseInt( node.jjtGetChild(0).jjtGetChild(0).jjtGetChild(0).toString() );
+      this.getWriter().print("bipush ");
+      this.getWriter().println(result);
+    }
+    if(node.jjtGetChild(1).jjtGetChild(0).jjtGetChild(0) instanceof  ASTLiteral){
+      int resultTest = Integer.parseInt( node.jjtGetChild(1).jjtGetChild(0).jjtGetChild(0).toString() );
+      this.getWriter().print("bipush ");
+      this.getWriter().println(resultTest);
+    }
+
+//    for (int i = 0; i < node.jjtGetNumChildren(); i++) {
+//      node.jjtGetChild(i).jjtAccept(this, data);
+//    }
     return null;
   }
 
@@ -398,8 +433,14 @@ public class JasminVisitor extends JasminGenerator implements JmmVisitor {
 
   @Override
   public Object visit(ASTIF node, Object data) {
+
     for (int i = 0; i < node.jjtGetNumChildren(); i++) {
       node.jjtGetChild(i).jjtAccept(this, data);
+      if(node.jjtGetChild(i) instanceof ASTCONDITION){
+        this.getWriter().print("if_icmpgt");
+
+      }
+
     }
     return null;
   }
@@ -414,9 +455,12 @@ public class JasminVisitor extends JasminGenerator implements JmmVisitor {
 
   @Override
   public Object visit(ASTSTATEMENT node, Object data) {
+    this.getWriter().print("if_icmpgt");
     for (int i = 0; i < node.jjtGetNumChildren(); i++) {
       node.jjtGetChild(i).jjtAccept(this, data);
     }
+    this.getWriter().println("numero da linha que sao o numero de statements");
+    this.getWriter().println("goto");
     return null;
   }
 

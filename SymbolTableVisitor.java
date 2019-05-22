@@ -2,8 +2,11 @@ import java.util.LinkedList;
 
 public class SymbolTableVisitor extends Global_Symbol_Table_List implements JmmVisitor {
 
+  public int counter;
+
   public SymbolTableVisitor() {
     this.list_symbol_tables = new LinkedList<SymbolTable>();
+    this.counter = -1;
   }
 
   /** Usa este constructor */
@@ -276,6 +279,8 @@ public class SymbolTableVisitor extends Global_Symbol_Table_List implements JmmV
     if (node.parent instanceof ASTMethodDeclaration) {
       Element element = new Element();
       element.setType(node.jjtGetChild(0).toString());
+      counter++;
+      element.setVarnum(counter);
       this.list_symbol_tables.getFirst().addVariablesV2(element);
 
     } else if (node.parent instanceof ASTResultType) {
