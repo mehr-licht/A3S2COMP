@@ -3,8 +3,10 @@ class MonteCarloPi {
 	public static void main(String[] args) {
 		int teste1;
 		int teste2;
-        teste2 = 31;
+
+        teste2 = 34;
         teste1=5*3-4/4;
+
         if(1 < 32){
             teste2 = 33;
         }

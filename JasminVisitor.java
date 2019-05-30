@@ -4,7 +4,7 @@ public class JasminVisitor extends JasminGenerator implements JmmVisitor {
 
   private Type storeType = Type.UNDEFINED;
   static  int counter = -1;
-
+  static String label = "Label";
   public JasminVisitor(LinkedList<SymbolTable> list_symbol_tables) {
     super(list_symbol_tables);
   }
@@ -30,16 +30,18 @@ public class JasminVisitor extends JasminGenerator implements JmmVisitor {
 
     this.getWriter().print(".class public ");
     this.getWriter().println(node.value);
-
+    this.lineNumber++;
     for (int i = 0; i < node.jjtGetNumChildren(); i++) {
 
       if (node.jjtGetChild(i) instanceof ASTName) {
         extends_class = ((ASTName) node.jjtGetChild(i)).value;
         this.getWriter().println(".super java/lang/" + extends_class);
+        this.lineNumber++;
         case_no_extends = false;
         this.getWriter().println("");
 //        this.getWriter().println(".method public <init>()V");
 //        this.getWriter().println("aload_0");
+        //da classe ques estmoas a estender
 //        this.getWriter().println("invokespecial java/lang/Object/<init>()V");
 //        this.getWriter().println(".end method");
         this.getWriter().println("");
@@ -48,6 +50,7 @@ public class JasminVisitor extends JasminGenerator implements JmmVisitor {
       if (case_no_extends) {
         this.getWriter().println(".super java/lang/Object");
         this.getWriter().println("");
+        this.lineNumber++;
 //        this.getWriter().println(".method public <init>()V");
 //        this.getWriter().println("aload_0");
 //        this.getWriter().println("invokespecial java/lang/Object/<init>()V");
@@ -158,16 +161,19 @@ public class JasminVisitor extends JasminGenerator implements JmmVisitor {
         // caso main metodo
         if (str_main.equals(((ASTMethodDeclarator) node.jjtGetChild(i)).value)) {
           this.getWriter().println(".method public static main([Ljava/lang/String;)V");
+          this.lineNumber++;
           //print stacks //TODO HARDCODDE
           this.getWriter().print(".limit locals ");
           this.getWriter().println("5");
+          this.lineNumber++;
           this.getWriter().print(".limit stack ");
           this.getWriter().println("5");
-
+          this.lineNumber++;
 //       caso outros metodos
         } else {
 
           this.getWriter().print(".method public ");
+
           this.getWriter().print(((ASTMethodDeclarator) node.jjtGetChild(i)).value);
           this.getWriter().print("(");
 
@@ -202,13 +208,14 @@ public class JasminVisitor extends JasminGenerator implements JmmVisitor {
           this.getWriter().print(")");
           String conversion_types = JasminGenerator.conversitonTypesArguments(resulting_type, check_method_return);
           this.getWriter().println("" + conversion_types);
-
+          this.lineNumber++;
           //print stacks //TODO HARDCODDE
           this.getWriter().print(".limit locals ");
           this.getWriter().println("5");
+          this.lineNumber++;
           this.getWriter().print(".limit stack ");
-          this.getWriter().println("5");
-
+          this.getWriter().println("10");
+          this.lineNumber++;
         }
       }
 
@@ -222,8 +229,9 @@ public class JasminVisitor extends JasminGenerator implements JmmVisitor {
 
     if(!check_ast_return){
       this.getWriter().println("return");
+      this.lineNumber++;
       this.getWriter().println(".end method");
-
+      this.lineNumber++;
     }
 
     return null;
@@ -294,17 +302,19 @@ public class JasminVisitor extends JasminGenerator implements JmmVisitor {
               this.getWriter().print("iload ");
               this.getWriter().println(newDataType.getVarnum());
             //SE O VARNUM VAI PARA O ILOAD
+            this.lineNumber++;
           }
           this.getWriter().println("invokestatic io/" + node.value2 +"("+ type_to_print + ")V");
-
+          this.lineNumber++;
         }
 
       }else if(node.value.toString().equals("MathUtils")){
         this.getWriter().println("invoke MathUtils/" + node.value2);
-
+        this.lineNumber++;
       }else{
         this.getWriter().print("ldc ");
         this.getWriter().println(node.value);
+        this.lineNumber++;
       }
 
     }
@@ -321,8 +331,10 @@ public class JasminVisitor extends JasminGenerator implements JmmVisitor {
       int result = Integer.parseInt(teste);
       this.getWriter().print("bipush ");
       this.getWriter().println(result);
+      this.lineNumber++;
       this.getWriter().print("istore_");
       this.getWriter().println(counter);
+      this.lineNumber++;
       counter++;
     }else{
       node.jjtGetChild(1).jjtAccept(this,data);
@@ -338,11 +350,13 @@ public class JasminVisitor extends JasminGenerator implements JmmVisitor {
       int result = Integer.parseInt( node.jjtGetChild(0).jjtGetChild(0).jjtGetChild(0).toString() );
       this.getWriter().print("bipush ");
       this.getWriter().println(result);
+      this.lineNumber++;
     }
     if(node.jjtGetChild(1).jjtGetChild(0).jjtGetChild(0) instanceof  ASTLiteral){
       int resultTest = Integer.parseInt( node.jjtGetChild(1).jjtGetChild(0).jjtGetChild(0).toString() );
       this.getWriter().print("bipush ");
       this.getWriter().println(resultTest);
+      this.lineNumber++;
     }
 
 //    for (int i = 0; i < node.jjtGetNumChildren(); i++) {
@@ -367,8 +381,10 @@ public class JasminVisitor extends JasminGenerator implements JmmVisitor {
 
     if (str_add.equals(node.value)) {
       this.getWriter().println("iadd");
+      this.lineNumber++;
     } else if (str_sub.equals(node.value)) {
       this.getWriter().println("isub");
+      this.lineNumber++;
     }
 
     return null;
@@ -390,8 +406,10 @@ public class JasminVisitor extends JasminGenerator implements JmmVisitor {
 
     if (str_div.equals(node.value)) {
       this.getWriter().println("idiv");
+      this.lineNumber++;
     } else if (str_mul.equals(node.value)) {
       this.getWriter().println("imul");
+      this.lineNumber++;
     }
 
     return null;
@@ -419,6 +437,7 @@ public class JasminVisitor extends JasminGenerator implements JmmVisitor {
     // onde entram os numeros de facto
     this.getWriter().print("bipush ");
     this.getWriter().println(node.value);
+    this.lineNumber++;
 
     return null;
   }
@@ -436,10 +455,10 @@ public class JasminVisitor extends JasminGenerator implements JmmVisitor {
 
     for (int i = 0; i < node.jjtGetNumChildren(); i++) {
       node.jjtGetChild(i).jjtAccept(this, data);
-      if(node.jjtGetChild(i) instanceof ASTCONDITION){
-        this.getWriter().print("if_icmpgt");
-
-      }
+//      if(node.jjtGetChild(i) instanceof ASTCONDITION){
+//        this.getWriter().print("if_icmpgt");
+//        //TODO
+//      }
 
     }
     return null;
@@ -455,12 +474,21 @@ public class JasminVisitor extends JasminGenerator implements JmmVisitor {
 
   @Override
   public Object visit(ASTSTATEMENT node, Object data) {
-    this.getWriter().print("if_icmpgt");
+    String newLabel = label + this.lineNumber;
+
+    this.getWriter().print("if_icmpgt ");
+    this.getWriter().println(newLabel);
+    //int lineIf= this.lineNumber;
+
     for (int i = 0; i < node.jjtGetNumChildren(); i++) {
       node.jjtGetChild(i).jjtAccept(this, data);
     }
-    this.getWriter().println("numero da linha que sao o numero de statements");
-    this.getWriter().println("goto");
+
+    this.getWriter().print(newLabel);
+    this.getWriter().println(": ");
+//    this.getWriter().print("goto ");
+//    this.getWriter().println(lineIf);
+
     return null;
   }
 
@@ -494,7 +522,9 @@ public class JasminVisitor extends JasminGenerator implements JmmVisitor {
     // caso em que  return; case voild
     if (node.jjtGetNumChildren() == 0) {
       this.getWriter().println("return");
+      this.lineNumber++;
       this.getWriter().println(".end method");
+      this.lineNumber++;
       return null;
     } else { // caso em que efectivamente retorna algo
 
@@ -502,13 +532,16 @@ public class JasminVisitor extends JasminGenerator implements JmmVisitor {
       if (node.jjtGetChild(0).jjtGetChild(0).jjtGetChild(0) instanceof ASTLiteral) {
         node.jjtGetChild(0).jjtAccept(this, data);
         this.getWriter().println("ireturn");
+        this.lineNumber++;
       } else if (false) { // caso arays //TODO
         this.getWriter().println("areturn");
+        this.lineNumber++;
       } else if (false) { // caso de variables
         // ret 2 return ti the address held in local variablw 2
         // JVM return from subroutine
       }
       this.getWriter().println(".end method");
+      this.lineNumber++;
     }
 
     return null;

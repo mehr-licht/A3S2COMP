@@ -8,7 +8,7 @@ public class JasminGenerator extends Global_Symbol_Table_List{
 
     public PrintWriter writer;
     private String filepath;
-    private Integer lineNumber = 1;
+    public Integer lineNumber = 0;
 
     private String moduleName;
 
@@ -83,15 +83,6 @@ public class JasminGenerator extends Global_Symbol_Table_List{
 
 
 
-    public String getFilepath() {
-        return filepath;
-    }
-
-    public void close() {
-        writer.close();
-    }
-
-
     public int writeFields(LinkedList<Element> fields) {
         int fieldsCounter = 0;
 //        for (Element field : fields) {
@@ -102,55 +93,10 @@ public class JasminGenerator extends Global_Symbol_Table_List{
         return fieldsCounter;
     }
 
-    private void writeField(Element field) {
-//        if (field.getType() != Type.INTEGER && field.getType() != Type.ARRAY)
-//            return;
-//        writer.print(".field static " + field.getName() + " ");
-//        writer.print((field.getType() == Type.INTEGER) ? "I" : "[I");
-//        if (field.getType() == Type.INTEGER && field.getValue() != null) {
-//            writer.print(" = ");
-//            println(field.getValue());
-//        } else {
-//            writer.print("\n");
-//        }
-    }
-
-
-    public void writeBeginMethod(SymbolTable symbolTable) {
-//        String methodName = symbolTable.getName();
-//        if (methodName.equals("main")) {
-//            writeMainMethod();
-//            return;
-//        }
-//        writer.print(".method public static " + methodName + "(");
-//        LinkedList<Element> parameters = symbolTable.getParameters();
-//        for (Element element : parameters) {
-//            writer.print(element.getJasminType());
-//        }
-//        writer.print(")");
-//        println(symbolTable.getJasminReturnType());
-    }
 
 
 
-//    public void writeWhile(ASTConditionalOperation conditionNode, ASTStatements statementNode, ParserVisitor visitor) {
-//        String beginLoopLabel = "loop" + lineNumber;
-//        String endLoopLabel = beginLoopLabel + "_end";
-//
-//        println(beginLoopLabel + ":");
-//
-//        writeCondition(conditionNode, visitor);
-//
-//        println(endLoopLabel);
-//
-//        SymbolTable currentSymbolTable = this.globalSymbolTableList.get_Top_Stack();
-//        this.globalSymbolTableList.insert_Top_Stack_push(currentSymbolTable.popChild());
-//        statementNode.jjtAccept(visitor, null);
-//        this.globalSymbolTableList.popFront();
-//
-//        writer.println("goto " + beginLoopLabel);
-//        writer.println(endLoopLabel + ":");
-//    }
+
 
 //    public void writeIf(ASTConditionalOperation conditionNode, ASTStatements ifNode, ASTStatements elseNode, ParserVisitor visitor) {
 //        String elseLabel = "else_" + lineNumber;
@@ -179,11 +125,6 @@ public class JasminGenerator extends Global_Symbol_Table_List{
 //
 //    }
 
-//    private void writeCondition(ASTConditionalOperation conditionNode, ParserVisitor visitor) {
-//        conditionNode.jjtAccept(visitor, null);
-//        String condition = (String) conditionNode.jjtGetValue();
-//        writer.print(Utils.conditionalsHashMap.get(condition) + " ");
-//    }
 
     public void writePutstatic(Element element) {
         writer.print("putstatic " + moduleName + "/" + element.getName() + " ");
