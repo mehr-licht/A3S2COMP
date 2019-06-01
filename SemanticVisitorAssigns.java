@@ -103,6 +103,11 @@ public class SemanticVisitorAssigns implements JmmVisitor {
     }
 
     @Override
+    public Object visit(ASTConditionalAndExpression node, Object data) {
+        return null;
+    }
+
+    @Override
     public Object visit(ASTLESSTHEN node, Object data) {
         return null;
     }

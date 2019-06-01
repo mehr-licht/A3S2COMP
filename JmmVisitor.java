@@ -20,6 +20,7 @@ public interface JmmVisitor
   public Object visit(ASTResultType node, Object data);
   public Object visit(ASTName node, Object data);
   public Object visit(ASTASSIGNMENT node, Object data);
+  public Object visit(ASTConditionalAndExpression node, Object data);
   public Object visit(ASTLESSTHEN node, Object data);
   public Object visit(ASTAdditiveExpression node, Object data);
   public Object visit(ASTADDSUB node, Object data);
@@ -37,4 +38,4 @@ public interface JmmVisitor
   public Object visit(ASTBODY node, Object data);
   public Object visit(ASTRETURN node, Object data);
 }
-/* JavaCC - OriginalChecksum=3c28743784303ae35964c9d7d46d3274 (do not edit this line) */
+/* JavaCC - OriginalChecksum=dcd11f274298f8b108dcc246dcc29c26 (do not edit this line) */

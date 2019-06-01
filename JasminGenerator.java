@@ -58,6 +58,7 @@ public class JasminGenerator extends Global_Symbol_Table_List{
 
 
 
+
     public static Element find_type_element(LinkedList<SymbolTable> listaIterar, String nomeVariavel, String nomeFuncao){
 
         //percorre a lista à procura do nome do metodo
@@ -77,53 +78,6 @@ public class JasminGenerator extends Global_Symbol_Table_List{
 
         return null;
     }
-
-
-
-
-
-
-    public int writeFields(LinkedList<Element> fields) {
-        int fieldsCounter = 0;
-//        for (Element field : fields) {
-//            writeField(field);
-//            Type fieldType = field.getType();
-//            fieldsCounter += (fieldType == Type.INTEGER || fieldType == Type.ARRAY) ? 1 : 0;
-//        }
-        return fieldsCounter;
-    }
-
-
-
-
-
-
-//    public void writeIf(ASTConditionalOperation conditionNode, ASTStatements ifNode, ASTStatements elseNode, ParserVisitor visitor) {
-//        String elseLabel = "else_" + lineNumber;
-//        String endIfLabel = "if_" + lineNumber + "_end";
-//        SymbolTable currentSymbolTable = this.globalSymbolTableList.get_Top_Stack();
-//
-//        writeCondition(conditionNode, visitor);
-//
-//        if(elseNode != null){
-//            println(elseLabel);
-//            this.globalSymbolTableList.insert_Top_Stack_push(currentSymbolTable.popChild());
-//            ifNode.jjtAccept(visitor, null);
-//            this.globalSymbolTableList.popFront();
-//            writer.println("goto " + endIfLabel);
-//            writer.println(elseLabel + ":");
-//            this.globalSymbolTableList.insert_Top_Stack_push(currentSymbolTable.popChild());
-//            elseNode.jjtAccept(visitor, null);
-//            this.globalSymbolTableList.popFront();
-//
-//        }
-//        else {
-//            this.globalSymbolTableList.insert_Top_Stack_push(currentSymbolTable.popChild());
-//            ifNode.jjtAccept(visitor, null);
-//        }
-//        writer.println(endIfLabel + ":");
-//
-//    }
 
 
     public void writePutstatic(Element element) {
@@ -254,10 +208,6 @@ public class JasminGenerator extends Global_Symbol_Table_List{
     private void println(String line) {
         writer.println(line);
         lineNumber++;
-    }
-
-    private void println(Object object) {
-        println(object.toString());
     }
 
 

@@ -20,22 +20,23 @@ public interface JmmTreeConstants
   public int JJTRESULTTYPE = 16;
   public int JJTNAME = 17;
   public int JJTASSIGNMENT = 18;
-  public int JJTLESSTHEN = 19;
-  public int JJTADDITIVEEXPRESSION = 20;
-  public int JJTADDSUB = 21;
-  public int JJTMULTIPLICATIVEEXPRESSION = 22;
-  public int JJTDIVMULT = 23;
-  public int JJTCASTLOOKAHEAD = 24;
-  public int JJTPRIMARYSUFFIX = 25;
-  public int JJTLITERAL = 26;
-  public int JJTBOOLEANLITERAL = 27;
-  public int JJTIF = 28;
-  public int JJTCONDITION = 29;
-  public int JJTSTATEMENT = 30;
-  public int JJTELSE = 31;
-  public int JJTWHILE = 32;
-  public int JJTBODY = 33;
-  public int JJTRETURN = 34;
+  public int JJTCONDITIONALANDEXPRESSION = 19;
+  public int JJTLESSTHEN = 20;
+  public int JJTADDITIVEEXPRESSION = 21;
+  public int JJTADDSUB = 22;
+  public int JJTMULTIPLICATIVEEXPRESSION = 23;
+  public int JJTDIVMULT = 24;
+  public int JJTCASTLOOKAHEAD = 25;
+  public int JJTPRIMARYSUFFIX = 26;
+  public int JJTLITERAL = 27;
+  public int JJTBOOLEANLITERAL = 28;
+  public int JJTIF = 29;
+  public int JJTCONDITION = 30;
+  public int JJTSTATEMENT = 31;
+  public int JJTELSE = 32;
+  public int JJTWHILE = 33;
+  public int JJTBODY = 34;
+  public int JJTRETURN = 35;
 
 
   public String[] jjtNodeName = {
@@ -58,6 +59,7 @@ public interface JmmTreeConstants
     "ResultType",
     "Name",
     "ASSIGNMENT",
+    "ConditionalAndExpression",
     "LESSTHEN",
     "AdditiveExpression",
     "ADDSUB",
@@ -76,4 +78,4 @@ public interface JmmTreeConstants
     "RETURN",
   };
 }
-/* JavaCC - OriginalChecksum=1bc4a94a7df926bfa95c03d936ad229e (do not edit this line) */
+/* JavaCC - OriginalChecksum=3ae671704ebf31de64c3df02c8473159 (do not edit this line) */

@@ -14,7 +14,7 @@ public class SymbolTable {
 
 
   private SymbolTable parent_symbol_table;
-  private HashMap<String, Element> variables = new HashMap<String, Element>();;
+  private HashMap<String, Element> variables = new HashMap<String, Element>();
   private HashMap<String, Element> parameters = new HashMap<String, Element>();
   private LinkedList<Element> variablesv2;
   private LinkedList<SymbolTable> children_list_of_symbol_tables = new LinkedList<SymbolTable>();
@@ -113,35 +113,6 @@ public class SymbolTable {
     return name;
   }
 
-  //    public String getJasminReturnType() {
-  //        if (end_return_element == null || end_return_element.getName() == null)
-  //            return "V";
-  //        else
-  //            return end_return_element.getJasminType();
-  //    }
-
-  //    public int getLocals() {
-  //        int counter = variables.size();
-  //        if (parameters != null) {
-  //            counter += parameters.size();
-  //        }
-  //        if (getDepth() == 1) {
-  //            counter++;
-  //        }
-  //
-  //        for (SymbolTable child : children_list_of_symbol_tables) {
-  //            counter += child.getLocals();
-  //        }
-  //
-  //        return counter;
-  //    }
-  //    public SemanticVisitor getSemanticVisitor() {
-  //        return semanticVisitor;
-  //    }
-  //
-  //    public SemanticVisitorAssigns getSemanticVisitorAssigns() {
-  //        return semanticVisitorAssigns;
-  //    }
 
   public void addVariables(Element element) {
     variables.put(element.getName(), element);

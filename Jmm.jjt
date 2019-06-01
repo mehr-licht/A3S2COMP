@@ -387,7 +387,7 @@ void AssignmentOperator() #void:
   <ASSIGN>
 }
 
-void ConditionalAndExpression() #void:
+void ConditionalAndExpression():
 {}
 {
   RelationalExpression() ( <SC_AND>  RelationalExpression() )*

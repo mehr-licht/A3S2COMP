@@ -179,7 +179,13 @@ public class SemanticVisitor extends SemanticManager implements JmmVisitor {
       }
       return null;
   }
-  /** Exemplo dos acetatos em comments Casos do Identifier() */
+
+    @Override
+    public Object visit(ASTConditionalAndExpression node, Object data) {
+        return null;
+    }
+
+    /** Exemplo dos acetatos em comments Casos do Identifier() */
   public Object visit(ASTName node, Object data) {
     // String name = (String)node.jjtGetValue();
     // Consult SymbolTable

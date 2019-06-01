@@ -6,20 +6,19 @@
 .limit locals 5
 .limit stack 5
 bipush 34
-istore_1
-bipush 5
-bipush 3
-imul
-bipush 4
-bipush 4
-idiv
-isub
-bipush 1
-bipush 32
-if_icmpgt Label16
+istore 1
+bipush 0
+istore 2
+bipush 35
+istore 3
 bipush 33
-istore_2
-Label16: 
+bipush 32
+if_icmpgt Label13
+bipush 33
+istore 1
+Label13: 
+bipush 36
+istore 1
 iload 1
 invokestatic io/println(I)V
 return

@@ -1,5 +1,9 @@
 
 
+ASTAddtiveExpression
+jjtChild(0).jjtChild(0).jjtChild(0) instanceof ASTBooleanLiteral
+((ASTBooleanLiteral) jjtChild(0).jjtChild(0).jjtChild(0)).value
+
 ###### Code printing 0
 
 
