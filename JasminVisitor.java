@@ -412,20 +412,27 @@ public class JasminVisitor extends JasminGenerator implements JmmVisitor {
   @Override
   public Object visit(ASTLESSTHEN node, Object data) {
 
-    if(node.jjtGetChild(0).jjtGetChild(0).jjtGetChild(0) instanceof  ASTLiteral){
-      int result = Integer.parseInt( node.jjtGetChild(0).jjtGetChild(0).jjtGetChild(0).toString() );
-      this.getWriter().print("bipush ");
-      this.getWriter().println(result);
-      this.lineNumber++;
-    }
+    // Verifica os dois filhos associados a condicao
+    for (int i = 0; i < node.jjtGetNumChildren(); i++) {
 
-    if(node.jjtGetChild(1).jjtGetChild(0).jjtGetChild(0) instanceof  ASTLiteral){
-      int resultTest = Integer.parseInt( node.jjtGetChild(1).jjtGetChild(0).jjtGetChild(0).toString() );
-      this.getWriter().print("bipush ");
-      this.getWriter().println(resultTest);
-      this.lineNumber++;
-    }
+        // filho eh um inteiro
+        if (node.jjtGetChild(i).jjtGetChild(0).jjtGetChild(0) instanceof ASTLiteral) {
+          int result = Integer.parseInt(node.jjtGetChild(i).jjtGetChild(0).jjtGetChild(0).toString());
+          this.getWriter().print("bipush ");
+          this.getWriter().println(result);
+          this.lineNumber++;
 
+          // Filho eh uma variavel
+        } else if (node.jjtGetChild(i).jjtGetChild(0).jjtGetChild(0) instanceof ASTName) {
+          // fazer o load da variavel no argumento do metodo
+          String variavelName = node.jjtGetChild(i).jjtGetChild(0).jjtGetChild(0).toString();
+          this.getWriter().print("iload ");
+          int index = mapStores.get(variavelName);
+          this.getWriter().println(index);
+          this.lineNumber++;
+        }
+
+      }
     return null;
   }
 
@@ -532,14 +539,43 @@ public class JasminVisitor extends JasminGenerator implements JmmVisitor {
   @Override
   public Object visit(ASTIF node, Object data) {
 
-    for (int i = 0; i < node.jjtGetNumChildren(); i++) {
-      node.jjtGetChild(i).jjtAccept(this, data);
-//      if(node.jjtGetChild(i) instanceof ASTCONDITION){
-//        this.getWriter().print("if_icmpgt");
-//        //TODO
-//      }
+    String finalLabel = label + this.lineNumber;
+    String middleLabel = label + ++this.lineNumber;
 
-    }
+    boolean flag = false;
+
+
+
+    for (int i = 0; i < node.jjtGetNumChildren(); i++) {
+
+
+      //Processar a condicao //TODO falta testar com &&
+      if(node.jjtGetChild(i) instanceof ASTCONDITION ){
+        node.jjtGetChild(i).jjtAccept(this, data);
+        //depois de por os filhos na stack escreve
+        this.getWriter().print("if_icmpge ");
+        this.getWriter().println(middleLabel);
+
+      }else if(node.jjtGetChild(i) instanceof ASTSTATEMENT ){
+        node.jjtGetChild(i).jjtAccept(this, data);
+
+        this.getWriter().print("goto ");
+        this.getWriter().println(finalLabel);
+        this.getWriter().print(middleLabel);
+        this.getWriter().println(": ");
+
+      }else if(node.jjtGetChild(i) instanceof ASTELSE){
+        node.jjtGetChild(i).jjtAccept(this, data);
+
+        this.getWriter().print(finalLabel);
+        this.getWriter().println(": ");
+
+      }
+
+
+    }// end for
+
+
     return null;
   }
 
@@ -553,26 +589,23 @@ public class JasminVisitor extends JasminGenerator implements JmmVisitor {
 
   @Override
   public Object visit(ASTSTATEMENT node, Object data) {
-    String newLabel = label + this.lineNumber;
-
-    this.getWriter().print("if_icmpgt ");
-    this.getWriter().println(newLabel);
 
     for (int i = 0; i < node.jjtGetNumChildren(); i++) {
       node.jjtGetChild(i).jjtAccept(this, data);
     }
-
-    this.getWriter().print(newLabel);
-    this.getWriter().println(": ");
 
     return null;
   }
 
   @Override
   public Object visit(ASTELSE node, Object data) {
+
+
     for (int i = 0; i < node.jjtGetNumChildren(); i++) {
       node.jjtGetChild(i).jjtAccept(this, data);
     }
+
+
     return null;
   }
 
@@ -647,15 +680,6 @@ public class JasminVisitor extends JasminGenerator implements JmmVisitor {
   //        return null;
   //    }
   //
-  //    public Object visit(ASTAssign node, Object data) {
-  //        storeType = Type.UNDEFINED;
-  //        Element element = (Element) node.jjtGetChild(0).jjtAccept(this, true);
-  //        node.jjtGetChild(1).jjtAccept(this, false);
-  //        this.jasminGenerator.writeStoreElement(element, storeType == Type.INTEGER);
-  //        storeType = Type.UNDEFINED;
-  //
-  //        return null;
-  //    }
   //
   //
   //    public Object visit(ASTAccess node, Object data) {
@@ -696,6 +720,7 @@ public class JasminVisitor extends JasminGenerator implements JmmVisitor {
   //
   //        return null;
   //    }
+
   //    public Object visit(ASTCall node, Object data) {
   //        SymbolTable rootSymbolTable = this.jasminGenerator.getRootSymbolTable();
   //
@@ -736,27 +761,13 @@ public class JasminVisitor extends JasminGenerator implements JmmVisitor {
   //
   //        return null;
   //    }
-  //
+  //11
   //    public Object visit(ASTWhile node, Object data) {
   //
   //        ASTConditionalOperation conditionNode = (ASTConditionalOperation) node.jjtGetChild(0);
   //        ASTStatements statementNode = (ASTStatements) node.jjtGetChild(1);
   //
   //        this.jasminGenerator.writeWhile(conditionNode, statementNode, this);
-  //
-  //        return null;
-  //    }
-  //
-  //    public Object visit(ASTIf node, Object data) {
-  //
-  //        ASTConditionalOperation conditionNode = (ASTConditionalOperation)node.jjtGetChild(0);
-  //        ASTStatements ifNode = (ASTStatements)node.jjtGetChild(1);
-  //        ASTStatements elseNode = null;
-  //        if(node.jjtGetNumChildren() > 2){
-  //            elseNode = (ASTStatements)node.jjtGetChild(2);
-  //        }
-  //
-  //        this.jasminGenerator.writeIf(conditionNode, ifNode, elseNode, this);
   //
   //        return null;
   //    }
