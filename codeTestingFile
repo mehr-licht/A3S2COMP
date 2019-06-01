@@ -5,16 +5,13 @@ class MonteCarloPi {
 		int teste2;
 
         boolean teste3;
-        teste2 = 31;
+        teste2 = 3;
         teste3=false;
         teste1=35;
 
-        if(32 < 31){
-            teste2 = 33;
-        }else{
-            teste2 = 36;
+        while(teste2 < 10){
+            teste2 = teste2 + 1;
         }
-
 
         ioPlus.println(teste2);
 	}
