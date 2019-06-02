@@ -1,22 +1,6 @@
-class MonteCarloPi {
-
+class HelloWorld {
 	public static void main(String[] args) {
-		int teste1;
-		int teste2;
-
-        boolean teste3;
-        teste2 = 3;
-        teste3=false;
-        teste1=35;
-
-        while(teste2 < 10){
-            teste2 = teste2 + 1;
-        }
-
-        ioPlus.println(teste2);
+		ioPlus.printHelloWorld();
 	}
-
-
-
-
 }
+

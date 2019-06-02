@@ -105,6 +105,18 @@ public class JasminVisitor extends JasminGenerator implements JmmVisitor {
 
   @Override
   public Object visit(ASTFD node, Object data) {
+//So preciso de por aqui quando acontece o //TODO new creio
+    //aqui tenho qu epor na hasmap
+//    System.out.println("Hello world");
+//    boolean arraydIniticializada = ((ASTType) node.jjtGetChild(0)).isArray;
+//    String nomearray = node.jjtGetChild(1).toString();
+//    //Preciso de imprimir?
+//    if(arraydIniticializada){
+//      mapStores.put(nomearray,counter);
+//      counter++;
+//    }
+
+
     for (int i = 0; i < node.jjtGetNumChildren(); i++) {
       node.jjtGetChild(i).jjtAccept(this, data);
     }
@@ -265,12 +277,18 @@ public class JasminVisitor extends JasminGenerator implements JmmVisitor {
   /** */
   @Override
   public Object visit(ASTType node, Object data) {
-    node.jjtGetChild(0).jjtAccept(this, data);
+    for (int i = 0; i < node.jjtGetNumChildren(); i++) {
+      node.jjtGetChild(i).jjtAccept(this, data);
+    }
     return null;
   }
 
   @Override
   public Object visit(ASTPrimitiveType node, Object data) {
+
+    for (int i = 0; i < node.jjtGetNumChildren(); i++) {
+      node.jjtGetChild(i).jjtAccept(this, data);
+    }
     return null;
   }
 
@@ -300,33 +318,116 @@ public class JasminVisitor extends JasminGenerator implements JmmVisitor {
 
     } else if (node.parent instanceof ASTMethodDeclaration ){
 
-      if(node.value.toString().equals("ioPlus")){
+      //Para usar o file io --todos os metodos sao final
+      if (node.value.toString().equals("io")) {
 
-        if(node.value2.toString().equals("print") || node.value2.toString().equals("println")){
+//        //Parte 1 de 3 da invocacao de metodos,
+//        this.getWriter().print("invokespecial io/");
+//
+//        switch (node.value2){
+//          case "read":
+//            this.getWriter().print("read()I");
+//            break;
+//          case "print":
+//            this.getWriter().print("print(");
+//            break;
+//          case "println":
+//            this.getWriter().print("println(");
+//
+//            break;
+//
+//          default:
+//            this.getWriter().println("Warning line 329");
+//            break;
+//
+//        }
+//
+//        //tratamento de 3 casos int, string int string e void
+//        if (node.value2.toString().equals("print") || node.value2.toString().equals("println")) {
+//
+//          //tratamento do void -caso especial sem filhos
+//          if(node.jjtGetParent().jjtGetChild(node.jjtGetNumChildren()-1).jjtGetNumChildren() == 0){
+//              //void nao faz nenhuma impressao em jasmim
+//
+//          //Tratamento dos casos normais
+//          }else{
+//
+//            //Impressao de inteiros
+//            if(node.jjtGetParent()
+//                    .jjtGetChild(node.jjtGetParent().jjtGetNumChildren() - 1)
+//                    .jjtGetChild(0)
+//                    .jjtGetChild(0)
+//                    .jjtGetChild(0)
+//                    .jjtGetChild(0)
+//                    instanceof ASTLiteral){
+//              //eh um numero
+//              this.getWriter().println("I;");
+//            }
+//
+//            //Impressao de Strings
+//            if(node.jjtGetParent()
+//                    .jjtGetChild(node.jjtGetParent().jjtGetNumChildren() - 1)
+//                    .jjtGetChild(0)
+//                    .jjtGetChild(0)
+//                    .jjtGetChild(0)
+//                    .jjtGetChild(0) instanceof  ASTName){
+//              String datatype =
+//                      node.jjtGetParent()
+//                              .jjtGetChild(node.jjtGetParent().jjtGetNumChildren() - 1)
+//                              .jjtGetChild(0)
+//                              .jjtGetChild(0)
+//                              .jjtGetChild(0)
+//                              .jjtGetChild(0)
+//                                  .toString();
+//              String init_type = JasminGenerator.conversitonTypesArguments(datatype, false);
+//              // Caso em que o argumento eh o nome de uma variavel
+//              if (init_type == null) {
+//                // procura o tipo de eleemnto. //tipo de no
+//                // -------------COULD DO A REFACTOR ----BEGIN //
+//                Element newDataType =
+//                        JasminGenerator.find_type_element(
+//                                this.list_symbol_tables,
+//                                datatype,
+//                                ((ASTMethodDeclarator) node.jjtGetParent().jjtGetChild(1)).value);
+//                type_to_print = JasminGenerator.conversitonTypesArguments(newDataType.getType(), false);
+//                // -------------COULD DO A REFACTOR ----END //
+//
+//                // fazer o load da variavel no argumento do metodo
+//                this.getWriter().print("iload ");
+//                int index = mapStores.get(newDataType.getName());
+//                this.getWriter().println(index);
+//                this.lineNumber++;
+//              }
+//
+//            }
+//
+//
+//          }//ended if do tratamento dos argumentos
+//          //imprimir os argumentos
+//          this.getWriter().println(")V");
+//          this.lineNumber++;
+//        }//ended if do tratamento do file io
+//
 
-          String datatype = node.jjtGetParent().jjtGetChild(node.jjtGetParent().jjtGetNumChildren()-1).
-                  jjtGetChild(0).jjtGetChild(0).jjtGetChild(0).jjtGetChild(0).toString();
-          String init_type = JasminGenerator.conversitonTypesArguments(datatype,false);
+        //Para usar o file do ioPlus -- Todos os metodos sao static
+      }else if(node.value.toString().equals("ioPlus")){
+        this.getWriter().print("invokestatic ioPlus/");
+        switch (node.value2) {
 
-          //Caso em que o argumento eh o nome de uma variavel
-          if(init_type == null){
-            //procura o tipo de eleemnto. //tipo de no
-            //-------------COULD DO A REFACTOR ----BEGIN //
-            Element newDataType = JasminGenerator.find_type_element(this.list_symbol_tables, datatype, ((ASTMethodDeclarator) node.jjtGetParent().jjtGetChild(1)).value);
-            type_to_print = JasminGenerator.conversitonTypesArguments(newDataType.getType(),false);
-            //-------------COULD DO A REFACTOR ----END //
-
-            //fazer o load da variavel no argumento do metodo
-            this.getWriter().print("iload ");
-            int index = mapStores.get(newDataType.getName());
-            this.getWriter().println(index);
-            this.lineNumber++;
-          }
-
-          this.getWriter().println("invokestatic io/" + node.value2 +"("+ type_to_print + ")V");
-          this.lineNumber++;
+          case "printResult":
+            this.getWriter().println("printResult(I)V");
+            break;
+          case "printHelloWorld":
+            this.getWriter().println("printHelloWorld()V");
+            break;
+          case "requestNumber":
+            this.getWriter().println("requestNumber()I");
+            break;
+          default:
+            this.getWriter().println("Warning line 373");
         }
 
+        // Para usar o file do MathUtils --metodos apenas publicos
       }else if(node.value.toString().equals("MathUtils")){
         this.getWriter().println("invoke MathUtils/" + node.value2);
         this.lineNumber++;
@@ -358,19 +459,23 @@ public class JasminVisitor extends JasminGenerator implements JmmVisitor {
 
     //Processamento dos assignements para int e boolean e arrays - BEGIN
     if(node.jjtGetChild(1).jjtGetChild(0).jjtGetChild(0).jjtGetChild(0) instanceof ASTLiteral
-          && node.jjtGetChild(1).jjtGetChild(0).jjtGetChild(0).jjtGetChild(0).jjtGetNumChildren() < 1
-          ){
+            && node.jjtGetChild(1).jjtGetChild(0).jjtGetChild(0).jjtGetChild(0).jjtGetNumChildren() < 1
+    ){
 
       valorInt = node.jjtGetChild(1).jjtGetChild(0).jjtGetChild(0).jjtGetChild(0).toString();
 
-        this.getWriter().print("bipush ");
-        int result = Integer.parseInt(valorInt);
-        this.getWriter().println(result);
+      this.getWriter().print("bipush ");
+      int result = Integer.parseInt(valorInt);
+      this.getWriter().println(result);
 
+
+      //Confirmacao se tem filhos para booelanos
+    }else if( node.jjtGetChild(1).jjtGetChild(0).jjtGetChild(0).
+            jjtGetChild(0).jjtGetNumChildren() != 0 ){
 
       //Assignment de booleanos
-    }else if(node.jjtGetChild(1).jjtGetChild(0).jjtGetChild(0).
-            jjtGetChild(0).jjtGetChild(0) instanceof ASTBooleanLiteral){
+      if (node.jjtGetChild(1).jjtGetChild(0).jjtGetChild(0).
+              jjtGetChild(0).jjtGetChild(0) instanceof ASTBooleanLiteral){
 
 
         //Processamento de boolean - irbuscar o valor
@@ -383,9 +488,20 @@ public class JasminVisitor extends JasminGenerator implements JmmVisitor {
         } else {
           this.getWriter().println(0);
         }
+      }
 
+      //Assignment de arrays - no pressuposto que existem mais
+    }else if(node.jjtGetChild(1).jjtGetChild(0).jjtGetChild(0).jjtGetNumChildren() == 2){
 
-    }else {
+      String nomeArray = node.jjtGetChild(1).jjtGetChild(0).jjtGetChild(0).jjtGetChild(0).toString();
+      String indexArray = node.jjtGetChild(1).jjtGetChild(0).jjtGetChild(0).jjtGetChild(1).
+              jjtGetChild(0).jjtGetChild(0).jjtGetChild(0).toString();
+      int indexArrayIntg = Integer.parseInt(indexArray);
+
+      //TODO Aqui tenho  de ir buscar o valor dela à hasmap
+      //saca -la de la por-la na stack  e fazer push dela para a nova variavel
+      int stackPosition = mapStores.get(nomeArray);
+      //TODO fazer qualquer coisa com o array
 
       for (int i = 0; i < node.jjtGetNumChildren(); i++) {
         node.jjtGetChild(i).jjtAccept(this, data);
@@ -425,24 +541,24 @@ public class JasminVisitor extends JasminGenerator implements JmmVisitor {
     // Verifica os dois filhos associados a condicao
     for (int i = 0; i < node.jjtGetNumChildren(); i++) {
 
-        // filho eh um inteiro
-        if (node.jjtGetChild(i).jjtGetChild(0).jjtGetChild(0) instanceof ASTLiteral) {
-          int result = Integer.parseInt(node.jjtGetChild(i).jjtGetChild(0).jjtGetChild(0).toString());
-          this.getWriter().print("bipush ");
-          this.getWriter().println(result);
-          this.lineNumber++;
+      // filho eh um inteiro
+      if (node.jjtGetChild(i).jjtGetChild(0).jjtGetChild(0) instanceof ASTLiteral) {
+        int result = Integer.parseInt(node.jjtGetChild(i).jjtGetChild(0).jjtGetChild(0).toString());
+        this.getWriter().print("bipush ");
+        this.getWriter().println(result);
+        this.lineNumber++;
 
-          // Filho eh uma variavel
-        } else if (node.jjtGetChild(i).jjtGetChild(0).jjtGetChild(0) instanceof ASTName) {
-          // fazer o load da variavel no argumento do metodo
-          String variavelName = node.jjtGetChild(i).jjtGetChild(0).jjtGetChild(0).toString();
-          this.getWriter().print("iload ");
-          int index = mapStores.get(variavelName);
-          this.getWriter().println(index);
-          this.lineNumber++;
-        }
-
+        // Filho eh uma variavel
+      } else if (node.jjtGetChild(i).jjtGetChild(0).jjtGetChild(0) instanceof ASTName) {
+        // fazer o load da variavel no argumento do metodo
+        String variavelName = node.jjtGetChild(i).jjtGetChild(0).jjtGetChild(0).toString();
+        this.getWriter().print("iload ");
+        int index = mapStores.get(variavelName);
+        this.getWriter().println(index);
+        this.lineNumber++;
       }
+
+    }
     return null;
   }
 
@@ -569,7 +685,7 @@ public class JasminVisitor extends JasminGenerator implements JmmVisitor {
         if (node.jjtGetNumChildren() == 3 ) {
           this.getWriter().print("goto ");
           this.getWriter().println(finalLabel);
-          }
+        }
 
         this.getWriter().print(middleLabel);
         this.getWriter().println(": ");

@@ -33,18 +33,6 @@ public class Jmm {
       //closeNodeHook();
     }
 
-
-//  /*
-//   * Returns true if the next token is not in the FOLLOW list of "expansion".
-//   * It is used to decide when the end of an "expansion" has been reached.
-//   */
-//  static private boolean notTailOfExpansionUnit() {
-//    Token t;
-//    t = getToken(1);
-//    if (t.kind == BIT_OR || t.kind == COMMA || t.kind == RPAREN || t.kind == RBRACE || t.kind == RBRACKET) return false;
-//    return true;
-//  }
-
 }
 
 PARSER_END(Jmm)
@@ -290,7 +278,7 @@ void MethodDeclaration() :{}
 void MethodDeclarator() :
 {Token t3;}
 {
-  t3=<IDENTIFIER> FormalParameters() ( <LBRACKET> <RBRACKET> )*
+  t3=<IDENTIFIER> FormalParameters() ( <LBRACKET> <RBRACKET> {jjtThis.isArray();})*
   {jjtThis.value = t3.image; jjtThis.line = t3.beginLine;}
 }
 

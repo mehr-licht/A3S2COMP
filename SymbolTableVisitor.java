@@ -41,12 +41,12 @@ public class SymbolTableVisitor extends Global_Symbol_Table_List implements JmmV
     } catch (LinkageError e) {
       // Semantica err nao existe no class
       SemanticManager.addError(
-          "Could not find class "
-              + st.getName()
-              + ", due to: "
-              + e.getClass().getName()
-              + ": "
-              + e.getMessage());
+              "Could not find class "
+                      + st.getName()
+                      + ", due to: "
+                      + e.getClass().getName()
+                      + ": "
+                      + e.getMessage());
     }
     for (int i = 0; i < node.jjtGetNumChildren(); i++) {
 
@@ -145,8 +145,8 @@ public class SymbolTableVisitor extends Global_Symbol_Table_List implements JmmV
   @Override
   public Object visit(ASTIF node, Object data) {
 
-  SymbolTable symbolTable = new SymbolTable("IF",true);
-  this.list_symbol_tables.getFirst().addChild(symbolTable);
+    SymbolTable symbolTable = new SymbolTable("IF",true);
+    this.list_symbol_tables.getFirst().addChild(symbolTable);
 
     for (int i = 0; i < node.jjtGetNumChildren(); i++) {
       node.jjtGetChild(i).jjtAccept(this, data);
@@ -177,9 +177,9 @@ public class SymbolTableVisitor extends Global_Symbol_Table_List implements JmmV
   public Object visit(ASTAdditiveExpression node, Object data) {
 
     if(node.parent instanceof ASTMethodDeclaration){
-     this.list_symbol_tables.getFirst().getVariablesv2().getFirst().setInitialized(true);
-     String valorBooleanDefined = "true";
-     this.list_symbol_tables.getFirst().getVariablesv2().getFirst().setValue(valorBooleanDefined);
+      this.list_symbol_tables.getFirst().getVariablesv2().getFirst().setInitialized(true);
+      String valorBooleanDefined = "true";
+      this.list_symbol_tables.getFirst().getVariablesv2().getFirst().setValue(valorBooleanDefined);
     }
 
     for (int i = 0; i < node.jjtGetNumChildren(); i++) {
@@ -253,13 +253,30 @@ public class SymbolTableVisitor extends Global_Symbol_Table_List implements JmmV
     if (node.parent instanceof ASTMethodDeclaration) {
       Element element = new Element(node.value2,node.value);
       element.setInitialized(true);
+
+      if(node.toString().equals("ioPlus") ||
+              node.toString().equals("io") ||
+              node.toString().equals("MathUtils") ){
+        element.setValue(node.value2);
+      } else {
+        element.setValue(
+                node.jjtGetParent()
+                        .jjtGetChild(node.jjtGetParent().jjtGetNumChildren() - 1)
+                        .jjtGetChild(0)
+                        .jjtGetChild(0)
+                        .jjtGetChild(0)
+                        .toString());
+      }
+
       this.list_symbol_tables.getFirst().addVariablesV2(element);
-      element.setValue( node.jjtGetParent().jjtGetChild(node.jjtGetParent().jjtGetNumChildren()-1).
-              jjtGetChild(0).jjtGetChild(0).jjtGetChild(0).toString() );
+
     }
+
+
     for (int i = 0; i < node.jjtGetNumChildren(); i++) {
       node.jjtGetChild(i).jjtAccept(this, data);
     }
+
     return null;
   }
 
@@ -487,7 +504,7 @@ public class SymbolTableVisitor extends Global_Symbol_Table_List implements JmmV
   @Override
   public Object visit(ASTBooleanLiteral node, Object data) {
 
-      return null;
+    return null;
   }
   /** */
   public Object visit(ASTIntegerLiteral node, Object data) {

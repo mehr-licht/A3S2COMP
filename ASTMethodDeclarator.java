@@ -5,6 +5,8 @@ public
 class ASTMethodDeclarator extends SimpleNode {
   public String value;
   public int line;
+  public boolean isArray = false;
+
 
   public ASTMethodDeclarator(int id) {
     super(id);
@@ -14,6 +16,9 @@ class ASTMethodDeclarator extends SimpleNode {
     super(p, id);
   }
 
+  public void isArray(){
+    isArray = true;
+  }
 
   /** Accept the visitor. **/
   public Object jjtAccept(JmmVisitor visitor, Object data) {
