@@ -1,3 +1,4 @@
+import java.util.HashMap;
 import java.util.LinkedList;
 
 public class SemanticVisitor extends SemanticManager implements JmmVisitor {
@@ -240,11 +241,38 @@ public class SemanticVisitor extends SemanticManager implements JmmVisitor {
   public Object visit(ASTMethodDeclarator node, Object data) {
 
       LinkedList<SymbolTable> lst = this.list_symbol_tables;
+      HashMap<String, Element> args = null;
+      int aux = 0;
 
-      if(!lst.contains(node))
+      for (int i = lst.size()-1; i >=0 ; i--) {
+          if (lst.get(i).getName().equals(node.value)){
+              args = lst.get(i).getParameters();
+              aux++;
+              lst.remove(i);
+              break;
+          }
+
+      }
+      System.out.println(node.jjtGetNumChildren()/2 + ", " + args.size() + node.value);
+
+
+      if(node.jjtGetNumChildren()/2 !=  args.size() ){
           SemanticManager.addError(node.line,
-                  "Error: In fuction " +
+                  "Incorrect function call on " + node.value + " has illegal number of arguments! Should be " + args.size() + " argument(s).");
+          return null;
+      }
+
+      if (aux == 0)
+          SemanticManager.addError(node.line,
+                  "Error: Fuction " +
                           node.value + " doesn't exist!");
+
+
+      if (aux >= 2){
+          SemanticManager.addError(node.line,
+                  "Error: This fuction " +
+                          node.value + " already exists!");
+      }
 
 
       if( !(node.jjtGetNumChildren() % 2 == 0) ){
