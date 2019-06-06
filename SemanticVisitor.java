@@ -1,8 +1,9 @@
 import java.util.HashMap;
+import java.util.IllegalFormatCodePointException;
 import java.util.LinkedList;
 
 public class SemanticVisitor extends SemanticManager implements JmmVisitor {
-
+    LinkedList<SymbolTable> lstaux = new LinkedList<SymbolTable>();
   /** * Semantic rules for expressions, invocation of functions */
   public SemanticVisitor(LinkedList<SymbolTable> list_symbol_tables) {
     this.list_symbol_tables = list_symbol_tables;
@@ -241,18 +242,52 @@ public class SemanticVisitor extends SemanticManager implements JmmVisitor {
   public Object visit(ASTMethodDeclarator node, Object data) {
 
       LinkedList<SymbolTable> lst = this.list_symbol_tables;
-      HashMap<String, Element> args = null;
+      SymbolTable func = null;
+
       int aux = 0;
 
       for (int i = lst.size()-1; i >=0 ; i--) {
-          if (lst.get(i).getName().equals(node.value)){
-              args = lst.get(i).getParameters();
-              aux++;
-              lst.remove(i);
-              break;
+          if (lst.get(i).getName().equals(node.value) && aux<=2){
+              System.out.println(lst.get(i));
+              if (!lstaux.contains(lst.get(i))){
+                  func = lst.get(i);
+                  lstaux.add(func);
+                  aux++;
+                  break;
+              }
+              else {
+                  return null;
+              }
           }
 
       }
+      System.out.println(lstaux.size());
+
+      if (aux == 0){
+          SemanticManager.addError(node.line,
+                  "Error: Fuction " +
+                          node.value + " doesn't exist!");
+          return null;
+      }
+      HashMap<String, Element> args = func.getParameters();
+
+
+
+      if(args.size() == 0 && node.jjtGetNumChildren() == 0)
+          return func;
+
+      if(node.jjtGetNumChildren() == 0 ){
+          SemanticManager.addError(node.line,
+                  "Incorrect function call on " + node.value + " has illegal number of arguments! Should be " + args.size() + " argument(s).");
+          return null;
+      }
+
+      if(args.size() == 0 && node.jjtGetNumChildren()!=0){
+          SemanticManager.addError(node.line,
+                  "Incorrect function call on " + node.value + " has illegal number of arguments! This function does not accept any argument.");
+          return null;
+      }
+
       System.out.println(node.jjtGetNumChildren()/2 + ", " + args.size() + node.value);
 
 
@@ -262,26 +297,7 @@ public class SemanticVisitor extends SemanticManager implements JmmVisitor {
           return null;
       }
 
-      if (aux == 0)
-          SemanticManager.addError(node.line,
-                  "Error: Fuction " +
-                          node.value + " doesn't exist!");
-
-
-      if (aux >= 2){
-          SemanticManager.addError(node.line,
-                  "Error: This fuction " +
-                          node.value + " already exists!");
-      }
-
-
-      if( !(node.jjtGetNumChildren() % 2 == 0) ){
-          SemanticManager.addError(node.line,
-              "Error: Definition of arguments: In fuction " +
-                node.value);
-      }
-
-      for (int i = 0; i < node.jjtGetNumChildren()-1; i++) {
+      for (int i = 0; i < node.jjtGetNumChildren()-1; i+=2) {
 
            if(node.jjtGetChild(i) instanceof  ASTType
                    && node.jjtGetChild(i+1) instanceof  ASTVariableDeclaratorId){
