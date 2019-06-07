@@ -1,6 +1,14 @@
-class HelloWorld {
+class MonteCarloPi {
+
+	public int estimatePi100(int n) {
+		return n;
+	}
+
 	public static void main(String[] args) {
-		ioPlus.printHelloWorld();
+		int pi_estimate_times_100;
+
+		pi_estimate_times_100 = new MonteCarloPi().estimatePi100(100);
+		ioPlus.printResult(pi_estimate_times_100);
 	}
 }
 
