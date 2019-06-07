@@ -1,6 +1,4 @@
-import java.util.HashMap;
-import java.util.IllegalFormatCodePointException;
-import java.util.LinkedList;
+import java.util.*;
 
 public class SemanticVisitor extends SemanticManager implements JmmVisitor {
     LinkedList<SymbolTable> lstaux = new LinkedList<SymbolTable>();
@@ -256,7 +254,30 @@ public class SemanticVisitor extends SemanticManager implements JmmVisitor {
                   break;
               }
               else {
-                  return null;
+                  System.out.println(lst.get(i).getParameters().size() + ", " + node.jjtGetNumChildren()/2);
+                  if (lst.get(i).getParameters().size() != node.jjtGetNumChildren()/2){
+                      return null;
+                  }
+                  else {
+                      int auxP = 0;
+                      int j = 0;
+                      Iterator it = lst.get(i).getParameters().entrySet().iterator();
+                      while(it.hasNext()){
+                          Map.Entry pair = (Map.Entry) it.next();
+                          Element pair2 = (Element) pair.getValue();
+                          if (pair2.getType().equals(node.jjtGetChild(j).jjtGetChild(0).toString())){
+                              System.out.println(pair2.getType() + ", " + node.jjtGetChild(j).jjtGetChild(0));
+                              auxP++;
+                          }
+                          j+=2;
+                      }
+                      if (auxP == lst.get(i).getParameters().size()){
+                          SemanticManager.addError(node.line,
+                                  "Error: Fuction " +
+                                          node.value + " already exists!");
+                          return null;
+                      }
+                  }
               }
           }
 
