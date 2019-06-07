@@ -12,7 +12,6 @@ public class SemanticVisitor extends SemanticManager implements JmmVisitor {
   public Object visit(ASTStart node, Object data) {
     node.jjtGetChild(0).jjtAccept(this, data);
     //TODO verificar se  os vlaores retornados estao de acordo
-    //TODO Verificar se existem metodos com o mesmo nome, com o mesmo
     //TODO numero de argumentos e mesmo tipo e return
     //TODO symbolTables com o mesmo numero
     //TODO variavel ja foi inicializada
@@ -246,7 +245,6 @@ public class SemanticVisitor extends SemanticManager implements JmmVisitor {
 
       for (int i = lst.size()-1; i >=0 ; i--) {
           if (lst.get(i).getName().equals(node.value) && aux<=2){
-              System.out.println(lst.get(i));
               if (!lstaux.contains(lst.get(i))){
                   func = lst.get(i);
                   lstaux.add(func);
@@ -254,7 +252,6 @@ public class SemanticVisitor extends SemanticManager implements JmmVisitor {
                   break;
               }
               else {
-                  System.out.println(lst.get(i).getParameters().size() + ", " + node.jjtGetNumChildren()/2);
                   if (lst.get(i).getParameters().size() != node.jjtGetNumChildren()/2){
                       return null;
                   }
@@ -266,7 +263,6 @@ public class SemanticVisitor extends SemanticManager implements JmmVisitor {
                           Map.Entry pair = (Map.Entry) it.next();
                           Element pair2 = (Element) pair.getValue();
                           if (pair2.getType().equals(node.jjtGetChild(j).jjtGetChild(0).toString())){
-                              System.out.println(pair2.getType() + ", " + node.jjtGetChild(j).jjtGetChild(0));
                               auxP++;
                           }
                           j+=2;
@@ -277,13 +273,12 @@ public class SemanticVisitor extends SemanticManager implements JmmVisitor {
                                           node.value + " already exists!");
                           return null;
                       }
+                      return null;
                   }
               }
           }
 
       }
-      System.out.println(lstaux.size());
-
       if (aux == 0){
           SemanticManager.addError(node.line,
                   "Error: Fuction " +
@@ -308,8 +303,6 @@ public class SemanticVisitor extends SemanticManager implements JmmVisitor {
                   "Incorrect function call on " + node.value + " has illegal number of arguments! This function does not accept any argument.");
           return null;
       }
-
-      System.out.println(node.jjtGetNumChildren()/2 + ", " + args.size() + node.value);
 
 
       if(node.jjtGetNumChildren()/2 !=  args.size() ){
