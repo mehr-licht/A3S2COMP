@@ -17,7 +17,7 @@ ireturn
 .method public static main([Ljava/lang/String;)V
 .limit locals 5
 .limit stack 5
-aload 1
+
 bipush 100
 istore 2
 invokevirtual MonteCarloPi/estimatePi100(I)I
