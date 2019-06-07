@@ -1,7 +1,7 @@
-import java.util.LinkedList;
+import java.util.*;
 
 public class SemanticVisitor extends SemanticManager implements JmmVisitor {
-
+    LinkedList<SymbolTable> lstaux = new LinkedList<SymbolTable>();
   /** * Semantic rules for expressions, invocation of functions */
   public SemanticVisitor(LinkedList<SymbolTable> list_symbol_tables) {
     this.list_symbol_tables = list_symbol_tables;
@@ -12,7 +12,6 @@ public class SemanticVisitor extends SemanticManager implements JmmVisitor {
   public Object visit(ASTStart node, Object data) {
     node.jjtGetChild(0).jjtAccept(this, data);
     //TODO verificar se  os vlaores retornados estao de acordo
-    //TODO Verificar se existem metodos com o mesmo nome, com o mesmo
     //TODO numero de argumentos e mesmo tipo e return
     //TODO symbolTables com o mesmo numero
     //TODO variavel ja foi inicializada
@@ -240,20 +239,79 @@ public class SemanticVisitor extends SemanticManager implements JmmVisitor {
   public Object visit(ASTMethodDeclarator node, Object data) {
 
       LinkedList<SymbolTable> lst = this.list_symbol_tables;
+      SymbolTable func = null;
 
-      if(!lst.contains(node))
+      int aux = 0;
+
+      for (int i = lst.size()-1; i >=0 ; i--) {
+          if (lst.get(i).getName().equals(node.value) && aux<=2){
+              if (!lstaux.contains(lst.get(i))){
+                  func = lst.get(i);
+                  lstaux.add(func);
+                  aux++;
+                  break;
+              }
+              else {
+                  if (lst.get(i).getParameters().size() != node.jjtGetNumChildren()/2){
+                      return null;
+                  }
+                  else {
+                      int auxP = 0;
+                      int j = 0;
+                      Iterator it = lst.get(i).getParameters().entrySet().iterator();
+                      while(it.hasNext()){
+                          Map.Entry pair = (Map.Entry) it.next();
+                          Element pair2 = (Element) pair.getValue();
+                          if (pair2.getType().equals(node.jjtGetChild(j).jjtGetChild(0).toString())){
+                              auxP++;
+                          }
+                          j+=2;
+                      }
+                      if (auxP == lst.get(i).getParameters().size()){
+                          SemanticManager.addError(node.line,
+                                  "Error: Fuction " +
+                                          node.value + " already exists!");
+                          return null;
+                      }
+                      return null;
+                  }
+              }
+          }
+
+      }
+      if (aux == 0){
           SemanticManager.addError(node.line,
-                  "Error: In fuction " +
+                  "Error: Fuction " +
                           node.value + " doesn't exist!");
+          return null;
+      }
+      HashMap<String, Element> args = func.getParameters();
 
 
-      if( !(node.jjtGetNumChildren() % 2 == 0) ){
+
+      if(args.size() == 0 && node.jjtGetNumChildren() == 0)
+          return func;
+
+      if(node.jjtGetNumChildren() == 0 ){
           SemanticManager.addError(node.line,
-              "Error: Definition of arguments: In fuction " +
-                node.value);
+                  "Incorrect function call on " + node.value + " has illegal number of arguments! Should be " + args.size() + " argument(s).");
+          return null;
       }
 
-      for (int i = 0; i < node.jjtGetNumChildren()-1; i++) {
+      if(args.size() == 0 && node.jjtGetNumChildren()!=0){
+          SemanticManager.addError(node.line,
+                  "Incorrect function call on " + node.value + " has illegal number of arguments! This function does not accept any argument.");
+          return null;
+      }
+
+
+      if(node.jjtGetNumChildren()/2 !=  args.size() ){
+          SemanticManager.addError(node.line,
+                  "Incorrect function call on " + node.value + " has illegal number of arguments! Should be " + args.size() + " argument(s).");
+          return null;
+      }
+
+      for (int i = 0; i < node.jjtGetNumChildren()-1; i+=2) {
 
            if(node.jjtGetChild(i) instanceof  ASTType
                    && node.jjtGetChild(i+1) instanceof  ASTVariableDeclaratorId){
