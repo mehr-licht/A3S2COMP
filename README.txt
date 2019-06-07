@@ -27,13 +27,13 @@ Para compilar o código fonte, precisa-se de javacc e de jjtree, por isso deve-s
 
     javac -verbose *.java
     java MainProject <filename> //ex:java MainProject codeTestingFile
-    java -jar miniJavi.jar <filename> 
+    java -jar miniJavi.jar <filename>
     java -jar jasmin.jar _jasmim_generated.j
 
 
 **DEALING WITH SYNTACTIC ERRORS: (Describe how the syntactic error recovery of your tool does work. Does it exit after the first error?)
 
-O analisador sintático percorre o código e mal apanha um erro termina logo mas apanha todos os erros de sintaxe. 
+O analisador sintático percorre o código e mal apanha um erro termina logo mas apanha todos os erros de sintaxe.
 
 Faz recuperação de erros nas condições do while. Ou seja, mal apanhe um erro semântico na condição do while salta para o fim da terminação e continua a analisar o resto do código.
 
@@ -54,12 +54,12 @@ O nosso compilador implementa todas as regras semanticas da linguagem Java--, no
  - Se o tipo da variável de saída é compatível com o retorno da função
 
 
-**INTERMEDIATE REPRESENTATIONS (IRs): 
+**INTERMEDIATE REPRESENTATIONS (IRs):
 
 Não temos Representações Intermédias.
 
 
-**CODE GENERATION: 
+**CODE GENERATION:
 
 Através do padrão visitor, a AST é visitada recuursivamente é feita a impressão de comandos Jasmin para cada nó no ficheiro.
 
@@ -80,7 +80,7 @@ A análise semantica é efectuada numa segunda fase.
 Por fim dá-se a geração de código, através do padrão visitor, é feita a impressão de comandos Jasmin no ficheiro.
 
 
-**TASK DISTRIBUTION: 
+**TASK DISTRIBUTION:
 
 Todos os membros:
 Desenvolvimento da gramática. Conversão da gramática para o formato LL(). Mecanismo de tratamento e recuperação de erros.
