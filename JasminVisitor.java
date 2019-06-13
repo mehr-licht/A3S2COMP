@@ -288,12 +288,10 @@ public class JasminVisitor extends JasminGenerator implements JmmVisitor {
     String type_to_print = null;
 
     if (node.jjtGetParent().jjtGetParent() instanceof ASTMethodDeclarator) {
-      System.out.println("Warning Jasmin Generator - line 291");
 
 
     } else if (node.jjtGetParent() instanceof ASTUnmodifiedClassDeclaration) {
       // caso do extends
-      System.out.println("Warning Jasmin Generator - line 294");
       return null;
 
 
