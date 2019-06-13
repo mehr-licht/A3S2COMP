@@ -2,9 +2,9 @@
 .super java/lang/Object
 
 
-.method public static main([Ljava/lang/String;)V
+.method public pi([I; )V
 .limit locals 5
-.limit stack 5
+.limit stack 10
 bipush 3
 istore 1
 bipush 0
